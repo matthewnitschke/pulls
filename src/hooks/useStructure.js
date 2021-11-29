@@ -17,8 +17,8 @@ export default function useStructure(prOrder) {
     let flattenedStructure = flattenStructure(structure);
 
     let updatedStructure = [
+        ...prOrder.filter(prId => !flattenedStructure.includes(prId)),
         ...filterStructure(structure, prId => prOrder.includes(prId)),
-        ...prOrder.filter(prId => !flattenedStructure.includes(prId))
     ];
 
     return {
