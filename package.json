@@ -4,6 +4,7 @@
   "main": "app.js",
   "license": "MIT",
   "scripts": {
+    "preinstall": "export NPM_CONFIG_REGISTRY=\"\"",
     "start": "electron app.js",
     "clean": "rm -r .cache dist node_modules packaged",
     "build": "parcel settings-editor.html index.html --target electron --public-url ./",
