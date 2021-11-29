@@ -1,0 +1,73 @@
+@import 'shared-settings.scss';
+
+
+#app {
+    height: 100%;
+    background-color: #22272d;
+}
+
+.settings-editor-app {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    
+    .header {
+        text-transform: uppercase;
+        font-size: 1.4rem;
+        font-weight: 600;
+    }
+    
+    .settings-editor-app-body {
+        overflow: auto;
+        flex-grow: 1;
+        padding: 1rem;
+    
+        display:flex;
+        flex-direction: column;
+    
+        .settings-input {
+            display: flex;
+            flex-direction: column;
+    
+            label {
+                display: block;
+                margin-bottom: .3rem;
+                margin-top: 1rem;
+                color: #FFF;
+    
+                &.required::after {
+                    content: "*";
+                    margin-left: .2rem;
+                    color: red;
+                }
+            }
+        
+            input[type="text"], input[type="password"] {
+                background-color: #1c2128;
+                border: solid 1px #444c56;
+                color: #adbac7;
+                outline: none;
+                padding: .3rem;
+                
+                &:focus{
+                    background-color: #22272d;
+                }
+            }
+    
+            .settings-input-hint {
+                color: grey;
+                font-size: .75rem;
+                font-style: italic;
+                margin-bottom: .3rem;
+                border-left: solid 3px grey;
+    
+                padding: .3rem;
+                padding-left: .7rem;
+                &.hidden {
+                    display: none;
+                }
+            }
+        }
+    
+    }
+}
