@@ -58,29 +58,31 @@ function PrList(props) {
             onChange={setFilterText}
             onKeyDown={_handleFilterInputKeyDown} />
         
-        <div className="pr-list" role="list">
-            {
-                props.structure.map((data) => {
-                    if (typeof data === 'string') {
-                        return __renderPrListItem(props.prs[data])
-                    }
-
-                    return <PrListItemGroup 
-                        key={data.id}
-                        name={data.name}
-                        isSelected={props.selectedItemIds.includes(data.id)}
-                        onEditName={() => props.onEditGroupName(data.id)}
-                        onDelete={() => props.onDeleteGroup(data.id)}
-                        onSelect={() => _handleSelectItem(data.id)}
-                    >
-                        {data.prIds
-                            .map(prId => __renderPrListItem(props.prs[prId]))
-                            .filter(pr => pr !== null)
+        { Object.keys(props.prs).length > 0 &&        
+            <div className="pr-list" role="list">
+                {
+                    props.structure.map((data) => {
+                        if (typeof data === 'string') {
+                            return __renderPrListItem(props.prs[data])
                         }
-                    </PrListItemGroup>
-                })
-            }
-        </div>
+
+                        return <PrListItemGroup 
+                            key={data.id}
+                            name={data.name}
+                            isSelected={props.selectedItemIds.includes(data.id)}
+                            onEditName={() => props.onEditGroupName(data.id)}
+                            onDelete={() => props.onDeleteGroup(data.id)}
+                            onSelect={() => _handleSelectItem(data.id)}
+                        >
+                            {data.prIds
+                                .map(prId => __renderPrListItem(props.prs[prId]))
+                                .filter(pr => pr !== null)
+                            }
+                        </PrListItemGroup>
+                    })
+                }
+            </div>
+        }
     </>
 }
 

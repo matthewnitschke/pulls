@@ -8,6 +8,7 @@
     "start": "electron app.js",
     "clean": "rm -r .cache dist node_modules packaged",
     "build": "parcel settings-editor.html index.html --target electron --public-url ./",
+    "build-ci": "parcel build settings-editor.html index.html --target electron --public-url ./",
     "package": "electron-packager . pulls --platform=darwin --out packaged --extendInfo ./buildFiles/Info.plist --overwrite",
     "test": "jest"
   },

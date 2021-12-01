@@ -6,6 +6,7 @@ import {
     deleteGroup,
     addPrsToGroup,
     setGroupName,
+    updateFromPrOrder,
  } from "../../src/hooks/useStructure"
 
 const testStructure = [
@@ -18,49 +19,34 @@ const testStructure = [
 
 const testPrOrder =  [ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 
-test('sorts structure', () => {
-    let actual = sortStructure(
-        testStructure, 
-        testPrOrder,
-    )
-
-    expect(actual).toEqual([
-        'b', 
-        'e',
-        { id: 'gId1', name: 'g1', prIds: ['a', 'c', 'f'] },
-        'g',
-        { id: 'gId2', name: 'g2', prIds: ['d', 'h']}
-    ])
-})
-
-test('flattens structure', () => {
-    let actual = flattenStructure(
-        testStructure
-    )
-
-    expect(actual).toEqual([
-        'g',
-        'e',
-        'f', 
-        'c',
-        'a',
-        'b',
-        'd',
-        'h',
-    ])
-})
-
-test('filter structure', () => {
-    let actual = filterStructure(
+test('updateFromPrOrder - empty result', () => {
+    let actual = updateFromPrOrder(
         testStructure,
-        (prId) => ['a', 'f', 'g'].includes(prId)
-    )
+        { prOrder: [] }
+    );
 
-    expect(actual).toEqual([
-        'g',
-        { id: 'gId1', name: 'g1', prIds: ['f', 'a'] },
-    ])
-})
+    expect(actual).toEqual([]);
+});
+
+test('updateFromPrOrder - new pr', () => {
+    let actual = updateFromPrOrder(
+        testStructure,
+        { prOrder: ['j', ...flattenStructure(testStructure), 'i'] }
+    );
+
+    expect(actual).toEqual(['j', ...testStructure, 'i']);
+});
+
+test('updateFromPrOrder - removed pr', () => {
+    let expected = filterStructure(testStructure, (prId) => !['e', 'h'].includes(prId));
+
+    let actual = updateFromPrOrder(
+        testStructure,
+        { prOrder: flattenStructure(expected) }
+    );
+
+    expect(actual).toEqual(expected);
+});
 
 test('groupPrs', () => {
     let actual = groupPrs(
@@ -122,5 +108,51 @@ test('setGroupName', () => {
         { id: 'gId1', name: 'foo', prIds: ['f', 'c', 'a'] },
         'b',
         { id: 'gId2', name: 'g2', prIds: ['d', 'h']}
+    ])
+})
+
+// ----------------------- Utils -----------------------
+
+test('sorts structure', () => {
+    let actual = sortStructure(
+        testStructure, 
+        testPrOrder,
+    )
+
+    expect(actual).toEqual([
+        'b', 
+        'e',
+        { id: 'gId1', name: 'g1', prIds: ['a', 'c', 'f'] },
+        'g',
+        { id: 'gId2', name: 'g2', prIds: ['d', 'h']}
+    ])
+})
+
+test('flattens structure', () => {
+    let actual = flattenStructure(
+        testStructure
+    )
+
+    expect(actual).toEqual([
+        'g',
+        'e',
+        'f', 
+        'c',
+        'a',
+        'b',
+        'd',
+        'h',
+    ])
+})
+
+test('filter structure', () => {
+    let actual = filterStructure(
+        testStructure,
+        (prId) => ['a', 'f', 'g'].includes(prId)
+    )
+
+    expect(actual).toEqual([
+        'g',
+        { id: 'gId1', name: 'g1', prIds: ['f', 'a'] },
     ])
 })

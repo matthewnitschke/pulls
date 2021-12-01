@@ -4,25 +4,25 @@ import { v4 as uuid } from 'uuid';
 import settings from 'src/components/settings/settings-utils.js';
 
 export default function useStructure(prOrder) {
+    console.log(prOrder)
     let [ structure, dispatch ] = useReducer((state, action) => {
+        let newStructure;
         switch(action.type) {
-            case 'groupPrs': return sortStructure(groupPrs(state, action), prOrder);
-            case 'deleteGroup': return sortStructure(deleteGroup(state, action), prOrder);
-            case 'addPrsToGroup': return sortStructure(addPrsToGroup(state, action), prOrder);
-            case 'setGroupName': return sortStructure(setGroupName(state, action), prOrder);
+            case 'groupPrs': newStructure = groupPrs(state, action); break;
+            case 'deleteGroup': newStructure = deleteGroup(state, action); break;
+            case 'addPrsToGroup': newStructure = addPrsToGroup(state, action); break;
+            case 'setGroupName': newStructure = setGroupName(state, action); break;
+            case 'updateFromPrOrder': newStructure = updateFromPrOrder(state, action); break;
         }
+        return sortStructure(newStructure, prOrder);
+
     }, settings.get('savedStructure') ?? []);
+
     useEffect(() => settings.set('savedStructure', structure), [structure])
-
-    let flattenedStructure = flattenStructure(structure);
-
-    let updatedStructure = [
-        ...prOrder.filter(prId => !flattenedStructure.includes(prId)),
-        ...filterStructure(structure, prId => prOrder.includes(prId)),
-    ];
+    useEffect(() => dispatch({ type: 'updateFromPrOrder', prOrder }), [prOrder])
 
     return {
-        structure: updatedStructure,
+        structure: structure,
 
         groupPrs: (prIds, groupName) => {
             dispatch({
@@ -54,6 +54,14 @@ export default function useStructure(prOrder) {
             })
         }
     }
+}
+
+export function updateFromPrOrder(structure, { prOrder }) {
+    let flattenedStructure = flattenStructure(structure);
+    return [
+        ...prOrder.filter(prId => !flattenedStructure.includes(prId)),
+        ...filterStructure(structure, prId => prOrder.includes(prId)),
+    ];
 }
 
 export function groupPrs(structure, { prIds, groupName }) {

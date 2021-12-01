@@ -111,5 +111,5 @@ function showAboutDialog() {
 }
 
 function clearAppData() {
-  settings.delete('savedStructure');
+  settings.set('savedStructure', []);
 }
