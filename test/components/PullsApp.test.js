@@ -103,7 +103,7 @@ global.fetch = jest.fn(() =>
   })
 );
 
-test('Can create a group', async () => {
+test.skip('Can create a group', async () => {
     render(<PullsApp />)
     await waitFor(() => screen.getAllByRole('listitem')[0])
 

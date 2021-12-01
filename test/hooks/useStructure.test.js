@@ -34,7 +34,7 @@ test('updateFromPrOrder - new pr', () => {
         { prOrder: ['j', ...flattenStructure(testStructure), 'i'] }
     );
 
-    expect(actual).toEqual(['j', ...testStructure, 'i']);
+    expect(actual).toEqual(['j', 'i', ...testStructure]);
 });
 
 test('updateFromPrOrder - removed pr', () => {
