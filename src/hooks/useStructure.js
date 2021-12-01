@@ -1,10 +1,9 @@
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useRef } from 'react';
 import { v4 as uuid } from 'uuid';
 
 import settings from 'src/components/settings/settings-utils.js';
 
 export default function useStructure(prOrder) {
-    console.log(prOrder)
     let [ structure, dispatch ] = useReducer((state, action) => {
         let newStructure;
         switch(action.type) {
@@ -19,40 +18,15 @@ export default function useStructure(prOrder) {
     }, settings.get('savedStructure') ?? []);
 
     useEffect(() => settings.set('savedStructure', structure), [structure])
-    useEffect(() => dispatch({ type: 'updateFromPrOrder', prOrder }), [prOrder])
+    useEffectExceptOnMount(() => dispatch({ type: 'updateFromPrOrder', prOrder }), [prOrder])
 
     return {
         structure: structure,
 
-        groupPrs: (prIds, groupName) => {
-            dispatch({
-                type: 'groupPrs',
-                prIds,
-                groupName
-            })
-        },
-
-        deleteGroup: (groupId) => {
-            dispatch({
-                type: 'deleteGroup',
-                groupId,
-            })
-        },
-        
-        addPrsToGroup: (prIds, groupId) => {
-            dispatch({
-                type: 'addPrsToGroup',
-                prIds,
-                groupId
-            })
-        },
-        setGroupName: (groupId, groupName) => {
-            dispatch({
-                type: 'setGroupName',
-                groupId,
-                groupName
-            })
-        }
+        groupPrs: (prIds, groupName) => dispatch({ type: 'groupPrs', prIds, groupName }),
+        deleteGroup: (groupId) => dispatch({ type: 'deleteGroup', groupId }),
+        addPrsToGroup: (prIds, groupId) => dispatch({ type: 'addPrsToGroup', prIds, groupId }),
+        setGroupName: (groupId, groupName) => dispatch({ type: 'setGroupName', groupId, groupName}),
     }
 }
 
@@ -166,3 +140,14 @@ export function sortStructure(structure, prOrder) {
 
     return sortedStructure;
 }
+
+function useEffectExceptOnMount(fn, inputs) {
+    const didMountRef = useRef(false);
+  
+    useEffect(() => {
+      if (didMountRef.current)
+        return fn();
+      else
+        didMountRef.current = true;
+    }, inputs);
+  }

@@ -140,21 +140,22 @@ export function usePrData() {
                 .map(({node}) => parsePullData(node))
                 .filter(pullData => pullData != null)
 
-            setIsRunning(false);
-
+                
             setResp({
                 prData: parsedData.reduce((acc, pr) => ({
                     ...acc,
                     [pr.id]: pr
                 }), {}),
-
+                
                 prOrder: parsedData.map(({id}) => id),
-            })
+            });
+            
+            setIsRunning(false);
         })
     }
 
     useEffect(apiRequest, []);
-    useInterval(apiRequest, toMils('30sec'));
+    // useInterval(apiRequest, toMils('30sec'));
 
     return {
         prs: resp.prData,

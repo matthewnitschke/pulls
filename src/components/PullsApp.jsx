@@ -25,7 +25,7 @@ function PullsApp() {
     useMenubarShow(() => setHasRequiredSettings(settings.hasRequiredSettings()));
     let [ selectedItemIds, setSelectedItemIds ] = useState([]);
     
-    let { prs, prOrder, isRunning, rerunQuery } = usePrData();
+    let { prs, prOrder, rerunQuery } = usePrData();
     let { structure, groupPrs, addPrsToGroup, deleteGroup, setGroupName } = useStructure(prOrder);
 
     useMenubarHide(() => {
