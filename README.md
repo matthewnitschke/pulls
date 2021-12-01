@@ -1,4 +1,6 @@
-# Pulls
+[![CI](https://github.com/matthewnitschke/pulls/actions/workflows/ci.yml/badge.svg)](https://github.com/matthewnitschke/pulls/actions/workflows/ci.yml)
+
+# Pulls 
 
 Like https://github.com/pulls, but for your menubar
 
