@@ -1,4 +1,4 @@
-# Pulls [![CI](https://github.com/matthewnitschke/pulls/actions/workflows/ci.yml/badge.svg)](https://github.com/matthewnitschke/pulls/actions/workflows/ci.yml)
+# Pulls [![Tests](https://github.com/matthewnitschke/pulls/actions/workflows/tests.yml/badge.svg)](https://github.com/matthewnitschke/pulls/actions/workflows/tests.yml)
 
 Like https://github.com/pulls, but for your menubar, and with folder support
 
