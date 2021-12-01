@@ -7,8 +7,6 @@ Like https://github.com/pulls, but for your menubar
 ## Usage
 Hotkeys:
 
-### Any Page
-
 | Combo | Action |
 |-------|--------|
 | `Cmd+G` | Group Selected PRs |
