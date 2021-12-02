@@ -8,13 +8,7 @@ import '@testing-library/jest-dom'
 import React from 'react'
 
 import userEvent from '@testing-library/user-event'
-
 import PullsApp from '../../src/components/PullsApp.jsx';
-
-// test to write:
-
-// no structure, select a few prs, add group. verify results
-// existing group, select a few prs, add to existing group. verify results
 
 jest.mock(
     'electron',
@@ -29,21 +23,14 @@ jest.mock(
     { virtual: true },
 );
 
+
 jest.mock(
     'electron-store',
     () => {
         return class Store {
-            constructor() {
-                this.storage = {
-                    github: 'someAuthKey',
-                    githubUser: 'someGithubUser',
-                    githubQuery: 'someQuery'
-                }
-            }
-
-            has(key) { return this.storage.hasOwnProperty(key) }
-            get(val) { return this.storage[val] }
-            set(key, val) { this.storage[val] = val }
+            has(key) { return mockStoreData.hasOwnProperty(key) }
+            get(val) { return mockStoreData[val] }
+            set(key, val) { mockStoreData[val] = val }
         }
     }
 )
@@ -93,15 +80,81 @@ global.fetch = jest.fn(() =>
     json: () => Promise.resolve({
         data: { 
             search: {
-                edges: [
-                    generateDummyPrData({name: 'test pr 1', id: '1'}),
-                    generateDummyPrData({name: 'test pr 2', id: '2'}),
-                ]
+                edges: mockPrData
             }
         }
     }),
   })
 );
+
+let mockStoreData;
+let mockPrData;
+
+beforeEach(() => {
+    mockStoreData = {
+        github: 'someAuthKey',
+        githubUser: 'someGithubUser',
+        githubQuery: 'someQuery'
+    }
+
+    mockPrData = [
+        generateDummyPrData({title: 'test pr 1', id: '1'}),
+        generateDummyPrData({title: 'test pr 2', id: '2'}),
+        generateDummyPrData({title: 'test pr 3', id: '3'}),
+    ]
+});
+
+test('Renders list with folder', async () => {
+    mockStoreData['savedStructure'] = ['1', '2', {id: 'g1', name: 'group 1', prIds: ['3']}]
+
+    render(<PullsApp />)
+    await waitFor(() => screen.getAllByRole('listitem')[0])
+
+    expect(screen.getByText('test pr 1')).toBeInTheDocument();
+    expect(screen.getByText('test pr 2')).toBeInTheDocument();
+
+    expect(screen.queryByText('test pr 3')).not.toBeInTheDocument();
+    userEvent.click(screen.getByText('group 1'))
+    expect(screen.getByText('test pr 3')).toBeInTheDocument();
+})
+
+test('Re-renders list with new pr returned', async () => {
+    mockStoreData['savedStructure'] = ['1', '2', {id: 'g1', name: 'group 1', prIds: ['3']}]
+    
+    render(<PullsApp automation={true} />)
+    await waitFor(() => screen.getAllByRole('listitem')[0])
+    
+    mockPrData.push(generateDummyPrData({title: 'new pr', id: '4'}));
+
+    userEvent.click(screen.getByRole('button', {name: /refresh/}))
+    await waitFor(() => screen.getAllByRole('listitem')[3])
+
+    expect(screen.getByText('test pr 1')).toBeInTheDocument();
+    expect(screen.getByText('test pr 2')).toBeInTheDocument();
+    expect(screen.getByText('new pr')).toBeInTheDocument();
+
+    expect(screen.queryByText('test pr 3')).not.toBeInTheDocument();
+    userEvent.click(screen.getByText('group 1'))
+    expect(screen.getByText('test pr 3')).toBeInTheDocument();
+})
+
+test('Re-renders list with existing pr removed', async () => {
+    mockStoreData['savedStructure'] = ['1', '2', {id: 'g1', name: 'group 1', prIds: ['3']}]
+    
+    render(<PullsApp automation={true} />)
+    await waitFor(() => screen.getAllByRole('listitem')[0])
+    
+    mockPrData.pop();
+
+    userEvent.click(screen.getByRole('button', {name: /refresh/}))
+    await waitFor(() => screen.getAllByRole('listitem')[3])
+
+    expect(screen.getByText('test pr 1')).toBeInTheDocument();
+    expect(screen.getByText('test pr 2')).toBeInTheDocument();
+
+    expect(screen.queryByText('group 1')).not.toBeInTheDocument();
+    expect(screen.queryByText('test pr 3')).not.toBeInTheDocument();
+})
 
 test.skip('Can create a group', async () => {
     render(<PullsApp />)
@@ -115,7 +168,6 @@ test.skip('Can create a group', async () => {
 
     let modal = document.querySelector('.swal-modal')
     userEvent.type(getByRole(modal, 'textbox'), 'test group')
-    // screen.debug();
     logRoles(modal);
     userEvent.click(getByRole(modal, 'button'))
 

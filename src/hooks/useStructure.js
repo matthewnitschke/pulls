@@ -21,7 +21,7 @@ export default function useStructure(prOrder) {
     useEffectExceptOnMount(() => dispatch({ type: 'updateFromPrOrder', prOrder }), [prOrder])
 
     return {
-        structure: structure,
+        structure: filterStructure(structure, (prId) => prOrder.includes(prId)),
 
         groupPrs: (prIds, groupName) => dispatch({ type: 'groupPrs', prIds, groupName }),
         deleteGroup: (groupId) => dispatch({ type: 'deleteGroup', groupId }),

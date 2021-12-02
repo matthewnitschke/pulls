@@ -20,7 +20,7 @@ import useHotkeys from '../hooks/useHotkeys.js';
 import useStructure, { flattenStructure } from '../hooks/useStructure.js';
 
 
-function PullsApp() {
+function PullsApp({ automation = false }) {
     let [ hasRequiredSettings, setHasRequiredSettings ] = useState(settings.hasRequiredSettings());
     useMenubarShow(() => setHasRequiredSettings(settings.hasRequiredSettings()));
     let [ selectedItemIds, setSelectedItemIds ] = useState([]);
@@ -117,7 +117,7 @@ function PullsApp() {
                 }
             }} />
         
-
+        { automation && <input type="button" value="refresh" onClick={rerunQuery}/>}
     </div>
 }
 
