@@ -41,9 +41,9 @@ function SelectedPrsWithGroupDetailsMenu(props) {
                     <LayersIcon fontSize="small" color="primary" />
                 </ListItemIcon>
                 <ListItemText>Add to Group</ListItemText>
-                <Typography variant="body2" color="text.secondary">
+                {/* <Typography variant="body2" color="text.secondary">
                     ⌘G
-                </Typography>
+                </Typography> */}
             </MenuItem>
         </Menu>
     </>;

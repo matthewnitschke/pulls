@@ -26,7 +26,7 @@ function PullsApp({ automation = false }) {
     let [ selectedItemIds, setSelectedItemIds ] = useState([]);
     
     let { prs, prOrder, rerunQuery } = usePrData();
-    let { structure, groupPrs, addPrsToGroup, deleteGroup, setGroupName } = useStructure(prOrder);
+    let { structure, groupPrs, addPrsToGroup, deleteGroup, setGroupName, moveGroup } = useStructure(prOrder);
 
     useMenubarHide(() => {
         setSelectedItemIds([]);
@@ -115,7 +115,8 @@ function PullsApp({ automation = false }) {
                 })) {
                     deleteGroup(groupId);
                 }
-            }} />
+            }} 
+            onMoveGroup={moveGroup} />
         
         { automation && <input type="button" value="refresh" onClick={rerunQuery}/>}
     </div>

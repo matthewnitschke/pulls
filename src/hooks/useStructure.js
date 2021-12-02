@@ -12,6 +12,7 @@ export default function useStructure(prOrder) {
             case 'addPrsToGroup': newStructure = addPrsToGroup(state, action); break;
             case 'setGroupName': newStructure = setGroupName(state, action); break;
             case 'updateFromPrOrder': newStructure = updateFromPrOrder(state, action); break;
+            case 'moveGroup': newStructure = moveGroup(state, action); break;
         }
         return sortStructure(newStructure, prOrder);
 
@@ -27,6 +28,7 @@ export default function useStructure(prOrder) {
         deleteGroup: (groupId) => dispatch({ type: 'deleteGroup', groupId }),
         addPrsToGroup: (prIds, groupId) => dispatch({ type: 'addPrsToGroup', prIds, groupId }),
         setGroupName: (groupId, groupName) => dispatch({ type: 'setGroupName', groupId, groupName}),
+        moveGroup: (groupId, delta) => dispatch({ type: 'moveGroup', groupId, delta}),
     }
 }
 
@@ -94,6 +96,23 @@ export function setGroupName(structure, { groupId, groupName }) {
             }
             return el
         });
+}
+export function moveGroup(structure, { groupId, delta }) {
+
+    function arrayMove(arr, fromIndex, toIndex) {
+        var element = arr[fromIndex];
+        arr.splice(fromIndex, 1);
+        arr.splice(toIndex, 0, element);
+    }
+
+    let currentIndex = structure.map(el => el.id).indexOf(groupId)
+    let newIndex = currentIndex + delta;
+
+    let newStructure = [...structure];
+    arrayMove(newStructure, currentIndex, newIndex);
+
+
+    return newStructure;
 }
 
 // --------------------------- Structure Utils ---------------------------

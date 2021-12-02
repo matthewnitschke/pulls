@@ -72,6 +72,7 @@ function PrList(props) {
                             isSelected={props.selectedItemIds.includes(data.id)}
                             onEditName={() => props.onEditGroupName(data.id)}
                             onDelete={() => props.onDeleteGroup(data.id)}
+                            onMove={(delta) => props.onMoveGroup(data.id, delta)}
                             onSelect={() => _handleSelectItem(data.id)}
                         >
                             {data.prIds

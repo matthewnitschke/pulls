@@ -8,6 +8,7 @@ function PrListItemGroup({
     onEditName,
     onDelete,
     onSelect,
+    onMove,
     children
 }) {
     let [ isOpen, setIsOpen ] = useState(false);
@@ -40,6 +41,8 @@ function PrListItemGroup({
                 <PrListItemGroupMenuItem 
                     onUngroupClick={onDelete}
                     onRenameClick={onEditName}
+                    onMoveUp={() => onMove(-1)}
+                    onMoveDown={() => onMove(1)}
                     />
             </div>
         </div>

@@ -12,7 +12,7 @@ const theme = createTheme({
       main: '#adbac7',
     },
     secondary: {
-      main: '#f50057',
+      main: '#768390',
     },
     text: {
       primary: '#adbac7',
@@ -26,6 +26,11 @@ const theme = createTheme({
 
   components: {
     MuiMenu: {
+      defaultProps: {
+        MenuListProps: {
+          'dense': true
+        }
+      },
       styleOverrides: {
         paper: {
           width: 170,

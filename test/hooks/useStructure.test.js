@@ -7,6 +7,7 @@ import {
     addPrsToGroup,
     setGroupName,
     updateFromPrOrder,
+    moveGroup,
  } from "../../src/hooks/useStructure"
 
 const testStructure = [
@@ -108,6 +109,66 @@ test('setGroupName', () => {
         { id: 'gId1', name: 'foo', prIds: ['f', 'c', 'a'] },
         'b',
         { id: 'gId2', name: 'g2', prIds: ['d', 'h']}
+    ])
+})
+
+test('moveGroup - positive delta', () => {
+    let actual = moveGroup(
+        testStructure,
+        { groupId: 'gId1', delta: 1}
+    )
+
+    expect(actual).toEqual([
+        'g',
+        'e',
+        'b',
+        { id: 'gId1', name: 'g1', prIds: ['f', 'c', 'a'] },
+        { id: 'gId2', name: 'g2', prIds: ['d', 'h']}
+    ])
+})
+
+test('moveGroup - negative delta', () => {
+    let actual = moveGroup(
+        testStructure,
+        { groupId: 'gId1', delta: -1}
+    )
+
+    expect(actual).toEqual([
+        'g',
+        { id: 'gId1', name: 'g1', prIds: ['f', 'c', 'a'] },
+        'e',
+        'b',
+        { id: 'gId2', name: 'g2', prIds: ['d', 'h']}
+    ])
+})
+
+test('moveGroup - negative delta off bounds', () => {
+    let actual = moveGroup(
+        testStructure,
+        { groupId: 'gId1', delta: -10}
+    )
+
+    expect(actual).toEqual([
+        { id: 'gId1', name: 'g1', prIds: ['f', 'c', 'a'] },
+        'g',
+        'e',
+        'b',
+        { id: 'gId2', name: 'g2', prIds: ['d', 'h']}
+    ])
+})
+
+test('moveGroup - positive delta off bounds', () => {
+    let actual = moveGroup(
+        testStructure,
+        { groupId: 'gId1', delta: 10}
+    )
+
+    expect(actual).toEqual([
+        'g',
+        'e',
+        'b',
+        { id: 'gId2', name: 'g2', prIds: ['d', 'h']},
+        { id: 'gId1', name: 'g1', prIds: ['f', 'c', 'a'] },
     ])
 })
 
