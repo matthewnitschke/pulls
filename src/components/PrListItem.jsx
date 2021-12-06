@@ -8,13 +8,29 @@ const settings = require('./settings/settings-utils.js');
 import PrStatusIndicator from "./utils/PrStatusIndicator";
 
 function PullListItem(props) {
+    let { filterText } = props;
 
     function _getPrTitle() {
-        if (settings.has('prTitleRewriter')) {
-            return props.name.replace(new RegExp(settings.get('prTitleRewriter')), '')
+        let name = 
+            settings.has('prTitleRewriter') 
+              ? props.name.replace(new RegExp(settings.get('prTitleRewriter')), '') 
+              : props.name
+        
+
+        if (filterText != '' || filterText != null) {
+            let matchStart = name.toLowerCase().indexOf(filterText.toLowerCase());
+
+            // sanity check to make sure the filter text is in the name
+            if (matchStart <= -1) return name;
+
+            let prefix = name.substring(0, matchStart)
+            let match = name.substring(matchStart, matchStart+filterText.length);
+            let suffix = name.substring(matchStart+filterText.length)
+
+            return <>{prefix}<mark>{match}</mark>{suffix}</>;
         }
 
-        return props.name
+        return name;
     }
 
     return <div

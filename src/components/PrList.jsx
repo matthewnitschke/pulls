@@ -45,6 +45,7 @@ function PrList(props) {
         return <PrListItem
             key={pr.id}
             isSelected={props.selectedItemIds.includes(pr.id)}
+            filterText={filterText}
             name={pr.name}
             repo={pr.repo}
             isClosed={pr.prState == 'closed'}
