@@ -1,5 +1,7 @@
 import React, {useState} from 'react';
 
+import { useDrop } from 'react-dnd';
+
 import PrListItemGroupMenuItem from './PrListItemGroupDetailsMenu.jsx';
 
 function PrListItemGroup({ 
@@ -7,15 +9,27 @@ function PrListItemGroup({
     isSelected,
     onEditName,
     onDelete,
+    onAddPrToGroup,
     onSelect,
     onMove,
     children
 }) {
     let [ isOpen, setIsOpen ] = useState(false);
 
+    const [_, drop] = useDrop({
+        accept: 'pr',
+        drop(item) {
+            onAddPrToGroup(item.id)
+        },
+    });
+
     if ((children?.length ?? 0) <= 0) return null;
 
-    return <div key={name} className="pr-list-item-group">
+    return <div 
+        key={name} 
+        ref={drop}
+        className="pr-list-item-group"
+    >
         <div 
             className={`pr-list-item-group__label ${isSelected ? 'selected' : ''}`} 
             onClick={(e) => {

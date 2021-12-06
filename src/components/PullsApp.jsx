@@ -41,16 +41,16 @@ function PullsApp({ automation = false }) {
 
     useHotkeys('command+o', _openSelectedPrs);
     useHotkeys('command+c', _copySelectedPrs);
-    useHotkeys('command+g', _groupSelectedPrs);
+    useHotkeys('command+g', () => _groupPrs(selectedPrIds));
 
-    async function _groupSelectedPrs() {
+    async function _groupPrs(prIds) {
         let groupName = await swal({
             title: 'ENTER NAME OF GROUP',
             content: 'input'
         });
 
         if (groupName) {
-            groupPrs(selectedPrIds, groupName);
+            groupPrs(prIds, groupName);
             setSelectedItemIds([]);
         }
     }
@@ -78,7 +78,7 @@ function PullsApp({ automation = false }) {
         <Header
             selectedItemIds={selectedItemIds}
             structure={structure}
-            onGroupSelectedPrs={_groupSelectedPrs}
+            onGroupSelectedPrs={() => _groupPrs(selectedPrIds)}
             onAddToSelectedGroup={() => {
                 let selectedGroupId = selectedItemIds.find(el => !selectedPrIds.includes(el))
                 addPrsToGroup(selectedPrIds, selectedGroupId);
@@ -93,6 +93,8 @@ function PullsApp({ automation = false }) {
             selectedItemIds={selectedItemIds}
             onHideWindow={() => ipcRenderer.send('hide-window')}
             setSelectedItemIds={setSelectedItemIds}
+            onGroupPrs={_groupPrs}
+            onAddPrsToGroup={addPrsToGroup}
             onEditGroupName={async (groupId) => {
                 let group = structure.find(el => el.id == groupId)
                 let groupName = await swal({

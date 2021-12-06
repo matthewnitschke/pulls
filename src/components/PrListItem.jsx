@@ -1,13 +1,14 @@
 // Libraries
-import React from 'react';
-import {removeTicketFromPrTitle} from '../utils.js';
+import React, {useRef} from 'react';
+import { useDrag } from 'react-dnd';
 
 const settings = require('./settings/settings-utils.js');
 
 // Components
 import PrStatusIndicator from "./utils/PrStatusIndicator";
 
-function PullListItem(props) {
+
+const PullListItem = React.forwardRef((props, ref) => {
     let { filterText } = props;
 
     function _getPrTitle() {
@@ -34,8 +35,10 @@ function PullListItem(props) {
     }
 
     return <div
-        className={`pr-list-item ${props.isSelected ? 'selected' : ''}`}
+        ref={ref}
+        className={`pr-list-item ${props.isSelected ? 'selected' : ''} ${props.isHovered ? 'hovered': ''}`}
         onClick={props.onClick}
+        style={props.style}
         role="listitem"
     >
         <PrStatusIndicator state={props.prStatus} isMerged={props.isClosed}/>
@@ -44,6 +47,6 @@ function PullListItem(props) {
             {_getPrTitle()}
         </div>
     </div>
-}
+});
 
 export default PullListItem;

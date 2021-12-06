@@ -145,6 +145,11 @@
             }
         }
 
+        &.hovered {
+            opacity: .5;
+            // background-color: rgb(105, 204, 174);
+        }
+
         &.selected, &:hover {
             background-color: #2d333b;
         }

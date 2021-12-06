@@ -1,9 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import { DndProvider } from 'react-dnd'
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 import PullsApp from './components/PullsApp.jsx';
 
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 const theme = createTheme({
   palette: {
@@ -42,8 +45,10 @@ const theme = createTheme({
 });
 
 ReactDOM.render(
-    <ThemeProvider theme={theme}>
-        <PullsApp />
-    </ThemeProvider>,
+    <DndProvider backend={HTML5Backend}>
+      <ThemeProvider theme={theme}>
+          <PullsApp />
+      </ThemeProvider>
+    </DndProvider>,
     document.getElementById('app')
 );

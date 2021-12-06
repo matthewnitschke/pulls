@@ -6,6 +6,7 @@ import { openUrl } from '../utils.js';
 import PrListItem from './PrListItem.jsx';
 import PrListItemGroup from './PrListItemGroup.jsx';
 import FilterInput from './FilterInput.jsx';
+import DraggablePrListItem from './DraggablePrListItem.jsx';
 
 function PrList(props) {
     let [ filterText, setFilterText ] = useState('')
@@ -39,15 +40,18 @@ function PrList(props) {
         return prName.toLowerCase().indexOf(filterText.toLowerCase()) >= 0;
     }
 
-    function __renderPrListItem(pr) {
+    function __renderPrListItem(pr, isInGroup=false) {
         if (!__matchesFilterText(pr.name)) return null;
 
-        return <PrListItem
+        return <DraggablePrListItem
+            allowDrop={!isInGroup}
             key={pr.id}
+            id={pr.id}
             isSelected={props.selectedItemIds.includes(pr.id)}
             filterText={filterText}
             name={pr.name}
             repo={pr.repo}
+            onGroupPrs={props.onGroupPrs}
             isClosed={pr.prState == 'closed'}
             prStatus={pr.prStatus}
             onClick={(e) => _handleClick(e, pr.id)} />;
@@ -73,11 +77,12 @@ function PrList(props) {
                             isSelected={props.selectedItemIds.includes(data.id)}
                             onEditName={() => props.onEditGroupName(data.id)}
                             onDelete={() => props.onDeleteGroup(data.id)}
+                            onAddPrToGroup={(prId) => props.onAddPrsToGroup([prId], data.id)}
                             onMove={(delta) => props.onMoveGroup(data.id, delta)}
                             onSelect={() => _handleSelectItem(data.id)}
                         >
                             {data.prIds
-                                .map(prId => __renderPrListItem(props.prs[prId]))
+                                .map(prId => __renderPrListItem(props.prs[prId], true))
                                 .filter(pr => pr !== null)
                             }
                         </PrListItemGroup>
