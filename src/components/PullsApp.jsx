@@ -28,9 +28,7 @@ function PullsApp({ automation = false }) {
     let { prs, prOrder, rerunQuery } = usePrData();
     let { structure, groupPrs, addPrsToGroup, deleteGroup, setGroupName, moveGroup } = useStructure(prOrder);
 
-    useMenubarHide(() => {
-        setSelectedItemIds([]);
-    });
+    useMenubarHide(() => setSelectedItemIds([]));
     
     let structurePrIds = flattenStructure(structure);
     let selectedPrIds = selectedItemIds.filter(id => structurePrIds.includes(id));
@@ -60,6 +58,7 @@ function PullsApp({ automation = false }) {
 
     function _openSelectedPrs() {
         selectedPrIds.map(id => prs[id].prUrl).map(openUrl);
+        setSelectedItemIds([]);
     }
 
     function _copySelectedPrs() {
@@ -83,6 +82,7 @@ function PullsApp({ automation = false }) {
             onAddToSelectedGroup={() => {
                 let selectedGroupId = selectedItemIds.find(el => !selectedPrIds.includes(el))
                 addPrsToGroup(selectedPrIds, selectedGroupId);
+                setSelectedItemIds([])
             }}
             onOpenSelectedPrs={_openSelectedPrs}
             onCopySelectedPrs={_copySelectedPrs} />
@@ -102,6 +102,7 @@ function PullsApp({ automation = false }) {
         
                 if (groupName) {
                     setGroupName(groupId, groupName);
+                    setSelectedItemIds([])
                 }
             }}
             onDeleteGroup={async (groupId) => {
@@ -114,6 +115,7 @@ function PullsApp({ automation = false }) {
                     dangerMode: true,
                 })) {
                     deleteGroup(groupId);
+                    setSelectedItemIds([])
                 }
             }} 
             onMoveGroup={moveGroup} />

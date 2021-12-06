@@ -155,7 +155,7 @@ export function usePrData() {
     }
 
     useEffect(apiRequest, []);
-    // useInterval(apiRequest, toMils('30sec'));
+    useInterval(apiRequest, toMils('30sec'));
 
     return {
         prs: resp.prData,
