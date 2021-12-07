@@ -1,80 +1,77 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 import PrListItem from './PrListItem.jsx';
 
-import { useDrag, useDrop } from 'react-dnd';
+import { useDrag, useDrop, useDragDropManager } from 'react-dnd';
 
 function DraggablePrListItem(props) {
+    const [hov, setHov] = useState(false);
+
+    const dragDropManager = useDragDropManager()
     const ref = useRef();
-    const [{isHovered}, drop] = useDrop({
+    const [{isHovered, isAbove, isBelow}, drop] = useDrop({
         accept: 'pr',
         drop(item) {
             props.onMove(item.id, props.index)
             // props.onGroupPrs([item.id, props.id])
         },
-        hover(item, monitor) {
-            // if (!ref.current) {
-            //     return;
-            // }
-            // const dragIndex = item.index;
-            // const hoverIndex = props.index;
-            // // Don't replace items with themselves
-            // if (dragIndex === hoverIndex) {
-            //     return;
-            // }
-            // // Determine rectangle on screen
-            // const hoverBoundingRect = ref.current?.getBoundingClientRect();
-            // // Get vertical middle
-            // const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-            // // Determine mouse position
-            // const clientOffset = monitor.getClientOffset();
-            // // Get pixels to the top
-            // const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-            // // Only perform the move when the mouse has crossed half of the items height
-            // // When dragging downwards, only move when the cursor is below 50%
-            // // When dragging upwards, only move when the cursor is above 50%
-            // // Dragging downwards
-            // if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
-            //     return;
-            // }
-            // // Dragging upwards
-            // if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
-            //     return;
-            // }
-            // // Time to actually perform the action
-            // // moveCard(dragIndex, hoverIndex);
-            // console.log(`Move ${dragIndex} to ${hoverIndex}`);
-            // props.onMove(item.id, hoverIndex)
-
-            // // Note: we're mutating the monitor item here!
-            // // Generally it's better to avoid mutations,
-            // // but it's good here for the sake of performance
-            // // to avoid expensive index searches.
-            // item.index = hoverIndex;
-        },
         canDrop(item) {
             return item.id != props.id && props.allowDrop
         },
         collect(monitor) {
+            // console.log('called')
+            if (ref.current != null && monitor.isOver()) {
+                const vertGutterSize = 15;
+
+                const hoverBoundingRect = ref.current?.getBoundingClientRect();
+                const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+                const clientOffset = monitor.getClientOffset();
+                const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+                
+                // console.log(hoverMiddleY, hoverClientY)
+
+                return {
+                    isHovered: true,
+                    isAbove: hoverClientY > hoverMiddleY,
+                    isBelow: hoverClientY < hoverMiddleY
+                }
+            }
             return {
-                isHovered: monitor.isOver()
+                isHovered: monitor.isOver(),
             }
         }
     });
 
-    const [{isDragging}, drag] = useDrag({
+    const [{isDragging, clientOffset}, drag] = useDrag({
         type: 'pr',
         item: () => ({ id: props.id, index: props.index }),
         collect: (monitor) => ({
             isDragging: monitor.isDragging(),
+            clientOffset: monitor.getClientOffset()
         }),
     });
 
     drag(drop(ref))
+
+    // console.log(dragDropManager.getMonitor().getClientOffset())
+    let borderStyles;
+    // if (isHovered) {
+    //     const hoverBoundingRect = ref.current?.getBoundingClientRect();
+    //     if (isAbove) {
+    //         borderStyles = {borderTop: 'solid 1px red'}
+    //     } else if (isBelow) {
+    //         borderStyles = {borderBottom: 'solid 1px red'}
+    //     }
+    // }
+
     return <PrListItem 
         {...props}
         isHovered={isHovered}
-        style={{display: isDragging ? 'none' : ''}}
+        onMouseOver={(e) => console.log(e)}
+        style={{
+            opacity: isDragging ? .5 : 1,
+            ...borderStyles
+        }}
         ref={ref}
     />
 }
