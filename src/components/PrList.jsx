@@ -40,12 +40,13 @@ function PrList(props) {
         return prName.toLowerCase().indexOf(filterText.toLowerCase()) >= 0;
     }
 
-    function __renderPrListItem(pr, isInGroup=false) {
+    function __renderPrListItem(pr, index, isInGroup=false) {
         if (!__matchesFilterText(pr.name)) return null;
 
         return <DraggablePrListItem
             allowDrop={!isInGroup}
             key={pr.id}
+            index={index}
             id={pr.id}
             isSelected={props.selectedItemIds.includes(pr.id)}
             filterText={filterText}
@@ -54,6 +55,7 @@ function PrList(props) {
             onGroupPrs={props.onGroupPrs}
             isClosed={pr.prState == 'closed'}
             prStatus={pr.prStatus}
+            onMove={props.onMove}
             onClick={(e) => _handleClick(e, pr.id)} />;
     }
 
@@ -66,9 +68,9 @@ function PrList(props) {
         { Object.keys(props.prs).length > 0 &&        
             <div className="pr-list" role="list">
                 {
-                    props.structure.map((data) => {
+                    props.structure.map((data, i) => {
                         if (typeof data === 'string') {
-                            return __renderPrListItem(props.prs[data])
+                            return __renderPrListItem(props.prs[data], i)
                         }
 
                         return <PrListItemGroup 
@@ -82,7 +84,7 @@ function PrList(props) {
                             onSelect={() => _handleSelectItem(data.id)}
                         >
                             {data.prIds
-                                .map(prId => __renderPrListItem(props.prs[prId], true))
+                                .map((prId, gId) => __renderPrListItem(props.prs[prId], gId, true))
                                 .filter(pr => pr !== null)
                             }
                         </PrListItemGroup>

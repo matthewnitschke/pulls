@@ -26,7 +26,7 @@ function PullsApp({ automation = false }) {
     let [ selectedItemIds, setSelectedItemIds ] = useState([]);
     
     let { prs, prOrder, rerunQuery } = usePrData();
-    let { structure, groupPrs, addPrsToGroup, deleteGroup, setGroupName, moveGroup } = useStructure(prOrder);
+    let { structure, groupPrs, addPrsToGroup, deleteGroup, setGroupName, moveGroup, move } = useStructure(prOrder);
 
     useMenubarHide(() => setSelectedItemIds([]));
     
@@ -94,6 +94,7 @@ function PullsApp({ automation = false }) {
             onHideWindow={() => ipcRenderer.send('hide-window')}
             setSelectedItemIds={setSelectedItemIds}
             onGroupPrs={_groupPrs}
+            onMove={move}
             onAddPrsToGroup={addPrsToGroup}
             onEditGroupName={async (groupId) => {
                 let group = structure.find(el => el.id == groupId)
