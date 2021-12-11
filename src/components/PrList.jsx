@@ -40,14 +40,17 @@ function PrList(props) {
         return prName.toLowerCase().indexOf(filterText.toLowerCase()) >= 0;
     }
 
-    function __renderPrListItem(pr, isInGroup=false) {
+    function __renderPrListItem(pr, index, groupId) {
         if (!__matchesFilterText(pr.name)) return null;
 
         return <DraggablePrListItem
-            allowDrop={!isInGroup}
+            // allowDrop={!isInGroup}
             key={pr.id}
             id={pr.id}
+            index={index}
+            groupId={groupId}
             isSelected={props.selectedItemIds.includes(pr.id)}
+            onMove={(id, index, groupId) => props.onMove(id, index, groupId)}
             filterText={filterText}
             name={pr.name}
             repo={pr.repo}
@@ -66,9 +69,9 @@ function PrList(props) {
         { Object.keys(props.prs).length > 0 &&        
             <div className="pr-list" role="list">
                 {
-                    props.structure.map((data) => {
+                    props.structure.map((data, i) => {
                         if (typeof data === 'string') {
-                            return __renderPrListItem(props.prs[data])
+                            return __renderPrListItem(props.prs[data], i)
                         }
 
                         return <PrListItemGroup 
@@ -82,7 +85,7 @@ function PrList(props) {
                             onSelect={() => _handleSelectItem(data.id)}
                         >
                             {data.prIds
-                                .map(prId => __renderPrListItem(props.prs[prId], true))
+                                .map((prId, gI) => __renderPrListItem(props.prs[prId], gI, data.id))
                                 .filter(pr => pr !== null)
                             }
                         </PrListItemGroup>

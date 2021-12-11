@@ -1,6 +1,5 @@
 // Libraries
-import React, {useRef} from 'react';
-import { useDrag } from 'react-dnd';
+import React from 'react';
 
 const settings = require('./settings/settings-utils.js');
 
@@ -36,7 +35,7 @@ const PullListItem = React.forwardRef((props, ref) => {
 
     return <div
         ref={ref}
-        className={`pr-list-item ${props.isSelected ? 'selected' : ''} ${props.isHovered ? 'hovered': ''}`}
+        className={`pr-list-item ${props.isSelected ? 'selected' : ''} ${props.isHovered ? 'hovered': ''} ${props.className}`}
         onClick={props.onClick}
         style={props.style}
         role="listitem"

@@ -125,6 +125,8 @@
         display: flex;
         cursor: pointer;
 
+        position: relative;
+
         font-size: 15px;
         font-weight: 600;
 
@@ -147,7 +149,6 @@
 
         &.hovered {
             opacity: .5;
-            // background-color: rgb(105, 204, 174);
         }
 
         &.selected, &:hover {
@@ -156,6 +157,29 @@
 
         &:not(:first-child) {
             border-top: solid 1px #373e47;
+        }
+
+        &.drag-middle {
+            background-color: lightgrey;
+        }
+
+        &.drag-above:before, &.drag-below:after {
+            content: '';
+            height: 10px;
+            width: calc(100% - 6px);
+            border: 3px solid lightgrey;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+        }
+        
+        &.drag-above:before {
+            border-bottom: 0;
+        }
+        &.drag-below:after {
+            border-top: 0;
+            bottom: 0px;
+            top: auto;
         }
     }
 

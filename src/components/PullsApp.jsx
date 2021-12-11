@@ -120,7 +120,8 @@ function PullsApp({ automation = false }) {
                     setSelectedItemIds([])
                 }
             }} 
-            onMoveGroup={moveGroup} />
+            onMoveGroup={moveGroup} 
+            onMove={onMove} />
         
         { automation && <input type="button" value="refresh" onClick={rerunQuery}/>}
     </div>
