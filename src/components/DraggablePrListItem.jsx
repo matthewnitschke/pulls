@@ -2,13 +2,13 @@ import React, { useRef, useState } from 'react';
 
 import PrListItem from './PrListItem.jsx';
 
-import { useDrag, useDrop } from 'react-dnd';
+import { useDrag, useDrop, useDragDropManager } from 'react-dnd';
 
 function DraggablePrListItem(props) {
     let [hoverState, setHoverState] = useState()
 
     const ref = useRef();
-    const [{isHovered}, drop] = useDrop({
+    const [{ isHovered }, drop] = useDrop({
         accept: 'pr',
         hover(item, monitor) {
             const hoverBoundingRect = ref.current?.getBoundingClientRect();
@@ -29,27 +29,26 @@ function DraggablePrListItem(props) {
             }
         },
         drop(item) {
+            let newIndex = props.index > item.index ? props.index-1 : props.index
             if (hoverState == 'above') {
-                props.onMove(item.id, props.index, props.group)
+                props.onMove(item.id, newIndex, props.group)
             } else if (hoverState == 'below') {
-                props.onMove(item.id, props.index+1, props.group)
+                props.onMove(item.id, newIndex+1, props.group)
             } else {
                 props.onGroupPrs([item.id, props.id])
             }
         },
         canDrop(item) {
-            return item.id != props.id && props.allowDrop
+            return item.id != props.id
         },
         collect(monitor) {
-            return {
-                isHovered: monitor.isOver(),
-            }
+            return { isHovered: monitor.isOver() }
         }
     });
 
-    const [{isDragging}, drag] = useDrag({
+    const [{ isDragging }, drag] = useDrag({
         type: 'pr',
-        item: () => ({ id: props.id }),
+        item: () => ({ id: props.id, index: props.index }),
         collect: (monitor) => ({
             isDragging: monitor.isDragging(),
         }),
@@ -67,12 +66,11 @@ function DraggablePrListItem(props) {
     }
 
     drag(drop(ref))
+
     return <PrListItem 
         {...props}
         isHovered={isHovered}
-        style={{
-            visibility: isDragging ? 'hidden' : 'visible',
-        }}
+        style={{ visibility: isDragging ? 'hidden' : 'visible' }}
         className={dragClass}
         ref={ref}
     />

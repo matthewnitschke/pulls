@@ -8,6 +8,7 @@ import {
     setGroupName,
     updateFromPrOrder,
     moveGroup,
+    move,
  } from "../../src/hooks/useStructure"
 
 const testStructure = [
@@ -171,6 +172,99 @@ test('moveGroup - positive delta off bounds', () => {
         { id: 'gId1', name: 'g1', prIds: ['f', 'c', 'a'] },
     ])
 })
+
+test('move - root to root', () => {
+    let actual = move(
+        testStructure,
+        { itemId: 'g', index: 1 }
+    )
+
+    expect(actual).toEqual([
+        'e',
+        'g',
+        { id: 'gId1', name: 'g1', prIds: ['f', 'c', 'a'] },
+        'b',
+        { id: 'gId2', name: 'g2', prIds: ['d', 'h']}
+    ])
+});
+
+test('move - group to same group', () => {
+    let actual = move(
+        testStructure,
+        { itemId: 'f', index: 1, groupId: 'gId1' }
+    )
+
+    expect(actual).toEqual([
+        'g',
+        'e',
+        { id: 'gId1', name: 'g1', prIds: ['c', 'f', 'a'] },
+        'b',
+        { id: 'gId2', name: 'g2', prIds: ['d', 'h']}
+    ])
+});
+
+test('move - group to new group', () => {
+    let actual = move(
+        testStructure,
+        { itemId: 'f', index: 1, groupId: 'gId2' }
+    )
+
+    expect(actual).toEqual([
+        'g',
+        'e',
+        { id: 'gId1', name: 'g1', prIds: ['c', 'a'] },
+        'b',
+        { id: 'gId2', name: 'g2', prIds: ['d', 'f', 'h']}
+    ])
+});
+
+test('move - group to root', () => {
+    let actual = move(
+        testStructure,
+        { itemId: 'f', index: 1 }
+    )
+
+    expect(actual).toEqual([
+        'g',
+        'f',
+        'e',
+        { id: 'gId1', name: 'g1', prIds: ['c', 'a'] },
+        'b',
+        { id: 'gId2', name: 'g2', prIds: ['d', 'h']}
+    ])
+});
+
+test('move - root to group', () => {
+    let actual = move(
+        testStructure,
+        { itemId: 'b', index: 1, groupId: 'gId2' }
+    )
+
+    expect(actual).toEqual([
+        'g',
+        'e',
+        { id: 'gId1', name: 'g1', prIds: ['f', 'c', 'a'] },
+        { id: 'gId2', name: 'g2', prIds: ['d', 'b', 'h']}
+    ])
+});
+
+
+test('move - group', () => {
+    let actual = move(
+        testStructure,
+        { itemId: 'gId1', index: 1 }
+    )
+
+    console.log(actual)
+
+    expect(actual).toEqual([
+        'g',
+        { id: 'gId1', name: 'g1', prIds: ['f', 'c', 'a'] },
+        'e',
+        'b',
+        { id: 'gId2', name: 'g2', prIds: ['d', 'h']}
+    ])
+});
 
 // ----------------------- Utils -----------------------
 

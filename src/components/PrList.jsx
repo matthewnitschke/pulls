@@ -46,6 +46,7 @@ function PrList(props) {
         return <DraggablePrListItem
             // allowDrop={!isInGroup}
             key={pr.id}
+            index={index}
             id={pr.id}
             index={index}
             groupId={groupId}
@@ -57,6 +58,7 @@ function PrList(props) {
             onGroupPrs={props.onGroupPrs}
             isClosed={pr.prState == 'closed'}
             prStatus={pr.prStatus}
+            onMove={props.onMove}
             onClick={(e) => _handleClick(e, pr.id)} />;
     }
 
@@ -85,7 +87,7 @@ function PrList(props) {
                             onSelect={() => _handleSelectItem(data.id)}
                         >
                             {data.prIds
-                                .map((prId, gI) => __renderPrListItem(props.prs[prId], gI, data.id))
+                                .map((prId, gId) => __renderPrListItem(props.prs[prId], gId, data.id))
                                 .filter(pr => pr !== null)
                             }
                         </PrListItemGroup>

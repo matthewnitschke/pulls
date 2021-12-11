@@ -13,8 +13,9 @@ export default function useStructure(prOrder) {
             case 'setGroupName': newStructure = setGroupName(state, action); break;
             case 'updateFromPrOrder': newStructure = updateFromPrOrder(state, action); break;
             case 'moveGroup': newStructure = moveGroup(state, action); break;
+            case 'move': newStructure = move(state, action); break;
         }
-        return sortStructure(newStructure, prOrder);
+        return newStructure;
 
     }, settings.get('savedStructure') ?? []);
 
@@ -29,6 +30,9 @@ export default function useStructure(prOrder) {
         addPrsToGroup: (prIds, groupId) => dispatch({ type: 'addPrsToGroup', prIds, groupId }),
         setGroupName: (groupId, groupName) => dispatch({ type: 'setGroupName', groupId, groupName}),
         moveGroup: (groupId, delta) => dispatch({ type: 'moveGroup', groupId, delta}),
+        move: (itemId, index, groupId) => {
+            dispatch({ type: 'move', itemId, index, groupId });
+        }
     }
 }
 
@@ -111,6 +115,56 @@ export function moveGroup(structure, { groupId, delta }) {
     let newStructure = [...structure];
     arrayMove(newStructure, currentIndex, newIndex);
 
+
+    return newStructure;
+}
+
+export function move(structure, { itemId, index, groupId }) {
+    console.log('move ran')
+    let newStructure = [...structure];
+
+    let enclosingGroup = structure.find(el => el.prIds?.includes(itemId))
+
+    let element;
+
+    if (enclosingGroup != null) {
+        // itemId is within a group
+
+        let newPrIds = [...enclosingGroup.prIds]
+        let itemIndex = newPrIds.indexOf(itemId)
+        element = newPrIds[itemIndex];
+
+        newPrIds.splice(itemIndex, 1);
+
+        newStructure[newStructure.indexOf(enclosingGroup)] = {
+            ...enclosingGroup,
+            prIds: newPrIds,
+        }
+    } else {
+        let itemIndex = structure
+            .map(el => el.id ?? el)
+            .indexOf(itemId)
+
+        element = structure[itemIndex];
+        newStructure.splice(itemIndex, 1);
+    }
+
+    if (groupId != null) {
+        newStructure = newStructure.map(el => {
+            if (el.id == groupId) {
+                let newGroupPrIds = [...el.prIds]
+                newGroupPrIds.splice(index, 0, element)
+                return {
+                    ...el,
+                    prIds: newGroupPrIds
+                }
+            }
+
+            return el
+        });
+    } else {
+        newStructure.splice(index, 0, element)
+    }
 
     return newStructure;
 }
