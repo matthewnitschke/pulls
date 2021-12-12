@@ -116,6 +116,37 @@
     }
 }
 
+@mixin draggableItem {
+    position: relative;
+
+    &:not(:first-child) {
+        border-top: solid 1px #373e47;
+    }
+
+    &.drag-middle {
+        background-color: lightgrey;
+    }
+
+    &.drag-above:before, &.drag-below:after {
+        content: '';
+        height: 10px;
+        width: calc(100% - 6px);
+        border: 3px solid lightgrey;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+    }
+    
+    &.drag-above:before {
+        border-bottom: 0;
+    }
+    &.drag-below:after {
+        border-top: 0;
+        bottom: 0px;
+        top: auto;
+    }
+}
+
 .pr-list {
     overflow: auto;
 
@@ -124,8 +155,6 @@
         font-size: .75rem;
         display: flex;
         cursor: pointer;
-
-        position: relative;
 
         font-size: 15px;
         font-weight: 600;
@@ -155,36 +184,14 @@
             background-color: #2d333b;
         }
 
-        &:not(:first-child) {
-            border-top: solid 1px #373e47;
-        }
-
-        &.drag-middle {
-            background-color: lightgrey;
-        }
-
-        &.drag-above:before, &.drag-below:after {
-            content: '';
-            height: 10px;
-            width: calc(100% - 6px);
-            border: 3px solid lightgrey;
-            position: absolute;
-            top: 0px;
-            left: 0px;
-        }
-        
-        &.drag-above:before {
-            border-bottom: 0;
-        }
-        &.drag-below:after {
-            border-top: 0;
-            bottom: 0px;
-            top: auto;
-        }
+        @include draggableItem;
     }
 
     .pr-list-item-group {
+        @include draggableItem;
+    
         .pr-list-item-group__label {
+
             display: flex;
             justify-content: space-between;
             align-items: center;

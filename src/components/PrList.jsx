@@ -78,12 +78,14 @@ function PrList(props) {
 
                         return <PrListItemGroup 
                             key={data.id}
+                            id={data.id}
+                            index={i}
                             name={data.name}
                             isSelected={props.selectedItemIds.includes(data.id)}
                             onEditName={() => props.onEditGroupName(data.id)}
                             onDelete={() => props.onDeleteGroup(data.id)}
                             onAddPrToGroup={(prId) => props.onAddPrsToGroup([prId], data.id)}
-                            onMove={(delta) => props.onMoveGroup(data.id, delta)}
+                            onMove={props.onMove}
                             onSelect={() => _handleSelectItem(data.id)}
                         >
                             {data.prIds

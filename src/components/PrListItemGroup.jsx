@@ -1,11 +1,15 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 
-import { useDrop } from 'react-dnd';
+import { useDrag, useDrop } from 'react-dnd';
 
 import PrListItemGroupMenuItem from './PrListItemGroupDetailsMenu.jsx';
 
+import useSortableItem from '../hooks/useSortableItem.js';
+
 function PrListItemGroup({ 
     name,
+    id,
+    index,
     isSelected,
     onEditName,
     onDelete,
@@ -16,19 +20,31 @@ function PrListItemGroup({
 }) {
     let [ isOpen, setIsOpen ] = useState(false);
 
-    const [_, drop] = useDrop({
-        accept: 'pr',
-        drop(item) {
-            onAddPrToGroup(item.id)
+    let { ref, isDragging, className } = useSortableItem({
+        id, 
+        index,
+        allowMiddleDrop: false,
+        allowBelowDrop: false,
+        onDrop: (item, hoverState, newIndex) => {
+            if (hoverState == 'above') {
+                onMove(item.id, newIndex) // intentionally pass no group ids
+            } else if (hoverState == 'below') {
+                onMove(item.id, newIndex+1);
+            } else {
+                onAddPrToGroup([item.id, id]);
+            }
         },
-    });
+        canDrop: () => true 
+    })
+
 
     if ((children?.length ?? 0) <= 0) return null;
 
     return <div 
-        key={name} 
-        ref={drop}
-        className="pr-list-item-group"
+        key={name}
+        ref={ref}
+        style={{ visibility: isDragging ? 'hidden' : 'visible' }}
+        className={`pr-list-item-group ${className}`}
     >
         <div 
             className={`pr-list-item-group__label ${isSelected ? 'selected' : ''}`} 

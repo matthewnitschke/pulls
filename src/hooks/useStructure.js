@@ -5,6 +5,7 @@ import settings from 'src/components/settings/settings-utils.js';
 
 export default function useStructure(prOrder) {
     let [ structure, dispatch ] = useReducer((state, action) => {
+        // console.log({action, state})
         let newStructure;
         switch(action.type) {
             case 'groupPrs': newStructure = groupPrs(state, action); break;
@@ -38,6 +39,12 @@ export default function useStructure(prOrder) {
 
 export function updateFromPrOrder(structure, { prOrder }) {
     let flattenedStructure = flattenStructure(structure);
+
+    console.log([
+        ...prOrder.filter(prId => !flattenedStructure.includes(prId)),
+        ...filterStructure(structure, prId => prOrder.includes(prId)),
+    ])
+
     return [
         ...prOrder.filter(prId => !flattenedStructure.includes(prId)),
         ...filterStructure(structure, prId => prOrder.includes(prId)),
