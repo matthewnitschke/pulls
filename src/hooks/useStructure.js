@@ -37,11 +37,6 @@ export default function useStructure(prOrder) {
 export function updateFromPrOrder(structure, { prOrder }) {
     let flattenedStructure = flattenStructure(structure);
 
-    console.log([
-        ...prOrder.filter(prId => !flattenedStructure.includes(prId)),
-        ...filterStructure(structure, prId => prOrder.includes(prId)),
-    ])
-
     return [
         ...prOrder.filter(prId => !flattenedStructure.includes(prId)),
         ...filterStructure(structure, prId => prOrder.includes(prId)),

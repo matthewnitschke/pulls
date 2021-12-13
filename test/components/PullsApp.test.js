@@ -5,6 +5,8 @@
 import {render, screen, getByLabelText, getByRole, waitFor} from '@testing-library/react'
 import {logRoles} from '@testing-library/dom'
 import '@testing-library/jest-dom'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import { DndProvider } from 'react-dnd'
 import React from 'react'
 
 import userEvent from '@testing-library/user-event'
@@ -90,6 +92,12 @@ global.fetch = jest.fn(() =>
 let mockStoreData;
 let mockPrData;
 
+function getComponent() {
+    return <DndProvider backend={HTML5Backend}>
+        <PullsApp automation={true} />
+  </DndProvider>;
+}
+
 beforeEach(() => {
     mockStoreData = {
         github: 'someAuthKey',
@@ -107,7 +115,7 @@ beforeEach(() => {
 test('Renders list with folder', async () => {
     mockStoreData['savedStructure'] = ['1', '2', {id: 'g1', name: 'group 1', prIds: ['3']}]
 
-    render(<PullsApp />)
+    render(getComponent())
     await waitFor(() => screen.getAllByRole('listitem')[0])
 
     expect(screen.getByText('test pr 1')).toBeInTheDocument();
@@ -121,7 +129,7 @@ test('Renders list with folder', async () => {
 test('Re-renders list with new pr returned', async () => {
     mockStoreData['savedStructure'] = ['1', '2', {id: 'g1', name: 'group 1', prIds: ['3']}]
     
-    render(<PullsApp automation={true} />)
+    render(getComponent())
     await waitFor(() => screen.getAllByRole('listitem')[0])
     
     mockPrData.push(generateDummyPrData({title: 'new pr', id: '4'}));
@@ -141,7 +149,7 @@ test('Re-renders list with new pr returned', async () => {
 test('Re-renders list with existing pr removed', async () => {
     mockStoreData['savedStructure'] = ['1', '2', {id: 'g1', name: 'group 1', prIds: ['3']}]
     
-    render(<PullsApp automation={true} />)
+    render(getComponent())
     await waitFor(() => screen.getAllByRole('listitem')[0])
     
     mockPrData.pop();
@@ -157,7 +165,7 @@ test('Re-renders list with existing pr removed', async () => {
 })
 
 test.skip('Can create a group', async () => {
-    render(<PullsApp />)
+    render(getComponent())
     await waitFor(() => screen.getAllByRole('listitem')[0])
 
     userEvent.click(screen.getAllByRole('listitem')[0], {shiftKey: true})
