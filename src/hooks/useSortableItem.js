@@ -9,6 +9,7 @@ function useSortableItem(props) {
     const [{ isHovered }, drop] = useDrop({
         accept: 'pr',
         hover(_, monitor) {
+
             const hoverBoundingRect = ref.current?.getBoundingClientRect();
             const clientOffset = monitor.getClientOffset();
 
@@ -17,22 +18,25 @@ function useSortableItem(props) {
             const moveBoundSize = 15;
             const upperBound = hoverBoundingRect.top+moveBoundSize
             const lowerBound = hoverBoundingRect.bottom-moveBoundSize
-            
+
+            let newHoverState;
             if (clientOffset.y < upperBound) {
-                setHoverState('above')
-            } else if (clientOffset.y > lowerBound && props.allowBelowDrop != false) {
-                setHoverState('below')
-            } else if (props.allowMiddleDrop != false) {
-                setHoverState('middle')
+                newHoverState = 'above';
+            } else if (clientOffset.y > lowerBound) {
+                newHoverState = 'below';
             } else {
-                setHoverState(null);
+                newHoverState = 'middle';
+            }
+
+            if (props.canHover == null || props.canHover(item, newHoverState)) {
+                setHoverState(newHoverState)
             }
         },
         drop(item) {
             let newIndex = props.index > item.index ? props.index-1 : props.index
             props.onDrop(item, hoverState, newIndex)
         },
-        canDrop(item) { return item.id != props.id && props.canDrop(item) },
+        canDrop(item) { return item.id != props.id },
         collect(monitor) { return { isHovered: monitor.isOver() }}
     });
 

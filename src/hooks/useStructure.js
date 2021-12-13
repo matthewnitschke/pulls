@@ -5,7 +5,6 @@ import settings from 'src/components/settings/settings-utils.js';
 
 export default function useStructure(prOrder) {
     let [ structure, dispatch ] = useReducer((state, action) => {
-        // console.log({action, state})
         let newStructure;
         switch(action.type) {
             case 'groupPrs': newStructure = groupPrs(state, action); break;
@@ -13,7 +12,6 @@ export default function useStructure(prOrder) {
             case 'addPrsToGroup': newStructure = addPrsToGroup(state, action); break;
             case 'setGroupName': newStructure = setGroupName(state, action); break;
             case 'updateFromPrOrder': newStructure = updateFromPrOrder(state, action); break;
-            case 'moveGroup': newStructure = moveGroup(state, action); break;
             case 'move': newStructure = move(state, action); break;
         }
         return newStructure;
@@ -30,7 +28,6 @@ export default function useStructure(prOrder) {
         deleteGroup: (groupId) => dispatch({ type: 'deleteGroup', groupId }),
         addPrsToGroup: (prIds, groupId) => dispatch({ type: 'addPrsToGroup', prIds, groupId }),
         setGroupName: (groupId, groupName) => dispatch({ type: 'setGroupName', groupId, groupName}),
-        moveGroup: (groupId, delta) => dispatch({ type: 'moveGroup', groupId, delta}),
         move: (itemId, index, groupId) => {
             dispatch({ type: 'move', itemId, index, groupId });
         }
@@ -108,26 +105,8 @@ export function setGroupName(structure, { groupId, groupName }) {
             return el
         });
 }
-export function moveGroup(structure, { groupId, delta }) {
-
-    function arrayMove(arr, fromIndex, toIndex) {
-        var element = arr[fromIndex];
-        arr.splice(fromIndex, 1);
-        arr.splice(toIndex, 0, element);
-    }
-
-    let currentIndex = structure.map(el => el.id).indexOf(groupId)
-    let newIndex = currentIndex + delta;
-
-    let newStructure = [...structure];
-    arrayMove(newStructure, currentIndex, newIndex);
-
-
-    return newStructure;
-}
 
 export function move(structure, { itemId, index, groupId }) {
-    console.log('move ran')
     let newStructure = [...structure];
 
     let enclosingGroup = structure.find(el => el.prIds?.includes(itemId))

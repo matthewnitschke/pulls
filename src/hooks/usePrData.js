@@ -2,14 +2,11 @@
 import { useState, useEffect } from 'react';
 import swal from 'sweetalert';
 import toMils from 'to-mils';
-import { v4 as uuid } from 'uuid';
 
 // Hooks
 import useInterval from './useInterval.js';
 
 import settings from 'src/components/settings/settings-utils.js';
-
-const USE_DUMMY_DATA = true;
 
 const baseFragment = `
 fragment Base on PullRequest {
@@ -61,8 +58,6 @@ fragment Statuses on PullRequest {
 `
 
 async function githubGraphQLRequest(query) {
-    if (USE_DUMMY_DATA) return dummyPrData;
-
     let githubAuth = settings.get('github');
     let res = await fetch(`https://api.github.com/graphql`, {
         body: JSON.stringify({
@@ -167,59 +162,5 @@ export function usePrData() {
         prOrder: resp.prOrder,
         isRunning: isRunning,
         rerunQuery: apiRequest
-    }
-}
-
-const dummyPrData = {
-    data: { 
-        search: {
-            edges: [
-                generateDummyPrData({title: 'Some PR 1'}),
-                generateDummyPrData({title: 'Some PR 2'}),
-                generateDummyPrData({title: 'Some PR 3'}),
-                generateDummyPrData({title: 'Some PR 4'}),
-                generateDummyPrData({title: 'Some PR 5'}),
-            ]
-        }
-    }
-}
-
-function generateDummyPrData({
-    id, 
-    status, 
-    org, 
-    repo, 
-    pull, 
-    state, 
-    title, 
-    url, 
-    branch
-}) {
-    return {
-        node: {
-            id: id ?? `${title}-id`,
-            commits: {
-                nodes: [{
-                    commit: {
-                        status: {
-                            state: status ?? 'status'
-                        }
-                    }
-                }]
-            },
-            repository: {
-                name: repo ?? 'a_repo',
-                owner: {
-                    login: org ?? 'testOrg',
-                }
-            },
-            number: pull ?? '1234',
-            state: state ?? 'testState',
-            title: title ?? 'testTitle',
-            url: url ?? 'testUrl',
-            headRef: {
-                name: branch ?? 'testBranch'
-            }
-        }
     }
 }

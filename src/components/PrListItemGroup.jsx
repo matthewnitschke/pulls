@@ -1,7 +1,5 @@
 import React, {useState, useRef} from 'react';
 
-import { useDrag, useDrop } from 'react-dnd';
-
 import PrListItemGroupMenuItem from './PrListItemGroupDetailsMenu.jsx';
 
 import useSortableItem from '../hooks/useSortableItem.js';
@@ -23,18 +21,22 @@ function PrListItemGroup({
     let { ref, isDragging, className } = useSortableItem({
         id, 
         index,
-        allowMiddleDrop: false,
-        allowBelowDrop: false,
         onDrop: (item, hoverState, newIndex) => {
             if (hoverState == 'above') {
                 onMove(item.id, newIndex) // intentionally pass no group ids
             } else if (hoverState == 'below') {
                 onMove(item.id, newIndex+1);
             } else {
-                onAddPrToGroup([item.id, id]);
+                onAddPrToGroup([item.id, id]); 
             }
         },
-        canDrop: () => true 
+        canHover: (_, hoverState) => {
+            if (hoverState == 'middle') return false;
+
+            if (hoverState == 'below') return false;
+
+            return true;
+        },
     })
 
 

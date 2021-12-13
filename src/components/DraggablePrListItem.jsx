@@ -18,7 +18,6 @@ function DraggablePrListItem(props) {
                 props.onGroupPrs([item.id, props.id])
             }
         },
-        canDrop: () => true 
     });
 
     return <PrListItem 
