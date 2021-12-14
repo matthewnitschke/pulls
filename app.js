@@ -40,14 +40,11 @@ if (isDebug) {
   mb.on('ready', () => {
     settings.setDefaults();
 
-    // Register a 'CommandOrControl+Shift+P' shortcut listener.
-    const hotkeyRegistration = globalShortcut.register('CommandOrControl+Shift+P', () => {
+    globalShortcut.register('CommandOrControl+I', () => {
       mb.showWindow()
     })
-  
-    if (!hotkeyRegistration) {
-      console.log('CommandOrControl+Shift+P registration failed');
-    }
+    // setGlobalHotkey()
+    // settings.onDidChange('globalShowHotkey', setGlobalHotkey())
   
     // sent from the frontend on escape key press
     ipcMain.on('hide-window', () => {

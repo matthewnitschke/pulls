@@ -4,9 +4,9 @@ const store = new Store();
 const settingsConfig = require('./settings-config.js');
 
 module.exports = {
-    get: (val) => store.get(val),
+    get: (key) => store.get(key),
     set: (key, val) => store.set(key, val),
-    has: (val) => store.has(val),
+    has: (key) => store.has(key),
     setDefaults: () => {
         settingsConfig
             .filter(s => s.hasOwnProperty('defaultValue'))

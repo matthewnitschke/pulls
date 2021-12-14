@@ -20,6 +20,12 @@ module.exports = [
         isRequired: true
     },
     {
+        settingsKey: 'globalShowHotkey',
+        label: 'Global show hotkey',
+        hint: 'Hotkey to use to show the panel. Uses electron\'s "Accelerator" format: https://www.electronjs.org/docs/latest/api/accelerator. Enter nothing to disable global shortcut.',
+        defaultValue: 'CommandOrControl+I'
+    },
+    {
         // "[A-z]*-\d*\s*[:\- ]\s*" can be used to remove a jira ticket
         settingsKey: 'prTitleRewriter',
         label: 'PR Title Rewrite',
