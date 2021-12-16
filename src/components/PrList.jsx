@@ -44,7 +44,6 @@ function PrList(props) {
         if (!__matchesFilterText(pr.name)) return null;
 
         return <DraggablePrListItem
-            // allowDrop={!isInGroup}
             key={pr.id}
             index={index}
             id={pr.id}

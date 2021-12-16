@@ -21,16 +21,19 @@ function useSortableItem(props) {
 
             let newHoverState;
             if (clientOffset.y < upperBound) {
-                newHoverState = 'above';
-            } else if (clientOffset.y > lowerBound) {
-                newHoverState = 'below';
-            } else {
-                newHoverState = 'middle';
+                // newHoverState = 'above';
+                setHoverState('above');
+            } else if (clientOffset.y > lowerBound && props.allowBelowHover != false) {
+                // newHoverState = 'below';
+                setHoverState('below');
+            } else if (props.allowMiddleHover != false) {
+                // newHoverState = 'middle';
+                setHoverState('middle');
             }
 
-            if (props.canHover == null || props.canHover(item, newHoverState)) {
-                setHoverState(newHoverState)
-            }
+            // if (props.canHover == null || props.canHover(item, newHoverState)) {
+                // setHoverState(newHoverState)
+            // }
         },
         drop(item) {
             let newIndex = props.index > item.index ? props.index-1 : props.index

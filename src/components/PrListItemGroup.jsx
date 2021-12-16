@@ -21,6 +21,8 @@ function PrListItemGroup({
     let { ref, isDragging, className } = useSortableItem({
         id, 
         index,
+        allowMiddleHover: false,
+        allowBelowHover: false,
         onDrop: (item, hoverState, newIndex) => {
             if (hoverState == 'above') {
                 onMove(item.id, newIndex) // intentionally pass no group ids
@@ -29,13 +31,6 @@ function PrListItemGroup({
             } else {
                 onAddPrToGroup([item.id, id]); 
             }
-        },
-        canHover: (_, hoverState) => {
-            if (hoverState == 'middle') return false;
-
-            if (hoverState == 'below') return false;
-
-            return true;
         },
     })
 
