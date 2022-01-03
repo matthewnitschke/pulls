@@ -28,6 +28,13 @@ const theme = createTheme({
   },
 
   components: {
+    MuiPopover: {
+      styleOverrides: {
+        paper: {
+          border: 'solid 1px #444c56',
+        }
+      }
+    },
     MuiMenu: {
       defaultProps: {
         MenuListProps: {
@@ -37,7 +44,6 @@ const theme = createTheme({
       styleOverrides: {
         paper: {
           width: 170,
-          border: 'solid 1px #444c56'
         }
       }
     },

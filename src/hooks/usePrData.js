@@ -77,6 +77,10 @@ function parsePullData(node) {
     try {
         let status = node.commits.nodes[0].commit.status
 
+        // context: "Skynet: Build/PR"
+        // state: "FAILURE"
+        // targetUrl: "https://wf-skynet-hrd.appspot.com/apps/test/smithy/3301689/1"
+
         return {
             id: node.id,
 
@@ -86,6 +90,7 @@ function parsePullData(node) {
 
             prState: node.state,
             prStatus: status != null ? status.state.toLowerCase() : 'no-status-found',
+            prStatusContexts: status?.contexts ?? [],
             name: node.title,
             prUrl: node.url,
             branch: node.headRef.name,

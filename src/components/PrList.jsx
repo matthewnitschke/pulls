@@ -57,6 +57,7 @@ function PrList(props) {
             onGroupPrs={props.onGroupPrs}
             isClosed={pr.prState == 'closed'}
             prStatus={pr.prStatus}
+            prStatusContexts={pr.prStatusContexts}
             onMove={props.onMove}
             onClick={(e) => _handleClick(e, pr.id)} />;
     }

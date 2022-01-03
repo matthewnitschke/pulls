@@ -41,7 +41,7 @@ const PullListItem = React.forwardRef((props, ref) => {
         role="listitem"
         onMouseOver={props.onMouseOver}
     >
-        <PrStatusIndicator state={props.prStatus} isMerged={props.isClosed}/>
+        <PrStatusIndicator state={props.prStatus} contexts={props.prStatusContexts} isMerged={props.isClosed}/>
         <div className={`pr-list-item__text ${props.isClosed ? 'merged' : ''}`}>
             <span className='pr-list-item__repo-name'>{props.repo}</span>
             {_getPrTitle()}
