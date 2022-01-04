@@ -1,8 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 
 import PrListItem from './PrListItem.jsx';
 
-import { useDrag, useDrop, useDragDropManager } from 'react-dnd';
 import useSortableItem from '../hooks/useSortableItem.js';
 
 function DraggablePrListItem(props) {

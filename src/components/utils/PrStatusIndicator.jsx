@@ -59,7 +59,6 @@ export default function PrStatusIndicator(props) {
                 vertical: 'top',
                 horizontal: 'left',
             }}
-            
         >
 
             { props.contexts?.map((el, i) => <MenuItem 

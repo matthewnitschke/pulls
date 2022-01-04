@@ -74,6 +74,7 @@ if (isDebug) {
       {label: 'About Pulls', click: showAboutDialog},
       {label: 'Preferences', click: showSettingsWindow},
       {label: 'Clear App Data', click: clearAppData},
+      {label: 'Display App Data', click: displayAppData},
       {label: 'Quit', click: () => {
         mb.app.quit();
       }},
@@ -109,4 +110,8 @@ function showAboutDialog() {
 
 function clearAppData() {
   settings.set('savedStructure', []);
+}
+
+function displayAppData() {
+  dialog.showMessageBox('App Data', JSON.stringify(settings.get('savedStructure')))
 }

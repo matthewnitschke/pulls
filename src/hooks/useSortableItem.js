@@ -18,22 +18,16 @@ function useSortableItem(props) {
             const moveBoundSize = 15;
             const upperBound = hoverBoundingRect.top+moveBoundSize
             const lowerBound = hoverBoundingRect.bottom-moveBoundSize
-
-            let newHoverState;
+            
             if (clientOffset.y < upperBound) {
-                // newHoverState = 'above';
                 setHoverState('above');
             } else if (clientOffset.y > lowerBound && props.allowBelowHover != false) {
-                // newHoverState = 'below';
                 setHoverState('below');
             } else if (props.allowMiddleHover != false) {
-                // newHoverState = 'middle';
                 setHoverState('middle');
+            } else {
+                setHoverState('');
             }
-
-            // if (props.canHover == null || props.canHover(item, newHoverState)) {
-                // setHoverState(newHoverState)
-            // }
         },
         drop(item) {
             let newIndex = props.index > item.index ? props.index-1 : props.index

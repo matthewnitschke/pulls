@@ -109,17 +109,8 @@ function PullsApp({ automation = false }) {
                 }
             }}
             onDeleteGroup={async (groupId) => {
-                let group = structure.find(el => el.id == groupId)
-                if(await swal({
-                    title: `UNGROUP "${group.name}"?`,
-                    text: 'Will only remove the group, and not nested prs.',
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                })) {
-                    deleteGroup(groupId);
-                    setSelectedItemIds([])
-                }
+                deleteGroup(groupId);
+                setSelectedItemIds([])
             }} 
             onMoveGroup={moveGroup} 
             onMove={move} />
