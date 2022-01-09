@@ -77,12 +77,9 @@ function parsePullData(node) {
     try {
         let status = node.commits.nodes[0].commit.status
 
-        // context: "Skynet: Build/PR"
-        // state: "FAILURE"
-        // targetUrl: "https://wf-skynet-hrd.appspot.com/apps/test/smithy/3301689/1"
-
         return {
-            id: node.id,
+            // id: node.id,
+            id: `${node.repository.owner.login}-${node.repository.name}-${node.number}`,
 
             org: node.repository.owner.login,
             repo: node.repository.name,

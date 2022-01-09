@@ -5,7 +5,6 @@ import settings from 'src/components/settings/settings-utils.js';
 
 export default function useStructure(prOrder) {
     let [ structure, dispatch ] = useReducer((state, action) => {
-        console.log({state, action});
         let newStructure;
         switch(action.type) {
             case 'groupPrs': newStructure = groupPrs(state, action); break;
