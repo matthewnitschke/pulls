@@ -26,7 +26,7 @@ test('updateFromPrOrder - empty result', () => {
         { prOrder: [] }
     );
 
-    expect(actual).toEqual([]);
+    expect(actual).toEqual(testStructure);
 });
 
 test('updateFromPrOrder - new pr', () => {
@@ -39,14 +39,14 @@ test('updateFromPrOrder - new pr', () => {
 });
 
 test('updateFromPrOrder - removed pr', () => {
-    let expected = filterStructure(testStructure, (prId) => !['e', 'h'].includes(prId));
+    let removedItemsStructure = filterStructure(testStructure, (prId) => !['e', 'h'].includes(prId));
 
     let actual = updateFromPrOrder(
         testStructure,
-        { prOrder: flattenStructure(expected) }
+        { prOrder: flattenStructure(removedItemsStructure) }
     );
 
-    expect(actual).toEqual(expected);
+    expect(actual).toEqual(testStructure);
 });
 
 test('groupPrs', () => {
@@ -193,8 +193,6 @@ test('move - group', () => {
         testStructure,
         { itemId: 'gId1', index: 1 }
     )
-
-    console.log(actual)
 
     expect(actual).toEqual([
         'g',

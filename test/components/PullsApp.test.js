@@ -2,8 +2,7 @@
  * @jest-environment jsdom
  */
 
-import {render, screen, getByLabelText, getByRole, waitFor} from '@testing-library/react'
-import {logRoles} from '@testing-library/dom'
+import {render, screen, waitFor} from '@testing-library/react'
 import '@testing-library/jest-dom'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
@@ -32,13 +31,13 @@ jest.mock(
         return class Store {
             has(key) { return mockStoreData.hasOwnProperty(key) }
             get(val) { return mockStoreData[val] }
-            set(key, val) { mockStoreData[val] = val }
+            set(key, val) { mockStoreData[key] = val }
         }
     }
 )
 
 function generateDummyPrData({
-    id = 'testId', 
+    id = 'testId',
     status = 'status', 
     org = 'testOrg', 
     repo = 'testRepo', 
@@ -146,13 +145,16 @@ test('Re-renders list with new pr returned', async () => {
     expect(screen.getByText('test pr 3')).toBeInTheDocument();
 })
 
-test('Re-renders list with existing pr removed', async () => {
+// GitHub's api has been flakey. To handle this, missing pulls persist in structure
+// this test verifies that when the api results are missing a pr, the pr-reappears in
+// when the pr is back in the results
+test('Handles flakey api results', async () => {
     mockStoreData['savedStructure'] = ['1', '2', {id: 'g1', name: 'group 1', prIds: ['3']}]
     
     render(getComponent())
     await waitFor(() => screen.getAllByRole('listitem')[0])
     
-    mockPrData.pop();
+    let poppedItem = mockPrData.pop();
 
     userEvent.click(screen.getByRole('button', {name: /refresh/}))
     await waitFor(() => screen.getAllByRole('listitem')[3])
@@ -162,22 +164,45 @@ test('Re-renders list with existing pr removed', async () => {
 
     expect(screen.queryByText('group 1')).not.toBeInTheDocument();
     expect(screen.queryByText('test pr 3')).not.toBeInTheDocument();
+
+    mockPrData.push(poppedItem)
+    userEvent.click(screen.getByRole('button', {name: /refresh/}))
+    await waitFor(() => screen.getAllByRole('listitem')[3])
+
+    expect(screen.getByText('test pr 1')).toBeInTheDocument();
+    expect(screen.getByText('test pr 2')).toBeInTheDocument();
+
+    expect(screen.queryByText('test pr 3')).not.toBeInTheDocument();
+    userEvent.click(screen.getByText('group 1'))
+    expect(screen.getByText('test pr 3')).toBeInTheDocument();
 })
 
-test.skip('Can create a group', async () => {
+test('Resets structure after flakey api results', async () => {
+    mockStoreData['savedStructure'] = ['1', '2', {id: 'g1', name: 'group 1', prIds: ['3']}]
+    
     render(getComponent())
     await waitFor(() => screen.getAllByRole('listitem')[0])
+    
+    let poppedItem = mockPrData.pop();
 
-    userEvent.click(screen.getAllByRole('listitem')[0], {shiftKey: true})
-    userEvent.click(screen.getAllByRole('listitem')[1], {shiftKey: true})
+    for (let i = 0; i < 10; i++) {
+        userEvent.click(screen.getByRole('button', {name: /refresh/}))
+        await waitFor(() => screen.getAllByRole('listitem')[3])
+    }
+    
+    mockPrData.push(poppedItem)
 
-    userEvent.click(screen.getByRole('button', { name: 'selected pr details' }))
-    userEvent.click(screen.getByRole('menuitem', { name: /group/i }))
+    for (let i = 0; i < 5; i++) {
+        userEvent.click(screen.getByRole('button', {name: /refresh/}))
+        await waitFor(() => screen.getAllByRole('listitem')[3])
+    }
 
-    let modal = document.querySelector('.swal-modal')
-    userEvent.type(getByRole(modal, 'textbox'), 'test group')
-    logRoles(modal);
-    userEvent.click(getByRole(modal, 'button'))
+    mockPrData.pop();
 
-    expect(screen.getByText('test group')).toBeInTheDocument();
+    for (let i = 0; i < 6; i++) {
+        userEvent.click(screen.getByRole('button', {name: /refresh/}))
+        await waitFor(() => screen.getAllByRole('listitem')[3])
+    }
+
+    expect(mockStoreData['savedStructure']).toStrictEqual(['1', '2'])
 })

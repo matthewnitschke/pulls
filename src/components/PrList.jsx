@@ -41,6 +41,8 @@ function PrList(props) {
     }
 
     function __renderPrListItem(pr, index, groupId) {
+        if (pr == null) return null;
+
         if (!__matchesFilterText(pr.name)) return null;
 
         return <DraggablePrListItem
@@ -71,7 +73,8 @@ function PrList(props) {
         { Object.keys(props.prs).length > 0 &&        
             <div className="pr-list" role="list">
                 {
-                    props.structure.map((data, i) => {
+                    props.structure
+                        .map((data, i) => {
                         if (typeof data === 'string') {
                             return __renderPrListItem(props.prs[data], i)
                         }

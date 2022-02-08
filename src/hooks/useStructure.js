@@ -13,16 +13,19 @@ export default function useStructure(prOrder) {
             case 'setGroupName': newStructure = setGroupName(state, action); break;
             case 'updateFromPrOrder': newStructure = updateFromPrOrder(state, action); break;
             case 'move': newStructure = move(state, action); break;
+            case 'resetFromPrOrder': newStructure = resetFromPrOrder(state, action); break;
         }
         return newStructure;
 
     }, settings.get('savedStructure') ?? []);
 
-    useEffect(() => settings.set('savedStructure', structure), [structure])
+    useEffect(() => {
+        settings.set('savedStructure', structure);
+    }, [structure])
     useEffectExceptOnMount(() => dispatch({ type: 'updateFromPrOrder', prOrder }), [prOrder])
 
     return {
-        structure: filterStructure(structure, (prId) => prOrder.includes(prId)),
+        structure,
 
         groupPrs: (prIds, groupName) => dispatch({ type: 'groupPrs', prIds, groupName }),
         deleteGroup: (groupId) => dispatch({ type: 'deleteGroup', groupId }),
@@ -30,7 +33,8 @@ export default function useStructure(prOrder) {
         setGroupName: (groupId, groupName) => dispatch({ type: 'setGroupName', groupId, groupName}),
         move: (itemId, index, groupId) => {
             dispatch({ type: 'move', itemId, index, groupId });
-        }
+        },
+        resetStructure: (prOrder) => dispatch({ type: 'resetFromPrOrder', prOrder })
     }
 }
 
@@ -39,7 +43,7 @@ export function updateFromPrOrder(structure, { prOrder }) {
 
     return [
         ...prOrder.filter(prId => !flattenedStructure.includes(prId)),
-        ...filterStructure(structure, prId => prOrder.includes(prId)),
+        ...structure,
     ];
 }
 
@@ -148,6 +152,11 @@ export function move(structure, { itemId, index, groupId }) {
     }
 
     return newStructure;
+}
+
+export function resetFromPrOrder(structure, { prOrder }) {
+    // console.log({prOrder})
+    return filterStructure(structure, prId => prOrder.includes(prId))
 }
 
 // --------------------------- Structure Utils ---------------------------
