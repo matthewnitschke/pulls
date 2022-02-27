@@ -33,7 +33,7 @@ if (isDebug) {
 } else {
   let mb = menubar({
     dir: `${__dirname}/dist`,
-    icon: `${__dirname}/Icon.png`,
+    icon: `${__dirname}/IconTemplate.png`,
     browserWindow: windowSettings,
   });
   
