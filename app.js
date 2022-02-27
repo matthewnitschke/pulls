@@ -39,9 +39,9 @@ if (isDebug) {
   mb.on('ready', () => {
     settings.setDefaults();
 
-    globalShortcut.register('CommandOrControl+I', () => {
-      mb.showWindow()
-    })
+    // globalShortcut.register('CommandOrControl+I', () => {
+    //   mb.showWindow()
+    // })
     // setGlobalHotkey()
     // settings.onDidChange('globalShowHotkey', setGlobalHotkey())
   
@@ -62,25 +62,22 @@ if (isDebug) {
   });
   
   
-  mb.on('will-quit', () => {
-    // Unregister all shortcuts.
-    globalShortcut.unregisterAll()
-  })
+  // mb.on('will-quit', () => {
+  //   // Unregister all shortcuts.
+  //   // globalShortcut.unregisterAll()
+  // })
 
   //right click menu for Tray
   mb.on('after-create-window', function() {
     const contextMenu = Menu.buildFromTemplate ([
-      {label: 'About Pulls', click: showAboutDialog},
-      {label: 'Preferences', click: showSettingsWindow},
-      {label: 'Clear App Data', click: clearAppData},
-      {label: 'Display App Data', click: displayAppData},
-      {label: 'Quit', click: () => {
-        mb.app.quit();
-      }},
+      { label: 'About Pulls', click: showAboutDialog },
+      { label: 'Preferences', click: showSettingsWindow },
+      { label: 'Clear App Data', click: clearAppData },
+      { label: 'Display App Data', click: displayAppData },
+      { label: 'Quit', click: mb.app.exit },
     ])
-    mb.tray.on ('right-click', () => {
-        mb.tray.popUpContextMenu (contextMenu);
-    })
+
+    mb.tray.on ('right-click', () => mb.tray.popUpContextMenu(contextMenu))
   });
 }
 

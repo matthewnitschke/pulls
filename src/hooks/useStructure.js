@@ -155,7 +155,6 @@ export function move(structure, { itemId, index, groupId }) {
 }
 
 export function resetFromPrOrder(structure, { prOrder }) {
-    // console.log({prOrder})
     return filterStructure(structure, prId => prOrder.includes(prId))
 }
 

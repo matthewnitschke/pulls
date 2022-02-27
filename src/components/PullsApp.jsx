@@ -12,6 +12,7 @@ import { openUrl, removeTicketFromPrTitle } from '../utils.js';
 import PrList from './PrList.jsx';
 import Header from './header/Header.jsx';
 import MissingRequiredSettingsView from './MissingRequiredSettingsView.jsx';
+import Spinner from './utils/Spinner.jsx';
 
 // Hooks
 import { usePrData } from '../hooks/usePrData.js';
@@ -25,8 +26,7 @@ function PullsApp({ automation = false }) {
     useMenubarShow(() => setHasRequiredSettings(settings.hasRequiredSettings()));
     let [ selectedItemIds, setSelectedItemIds ] = useState([]);
     
-    let { prs, prOrder, rerunQuery } = usePrData((structureToResetTo) => {
-        console.log(structureToResetTo)
+    let { prs, prOrder, isRunning, rerunQuery } = usePrData((structureToResetTo) => {
         resetStructure(structureToResetTo);
     });
     let { 
@@ -98,6 +98,7 @@ function PullsApp({ automation = false }) {
             }}
             onOpenSelectedPrs={_openSelectedPrs}
             onCopySelectedPrs={_copySelectedPrs} />
+    
 
         <PrList
             prs={prs}
@@ -126,6 +127,20 @@ function PullsApp({ automation = false }) {
             }} 
             onMoveGroup={moveGroup} 
             onMove={move} />
+
+        { isRunning && Object.keys(prs).length == 0 &&
+            <div
+                style={{
+                    position: "fixed",
+                    top: "8rem",
+                    fontSize: "2rem",
+                    left: "50%", 
+                    color: "#adbac7",
+                }}
+            >
+                <Spinner />
+            </div>
+        }
         
         { automation && <input type="button" value="refresh" onClick={rerunQuery}/>}
     </div>
