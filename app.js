@@ -26,7 +26,6 @@ const windowSettings = {
 
 if (isDebug) {
   app.whenReady().then(() => {
-    // settings.setDefaults();
     let win = new BrowserWindow(windowSettings);
     win.loadFile(`${__dirname}/dist/index.html`)
   })

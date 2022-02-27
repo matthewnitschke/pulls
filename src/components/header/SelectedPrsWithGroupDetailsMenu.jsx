@@ -6,7 +6,6 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Typography from '@mui/material/Typography';
 import LayersIcon from '@mui/icons-material/Layers';
 
 function SelectedPrsWithGroupDetailsMenu(props) {

@@ -1,6 +1,6 @@
 const settings = require('./settings-utils.js');
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 function SettingInput(props) {
     const defaultValue = settings.has(props.settingsKey) ? settings.get(props.settingsKey) : props.defaultValue;
