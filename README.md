@@ -13,4 +13,4 @@ Hotkeys:
 | `Cmd+O` | Open Selected PRs in Browser |
 | `Cmd+C` | Copy Selected PRs text and links |
 | `Cmd+l` | Focus search bar |
-| `Cmd+Shift+P` (can be run globally) | Shows pulls window |
+| `Cmd+Shift+l` (can be run globally) | Shows pulls window |
