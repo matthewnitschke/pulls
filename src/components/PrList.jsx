@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { openUrl } from '../utils.js';
 
 // Components
-import PrListItem from './PrListItem.jsx';
 import PrListItemGroup from './PrListItemGroup.jsx';
 import FilterInput from './FilterInput.jsx';
 import DraggablePrListItem from './DraggablePrListItem.jsx';

@@ -32,7 +32,6 @@ function PullsSettingsApp() {
     return <div className="settings-editor-app">
         <div className="header">
             Pulls preferences
-
             <i 
                 className="far fa-trash-alt clickable fr"
                 onClick={_handleDeleteAll}

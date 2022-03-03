@@ -1,6 +1,7 @@
 const settings = require('./settings-utils.js');
 
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 
 function SettingInput(props) {
     const defaultValue = settings.has(props.settingsKey) ? settings.get(props.settingsKey) : props.defaultValue;
@@ -9,6 +10,9 @@ function SettingInput(props) {
     function _handleCommitValue(e) {
         if (props.type == 'checkbox') {
             settings.set(props.settingsKey, e.target.checked);
+        } else if (props.type == 'map') {
+            console.log(`Committing: ${JSON.stringify(e)}`);
+            settings.set(props.settingsKey, e);
         } else {
             let inputValue = e.target.value;
 
@@ -37,7 +41,16 @@ function SettingInput(props) {
                 onChange={_handleCommitValue} />
         }
 
-        { props.type != 'checkbox' &&
+        {
+            props.type == 'map' &&
+            <MapInput 
+                {...props}
+                defaultValue={defaultValue}
+                onCommitValue={_handleCommitValue}
+            />
+        }
+
+        { props.type == 'string' &&
             <input 
                 type={props.isProtected && !isFocused ? 'password' : 'text'}
                 defaultValue={defaultValue}
@@ -48,3 +61,60 @@ function SettingInput(props) {
 }
 
 export default SettingInput;
+
+function MapInput(props) {
+    let [entries, setEntries] = useState(props.defaultValue);
+
+    useEffect(() => props.onCommitValue(entries), [entries]);
+
+    return <div>
+        {entries.map(entry => <div style={{
+            display: 'flex',
+            marginTop: '.3rem',
+        }}>
+            <input 
+                defaultValue={entry.key} 
+                style={{marginRight: '.3rem'}} 
+                type='text'
+                onBlur={(event) => setEntries(entries.map(el => {
+                    if (el == entry) return {...el, key: event.target.value}
+                    return el
+                }))} 
+            />
+
+            <input 
+                defaultValue={entry.value}
+                style={{
+                    flexGrow: '1',
+                    fontFamily: 'monospace'
+                }}
+                type='text' 
+                onBlur={(event) => setEntries(entries.map(el => {
+                    if (el == entry) return {...el, value: event.target.value}
+                    return el
+                }))}
+            />
+
+            <button
+                 style={{
+                    color: 'red',
+                    background: 'none',
+                    border: 'none',
+                }}
+                onClick={() => setEntries(entries.filter(el => el != entry))}
+            >
+                <i style={{color:'red'}}
+                    className="fas fa-minus clickable"></i>
+            </button>
+        </div>)}
+
+        <i
+            style={{
+                color: '#adbac7',
+                marginTop: '.5rem',
+                fontSize: '1.1rem',
+            }}
+            onClick={() => setEntries([...entries, {key: '', value: ''}])}
+            className="fas fa-plus clickable"></i>
+    </div>
+}

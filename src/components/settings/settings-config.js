@@ -3,6 +3,7 @@ module.exports = [
         settingsKey: 'github',
         label: 'Github Auth Key',
         hint: 'found here: "https://github.com/settings/tokens"',
+        type: 'string',
         isProtected: true,
         isRequired: true,
     },
@@ -10,14 +11,26 @@ module.exports = [
         settingsKey: 'githubUser',
         label: 'Github Username',
         hint: 'Used to get a list of your pulls',
+        type: 'string',
         isRequired: true,
     },
     {
         settingsKey: 'githubQuery',
         label: 'Github Search Query',
         hint: 'The GitHub style query to use to retrieve the list of prs. Use `{githubUser}` as the wildcard for your github username',
+        type: 'string',
         defaultValue: 'is:open is:pr author:{githubUser} archived:false',
         isRequired: true
+    },
+    {
+        settingsKey: 'githubQueries',
+        label: 'Github Search Queries',
+        hint: 'Map of label to github search query for the list of prs to retrieve. Use `{githubUser}` as the wildcard for your github username',
+        type: 'map',
+        defaultValue: [{
+            key: 'My PRs',
+            value: 'is:open is:pr author:{githubUser} archived:false',
+        }]
     },
     // {
     //     settingsKey: 'globalShowHotkey',
@@ -29,6 +42,7 @@ module.exports = [
         // "^([A-z]*-\d*\s*[, ]*)+[:\- ]\s*" can be used to remove a jira ticket
         settingsKey: 'prTitleRewriter',
         label: 'PR Title Rewrite',
+        type: 'string',
         hint: 'A regex string that selects content in a pr title to remove. Can be useful to remove unhelpful information like a jira ticket, and cleanup the list of prs',
         isRequired: false
     }
