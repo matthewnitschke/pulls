@@ -3,7 +3,9 @@ import { v4 as uuid } from 'uuid';
 
 import settings from 'src/components/settings/settings-utils.js';
 
-export default function useStructure(prOrder) {
+export default function useStructure(query, prOrder) {
+    let queryKey = encodeURIComponent(query);
+
     let [ structure, dispatch ] = useReducer((state, action) => {
         let newStructure;
         switch(action.type) {
@@ -17,12 +19,12 @@ export default function useStructure(prOrder) {
         }
         return newStructure;
 
-    }, settings.get('savedStructure') ?? []);
+    }, settings.get(`savedStructure.${queryKey}`) ?? []);
 
-    useEffect(() => {
-        settings.set('savedStructure', structure);
-    }, [structure])
-    useEffectExceptOnMount(() => dispatch({ type: 'updateFromPrOrder', prOrder }), [prOrder])
+    useEffect(() => settings.set(`savedStructure.${queryKey}`, structure), [structure]);
+    useEffectExceptOnMount(() => {
+        dispatch({ type: 'updateFromPrOrder', prOrder });
+    }, [prOrder])
 
     return {
         structure,

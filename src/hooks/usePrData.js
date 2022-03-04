@@ -10,6 +10,7 @@ import useInterval from './useInterval.js';
 let resetStructureResponseCount = 20;
 
 export function usePrData(
+  query,
   resetStructure
 ) {
   let previousResponses = useRef([]);
@@ -23,7 +24,7 @@ export function usePrData(
 
   let apiRequest = () => {
     let username = settings.get('githubUser');
-    let query = settings.get('githubQuery');
+    
     if (!username || !query) return;
 
     let usernameQuery = query.replace('{githubUser}', username)
@@ -65,7 +66,7 @@ export function usePrData(
     })
   }
 
-  useEffect(apiRequest, []);
+  useEffect(apiRequest, [query]);
   useInterval(apiRequest, toMils('1min'));
 
   return {

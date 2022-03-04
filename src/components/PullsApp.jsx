@@ -25,20 +25,24 @@ function PullsApp({ automation = false }) {
     let [ hasRequiredSettings, setHasRequiredSettings ] = useState(settings.hasRequiredSettings());
     useMenubarShow(() => setHasRequiredSettings(settings.hasRequiredSettings()));
     let [ selectedItemIds, setSelectedItemIds ] = useState([]);
+
+    let [query, setQuery] = useState('is:open is:pr author:{githubUser} archived:false');
     
-    let { prs, prOrder, isRunning, rerunQuery } = usePrData((structureToResetTo) => {
-        resetStructure(structureToResetTo);
-    });
+    let { prs, prOrder, isRunning, rerunQuery } = usePrData(
+        query,
+        (structureToResetTo) => resetStructure(structureToResetTo),
+    );
+
     let { 
         structure,
-        groupPrs, 
+        groupPrs,
         addPrsToGroup,
         deleteGroup,
         setGroupName,
         moveGroup,
         move,
         resetStructure
-     } = useStructure(prOrder);
+     } = useStructure(query, prOrder);
 
     useMenubarHide(() => setSelectedItemIds([]));
     
@@ -98,16 +102,18 @@ function PullsApp({ automation = false }) {
             }}
             onOpenSelectedPrs={_openSelectedPrs}
             onCopySelectedPrs={_copySelectedPrs} />
-    
-
+            
         <PrList
             prs={prs}
             structure={structure}
             selectedItemIds={selectedItemIds}
             onHideWindow={() => ipcRenderer.send('hide-window')}
+            queries={[
+                {key: 'My PRs', value: 'is:pr'},
+                {key: 'Assigned PRs', value: 'is:pr'},
+            ]}
             setSelectedItemIds={setSelectedItemIds}
             onGroupPrs={_groupPrs}
-            onMove={move}
             onAddPrsToGroup={addPrsToGroup}
             onEditGroupName={async (groupId) => {
                 let group = structure.find(el => el.id == groupId)
