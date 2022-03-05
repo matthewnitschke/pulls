@@ -14,14 +14,6 @@ module.exports = [
         type: 'string',
         isRequired: true,
     },
-    // {
-    //     settingsKey: 'githubQuery',
-    //     label: 'Github Search Query',
-    //     hint: 'The GitHub style query to use to retrieve the list of prs. Use `{githubUser}` as the wildcard for your github username',
-    //     type: 'string',
-    //     defaultValue: 'is:open is:pr author:{githubUser} archived:false',
-    //     isRequired: true
-    // },
     {
         settingsKey: 'githubQueries',
         label: 'Github Search Queries',

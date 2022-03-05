@@ -66,7 +66,10 @@ export function usePrData(
     })
   }
 
-  useEffect(apiRequest, [query]);
+  useEffect(() => {
+    apiRequest();
+    previousResponses.current = [];
+  }, [query]);
   useInterval(apiRequest, toMils('1min'));
 
   return {
