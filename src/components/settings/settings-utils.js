@@ -7,6 +7,8 @@ module.exports = {
     get: (key) => store.get(key),
     set: (key, val) => store.set(key, val),
     has: (key) => store.has(key),
+    onDidChange: (key, callback) => store.onDidChange(key, callback),
+    onDidAnyChange: (callback) => store.onDidAnyChange(callback),
     setDefaults: () => {
         settingsConfig
             .filter(s => s.hasOwnProperty('defaultValue'))

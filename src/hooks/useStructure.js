@@ -19,12 +19,15 @@ export default function useStructure(query, prOrder) {
         }
         return newStructure;
 
-    }, settings.get(`savedStructure.${queryKey}`) ?? []);
+    }, settings.get(`savedStructure|${queryKey}`) ?? []);
 
-    useEffect(() => settings.set(`savedStructure.${queryKey}`, structure), [structure]);
+    useEffectExceptOnMount(() => {
+        settings.set(`savedStructure|${queryKey}`, structure);
+    }, [structure]);
     useEffectExceptOnMount(() => {
         dispatch({ type: 'updateFromPrOrder', prOrder });
     }, [prOrder])
+
 
     return {
         structure,

@@ -16,6 +16,7 @@ import Spinner from './utils/Spinner.jsx';
 
 // Hooks
 import { usePrData } from '../hooks/usePrData.js';
+import { useSettings } from '../hooks/useSettings.js';
 import { useMenubarShow, useMenubarHide } from '../hooks/useMenubarEvents.js';
 import useHotkeys from '../hooks/useHotkeys.js';
 import useStructure, { flattenStructure } from '../hooks/useStructure.js';
@@ -26,10 +27,12 @@ function PullsApp({ automation = false }) {
     useMenubarShow(() => setHasRequiredSettings(settings.hasRequiredSettings()));
     let [ selectedItemIds, setSelectedItemIds ] = useState([]);
 
-    let [query, setQuery] = useState('is:open is:pr author:{githubUser} archived:false');
+    let queries = useSettings('githubQueries', []);
+
+    let [query, setQuery] = useState({key: 'My PRs', value: 'is:open is:pr author:{githubUser} archived:false'});
     
     let { prs, prOrder, isRunning, rerunQuery } = usePrData(
-        query,
+        query.value,
         (structureToResetTo) => resetStructure(structureToResetTo),
     );
 
@@ -42,7 +45,7 @@ function PullsApp({ automation = false }) {
         moveGroup,
         move,
         resetStructure
-     } = useStructure(query, prOrder);
+     } = useStructure(query.value, prOrder);
 
     useMenubarHide(() => setSelectedItemIds([]));
     
@@ -92,26 +95,15 @@ function PullsApp({ automation = false }) {
 
     return <div className='pulls-app'>
         <Header
-            selectedItemIds={selectedItemIds}
-            structure={structure}
-            onGroupSelectedPrs={() => _groupPrs(selectedPrIds)}
-            onAddToSelectedGroup={() => {
-                let selectedGroupId = selectedItemIds.find(el => !selectedPrIds.includes(el))
-                addPrsToGroup(selectedPrIds, selectedGroupId);
-                setSelectedItemIds([])
-            }}
-            onOpenSelectedPrs={_openSelectedPrs}
-            onCopySelectedPrs={_copySelectedPrs} />
+            currentQuery={query}
+            queries={queries} 
+            onSetQuery={setQuery} />
             
         <PrList
             prs={prs}
             structure={structure}
             selectedItemIds={selectedItemIds}
             onHideWindow={() => ipcRenderer.send('hide-window')}
-            queries={[
-                {key: 'My PRs', value: 'is:pr'},
-                {key: 'Assigned PRs', value: 'is:pr'},
-            ]}
             setSelectedItemIds={setSelectedItemIds}
             onGroupPrs={_groupPrs}
             onAddPrsToGroup={addPrsToGroup}
@@ -140,7 +132,7 @@ function PullsApp({ automation = false }) {
                     position: "fixed",
                     top: "8rem",
                     fontSize: "2rem",
-                    left: "50%", 
+                    left: "50%",
                     color: "#adbac7",
                 }}
             >

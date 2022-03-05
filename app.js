@@ -9,7 +9,7 @@ const isDebug = process.env.DEBUG == "true";
 
 const windowSettings = {
   width: 600,
-  height: 700,
+  height: 800,
   ...(!isDebug ? {
     transparent: true,
     frame: false,
@@ -46,11 +46,9 @@ if (isDebug) {
     // settings.onDidChange('globalShowHotkey', setGlobalHotkey())
   
     // sent from the frontend on escape key press
-    ipcMain.on('hide-window', () => {
-      mb.hideWindow();
-    })
-
+    ipcMain.on('hide-window', () => mb.hideWindow());
     ipcMain.on('show-settings', showSettingsWindow);
+    ipcMain.on('settings-updated', () => mb.window.webContents.send('settings-updated'));
   })
   
   mb.on('show', () => {

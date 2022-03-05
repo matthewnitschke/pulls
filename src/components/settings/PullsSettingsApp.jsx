@@ -6,11 +6,11 @@ import swal from 'sweetalert';
 
 import React from 'react';
 import SettingInput from './SettingInput';
+import { useSettings } from '../../hooks/useSettings';
 
 function PullsSettingsApp() {
-
     function _handleSave() {
-        ipcRenderer.send('refresh-pulls-app')
+        ipcRenderer.send('settings-updated')
     }
 
     function _handleDeleteAll() {
@@ -24,7 +24,7 @@ function PullsSettingsApp() {
             if (value) {
                 settings.deleteAll();
                 settings.setDefaults();
-                ipcRenderer.send('refresh-pulls-app')
+                ipcRenderer.send('settings-updated')
             }
         })
     }

@@ -66,16 +66,6 @@ function PrList(props) {
             value={filterText}
             onChange={setFilterText}
             onKeyDown={_handleFilterInputKeyDown} />
-
-        {/* <div style={{
-            display: 'flex',
-            justifyContent:'space-around',
-            marginBottom: '.2rem',
-            backgroundColor: '#FFF'
-
-        }}>
-            {props.queries.map((q) => <a>{q.key}</a>)}
-        </div> */}
         
         { Object.keys(props.prs).length > 0 &&        
             <div className="pr-list" role="list">
