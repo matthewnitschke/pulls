@@ -9,6 +9,8 @@ import useInterval from './useInterval.js';
 
 let resetStructureResponseCount = 20;
 
+let cache = {};
+
 export function usePrData(
   query,
   resetStructure
@@ -23,6 +25,13 @@ export function usePrData(
   let [isRunning, setIsRunning] = useState(false);
 
   let apiRequest = () => {
+    if (cache.hasOwnProperty(query)) {
+      setResp({ 
+        prData: cache[query].prData, 
+        prOrder: cache[query].prOrder, 
+      });
+    }
+
     let username = settings.get('githubUser');
     
     if (!username || !query) return;
@@ -59,7 +68,8 @@ export function usePrData(
         resetStructure(resp);
         previousResponses.current = [];
       }
-
+      
+      cache[query] = { prData, prOrder }
       setResp({ prData, prOrder });
 
       setIsRunning(false);
