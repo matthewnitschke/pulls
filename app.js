@@ -7,9 +7,11 @@ const settings = require('./src/components/settings/settings-utils.js');
 
 const isDebug = process.env.DEBUG == "true";
 
+let windowHeight = settings.get('windowHeight');
+
 const windowSettings = {
   width: 600,
-  height: 800,
+  height: parseInt(windowHeight),
   ...(!isDebug ? {
     transparent: true,
     frame: false,
@@ -70,8 +72,8 @@ if (isDebug) {
     const contextMenu = Menu.buildFromTemplate ([
       { label: 'About Pulls', click: showAboutDialog },
       { label: 'Preferences', click: showSettingsWindow },
-      { label: 'Clear App Data', click: clearAppData },
-      { label: 'Display App Data', click: displayAppData },
+      // { label: 'Clear App Data', click: clearAppData },
+      // { label: 'Display App Data', click: displayAppData },
       { label: 'Quit', click: mb.app.exit },
     ])
 

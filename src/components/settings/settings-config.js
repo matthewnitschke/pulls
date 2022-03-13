@@ -37,6 +37,14 @@ module.exports = [
         type: 'string',
         hint: 'A regex string that selects content in a pr title to remove. Can be useful to remove unhelpful information like a jira ticket, and cleanup the list of prs',
         isRequired: false
+    },
+    {
+        settingsKey: 'windowHeight',
+        label: 'Window Height',
+        type: 'string',
+        hint: 'The height of the popover window, in pixels. Requires app restart on change',
+        defaultValue: '700',
+        isRequired: false
     }
     // {
     //     settingsKey: 'openAtLogin',
