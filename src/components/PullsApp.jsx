@@ -4,15 +4,14 @@ const { ipcRenderer, clipboard } = require('electron');
 const settings = require('./settings/settings-utils.js');
 
 // Libraries
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import swal from 'sweetalert';
-import { openUrl, removeTicketFromPrTitle } from '../utils.js';
+import { openUrl } from '../utils.js';
 
 // Components
 import PrList from './PrList.jsx';
 import Header from './header/Header.jsx';
 import MissingRequiredSettingsView from './MissingRequiredSettingsView.jsx';
-import Spinner from './utils/Spinner.jsx';
 
 // Hooks
 import { usePrData } from '../hooks/usePrData.js';
@@ -62,6 +61,14 @@ function PullsApp({ automation = false }) {
     useHotkeys('command+c', _copySelectedPrs);
     useHotkeys('command+g', () => _groupPrs(selectedPrIds));
 
+    for (let i = 0; i <= 8; i ++) {
+        useHotkeys(`command+${i+1}`, () => {
+            if (queries.length - 1 >= i) {
+                setQuery(queries[i]);
+            }
+        })
+    }
+
     async function _groupPrs(prIds) {
         let groupName = await swal({
             title: 'ENTER NAME OF GROUP',
@@ -83,7 +90,7 @@ function PullsApp({ automation = false }) {
     function _copySelectedPrs() {
         let prText = selectedPrIds
             .map(id => prs[id])
-            .map(pr => `${pr.prUrl} (${removeTicketFromPrTitle(pr.name)})`)
+            .map(pr => `${pr.prUrl} (${pr.name})`)
             .join('\n')
         
         clipboard.writeText(prText, 'selection')
@@ -97,7 +104,12 @@ function PullsApp({ automation = false }) {
         <Header
             currentQuery={query}
             queries={queries} 
-            onSetQuery={setQuery} />
+            onSetQuery={setQuery} 
+            selectedItemIds={selectedItemIds} 
+            onGroupSelectedPrs={() => _groupPrs(selectedPrIds)}
+            onOpenSelectedPrs={_openSelectedPrs}
+            onCopySelectedPrs={_copySelectedPrs}
+            isQueryRunning={isRunning} />
             
         <PrList
             prs={prs}
@@ -125,20 +137,6 @@ function PullsApp({ automation = false }) {
             }} 
             onMoveGroup={moveGroup} 
             onMove={move} />
-
-        { isRunning && Object.keys(prs).length == 0 &&
-            <div
-                style={{
-                    position: "fixed",
-                    top: "8rem",
-                    fontSize: "2rem",
-                    left: "50%",
-                    color: "#adbac7",
-                }}
-            >
-                <Spinner />
-            </div>
-        }
         
         { automation && <input type="button" value="refresh" onClick={rerunQuery}/>}
     </div>

@@ -67,22 +67,63 @@ function MapInput(props) {
 
     useEffect(() => props.onCommitValue(entries), [entries]);
 
+    let _moveEntry = (entry, delta) => {
+        let currentIndex = entries.indexOf(entry)
+
+        let newIndex = currentIndex + delta
+        if (newIndex >= entries.length) {
+            newIndex = 0;
+        } else if (newIndex <= 0) {
+            newIndex = entries.length -1;
+        }
+
+        let newEntries = [...entries]
+
+        newEntries.splice(currentIndex, 1);
+        newEntries.splice(newIndex, 0, entry)
+
+        setEntries(newEntries);
+    }
+
     return <div>
-        {entries.map(entry => <div style={{
-            display: 'flex',
-            marginTop: '.3rem',
-        }}>
+        {entries.map(entry => <div 
+            key={entry.key + entry.value}
+            style={{
+                display: 'flex',
+                alignItems: 'center',
+                marginTop: '.3rem',
+            }}
+        >
+            <div 
+                style={{
+                    color: 'grey',
+                    marginRight: '.1rem',
+                    cursor: 'pointer'
+                }}
+                onClick={() => _moveEntry(entry, -1)}
+            >↑</div>
+            <div 
+                style={{
+                    color: 'grey',
+                    cursor: 'pointer'
+                }}
+                onClick={() => _moveEntry(entry, 1)}
+            >↓</div>
+
             <input 
                 defaultValue={entry.key} 
-                style={{marginRight: '.3rem'}} 
+                style={{
+                    marginRight: '.3rem',
+                    marginLeft: '.3rem'
+                }} 
                 type='text'
                 onBlur={(event) => setEntries(entries.map(el => {
                     if (el == entry) return {...el, key: event.target.value}
                     return el
-                }))} 
+                }))}
             />
 
-            <input 
+            <input
                 defaultValue={entry.value}
                 style={{
                     flexGrow: '1',
