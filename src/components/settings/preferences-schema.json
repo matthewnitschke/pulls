@@ -1,0 +1,40 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "githubUser": {
+            "description": "Your github username, used to get your list of pulls",
+            "type": "string"
+        },
+        "githubAccessToken": {
+            "description": "Your github access token, found here: https://github.com/settings/tokens",
+            "type": "string"
+        },
+        "queries": {
+            "description": "The list of query configurations which drive what prs are displayed",
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "query": {
+                        "type": "string",
+                        "description": "The github search syntax query to use to retrieve the list of prs. Use `{githubUser}` as the wildcard for your github username. More information: https://docs.github.com/en/search-github/searching-on-github/searching-issues-and-pull-requests."
+                    },
+                    "label": {
+                        "type": "string",
+                        "description": "The label to associate with this query"
+                    }
+                }
+            }
+        },
+        "prTitleRewriter": {
+            "description": "A regex string that selects content in a pr title to remove. Can be useful to remove unhelpful information like a jira ticket, and cleanup the list of prs",
+            "type": "string"
+        },
+        "windowHeight": {
+            "description": "The height of the popover window, in pixels. Requires app restart on change",
+            "type": "number",
+            "default": 700
+        }
+    }
+}
