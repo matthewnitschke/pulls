@@ -2,13 +2,25 @@
 import React, { useState } from 'react';
 import { openUrl } from '../utils.js';
 
+import { useSelector } from 'react-redux';
+
 // Components
 import PrListItemGroup from './PrListItemGroup.jsx';
 import FilterInput from './FilterInput.jsx';
 import DraggablePrListItem from './DraggablePrListItem.jsx';
 
 function PrList(props) {
-    let [ filterText, setFilterText ] = useState('')
+    let [ filterText, setFilterText ] = useState('');
+
+    let prs = useSelector(state => {
+        let queryObj = state.queries[state.activeQueryIndex];
+        return state.prs[queryObj.query] ?? {};
+    });
+
+    let structure = useSelector(state => {
+        let queryObj = state.queries[state.activeQueryIndex];
+        return state.structure[queryObj.query] ?? [];
+    });
 
     function _handleSelectItem(prId) {
         if (props.selectedItemIds.includes(prId)) {
@@ -67,13 +79,13 @@ function PrList(props) {
             onChange={setFilterText}
             onKeyDown={_handleFilterInputKeyDown} />
         
-        { Object.keys(props.prs).length > 0 &&        
+        { Object.keys(prs).length > 0 &&        
             <div className="pr-list" role="list">
                 {
-                    props.structure
+                    structure
                         .map((data, i) => {
                         if (typeof data === 'string') {
-                            return __renderPrListItem(props.prs[data], i)
+                            return __renderPrListItem(prs[data], i)
                         }
 
                         return <PrListItemGroup 

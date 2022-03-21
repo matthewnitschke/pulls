@@ -1,5 +1,8 @@
 import React from 'react';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { setActiveQuery } from '../../redux/root_reducer';
+
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -18,6 +21,10 @@ function Header(props) {
     const handleClick = (event) => setAnchorEl(event.currentTarget);
     const handleClose = () => setAnchorEl(null);
 
+    let dispatch = useDispatch();
+    let queries = useSelector((state) => state.queries);
+    let activeQueryIndex = useSelector((state) => state.activeQueryIndex);
+
     return <div className='header'>
         <div className='main-header'>
             <div className='df aic'>
@@ -27,13 +34,13 @@ function Header(props) {
                 >
                     <Typography color="text.primary">PULLS</Typography>
                     {
-                        props.queries.length > 1 &&
+                        queries.length > 1 &&
                         <Link
                             color="inherit"
                             underline="hover"
                             onClick={handleClick}
                         >
-                            {props.currentQuery.key}
+                            {queries[activeQueryIndex].label}
                         </Link>
                     }
                 </Breadcrumbs>
@@ -51,14 +58,14 @@ function Header(props) {
                 }}
             >
                 {
-                props.queries.map((query, i) => <MenuItem 
-                    key={query.key}
+                queries.map((query, i) => <MenuItem 
+                    key={query.label}
                     onClick={() => {
-                        props.onSetQuery(query)
+                        dispatch(setActiveQuery(i))
                         handleClose();
                     }}
                 >
-                    <ListItemText>{query.key}</ListItemText>
+                    <ListItemText>{query.label}</ListItemText>
                     {
                         i <= 9 &&
                         <Typography variant="body2" color="text.secondary">⌘{i+1}</Typography>

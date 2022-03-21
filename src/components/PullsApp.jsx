@@ -19,12 +19,17 @@ import { useSettings } from '../hooks/useSettings.js';
 import { useMenubarShow, useMenubarHide } from '../hooks/useMenubarEvents.js';
 import useHotkeys from '../hooks/useHotkeys.js';
 import useStructure, { flattenStructure } from '../hooks/useStructure.js';
+import { useDispatch } from 'react-redux';
+
+import {setActiveQuery} from '../redux/root_reducer.js';
 
 
 function PullsApp({ automation = false }) {
     let [ hasRequiredSettings, setHasRequiredSettings ] = useState(settings.hasRequiredSettings());
     useMenubarShow(() => setHasRequiredSettings(settings.hasRequiredSettings()));
     let [ selectedItemIds, setSelectedItemIds ] = useState([]);
+
+    let dispatch = useDispatch();
 
     let queries = useSettings('githubQueries', []);
 
@@ -64,7 +69,7 @@ function PullsApp({ automation = false }) {
     for (let i = 0; i <= 8; i ++) {
         useHotkeys(`command+${i+1}`, () => {
             if (queries.length - 1 >= i) {
-                setQuery(queries[i]);
+                dispatch(setActiveQuery(i))
             }
         })
     }

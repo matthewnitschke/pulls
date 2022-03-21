@@ -6,6 +6,8 @@ import { DndProvider } from 'react-dnd'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import PullsApp from './components/PullsApp.jsx';
+import configureStore from './redux/store.js';
+import { Provider } from 'react-redux'
 
 
 const theme = createTheme({
@@ -50,11 +52,37 @@ const theme = createTheme({
   }
 });
 
+let store = configureStore({
+  activeQueryIndex: 0,
+  queryStatus: 'running',
+
+  queries: [
+    {
+      label: 'My PRs',
+      query: 'is:open is:pr author:{githubUser} archived:false'
+    },
+    {
+      label: 'Assigned PRs',
+      query: 'is:open is:pr team-review-requested:Workiva/ir-platform'
+    }
+  ],
+
+  prs: {},
+
+  structure: {
+    'is:open is:pr author:{githubUser} archived:false': [
+      'uuid'
+    ]
+  }
+});
+
 ReactDOM.render(
     <DndProvider backend={HTML5Backend}>
-      <ThemeProvider theme={theme}>
-          <PullsApp />
-      </ThemeProvider>
+      <Provider store={store}>
+        <ThemeProvider theme={theme}>
+            <PullsApp />
+        </ThemeProvider>
+      </Provider>
     </DndProvider>,
     document.getElementById('app')
 );
