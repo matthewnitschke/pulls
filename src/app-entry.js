@@ -9,6 +9,8 @@ import PullsApp from './components/PullsApp.jsx';
 import configureStore from './redux/store.js';
 import { Provider } from 'react-redux'
 
+import prsSlice, {fetchPrs} from './redux/prs_slice.js';
+
 
 const theme = createTheme({
   palette: {
@@ -59,7 +61,7 @@ let store = configureStore({
   queries: [
     {
       label: 'My PRs',
-      query: 'is:open is:pr author:{githubUser} archived:false'
+      query: 'is:open is:pr author:matthewnitschke-wk archived:false'
     },
     {
       label: 'Assigned PRs',
@@ -67,14 +69,15 @@ let store = configureStore({
     }
   ],
 
-  prs: {},
-
   structure: {
-    'is:open is:pr author:{githubUser} archived:false': [
+    'is:open is:pr author:matthewnitschke-wk archived:false': [
       'uuid'
     ]
   }
 });
+
+let fullState = store.getState();
+store.dispatch(fetchPrs(fullState.queries[fullState.activeQueryIndex].query))
 
 ReactDOM.render(
     <DndProvider backend={HTML5Backend}>

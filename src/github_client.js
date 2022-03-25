@@ -1,8 +1,8 @@
-const settings = require('../components/settings/settings-utils.js');
+import settings from './components/settings/settings-utils.js';
 
-export const query = (ghQuery) => {
+export default async function queryGithub(ghQuery) {
   let githubAuth = settings.get('github');
-
+  
   let res = await fetch(`https://api.github.com/graphql`, {
     body: JSON.stringify({
       query: buildGraphQLQuery(ghQuery)
@@ -11,9 +11,44 @@ export const query = (ghQuery) => {
       Authorization: `bearer ${githubAuth}`,
     },
     method: "POST"
-  })
+  }).then((res) => res.json());
+  
+  let parsedData = res.data.search.edges
+    .map(({ node }) => parsePullDataFromNode(node))
+    .filter(pullData => pullData != null)
 
-  return await res.json();
+  let prData = parsedData.reduce((acc, pr) => ({
+    ...acc,
+    [pr.id]: pr
+  }), {});
+
+  return prData;
+}
+
+
+function parsePullDataFromNode(node) {
+  try {
+    let status = node.commits.nodes[0].commit.status
+
+    return {
+      id: node.id,
+
+      org: node.repository.owner.login,
+      repo: node.repository.name,
+      pull: node.number,
+
+      prState: node.state,
+      prStatus: status != null ? status.state.toLowerCase() : 'no-status-found',
+      prStatusContexts: status?.contexts ?? [],
+      name: node.title,
+      prUrl: node.url,
+      branch: node.headRef.name,
+
+      rawData: node
+    }
+  } catch (err) {
+    console.error('Unable to parse pull data', node, err)
+  }
 }
 
 function buildGraphQLQuery(ghQuery) {

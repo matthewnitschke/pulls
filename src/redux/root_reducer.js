@@ -8,7 +8,6 @@ export default function rootReducer(state, action) {
       return { 
         ...state,
         activeQueryIndex: action.payload,
-        queryStatus: 'running'
       }
     default:
       return state

@@ -13,6 +13,8 @@ import SelectedPrsDetailMenu from './SelectedPrsDetailsMenu';
 import CircularProgress from '@mui/material/CircularProgress';
 import { ListItemText } from '@mui/material';
 
+import {fetchPrs} from '../../redux/prs_slice.js';
+
 function Header(props) {
     let selectedItemIds = props.selectedItemIds ?? [];
 
@@ -24,6 +26,7 @@ function Header(props) {
     let dispatch = useDispatch();
     let queries = useSelector((state) => state.queries);
     let activeQueryIndex = useSelector((state) => state.activeQueryIndex);
+    let isPrsQueryRunning = useSelector((state) => state.prs.status == 'loading');
 
     return <div className='header'>
         <div className='main-header'>
@@ -62,6 +65,7 @@ function Header(props) {
                     key={query.label}
                     onClick={() => {
                         dispatch(setActiveQuery(i))
+                        dispatch(fetchPrs(queries[i].query))
                         handleClose();
                     }}
                 >
@@ -84,7 +88,7 @@ function Header(props) {
                 </div>
                 
                 {
-                    props.isQueryRunning &&
+                    isPrsQueryRunning &&
                     <CircularProgress size='1rem' style={{ marginLeft: '.5rem' }}/>
                 }
             </div>

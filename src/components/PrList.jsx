@@ -14,7 +14,7 @@ function PrList(props) {
 
     let prs = useSelector(state => {
         let queryObj = state.queries[state.activeQueryIndex];
-        return state.prs[queryObj.query] ?? {};
+        return state.prs.data[queryObj.query] ?? {};
     });
 
     let structure = useSelector(state => {
@@ -73,6 +73,11 @@ function PrList(props) {
             onClick={(e) => _handleClick(e, pr.id)} />;
     }
 
+    let flattenedStructure = flattenStructure(structure);
+    let prsNotInStructure = Object.keys(prs)
+      .filter(prId => !flattenedStructure.includes(prId))
+      .reduce((acc, prId) => ({...acc, [prId]: prs[prId] }), {});
+
     return <>
          <FilterInput
             value={filterText}
@@ -82,30 +87,34 @@ function PrList(props) {
         { Object.keys(prs).length > 0 &&        
             <div className="pr-list" role="list">
                 {
-                    structure
-                        .map((data, i) => {
-                        if (typeof data === 'string') {
-                            return __renderPrListItem(prs[data], i)
-                        }
-
-                        return <PrListItemGroup 
-                            key={data.id}
-                            id={data.id}
-                            index={i}
-                            name={data.name}
-                            isSelected={props.selectedItemIds.includes(data.id)}
-                            onEditName={() => props.onEditGroupName(data.id)}
-                            onDelete={() => props.onDeleteGroup(data.id)}
-                            onAddPrToGroup={(prId) => props.onAddPrsToGroup([prId], data.id)}
-                            onMove={props.onMove}
-                            onSelect={() => _handleSelectItem(data.id)}
-                        >
-                            {data.prIds
-                                .map((prId, gId) => __renderPrListItem(props.prs[prId], gId, data.id))
-                                .filter(pr => pr !== null)
-                            }
-                        </PrListItemGroup>
+                    Object.keys(prsNotInStructure).map((prId, i) => {
+                      return __renderPrListItem(prsNotInStructure[prId], i);
                     })
+
+                    // structure
+                    //     .map((data, i) => {
+                    //     if (typeof data === 'string') {
+                    //         return __renderPrListItem(prs[data], i)
+                    //     }
+
+                    //     return <PrListItemGroup 
+                    //         key={data.id}
+                    //         id={data.id}
+                    //         index={i}
+                    //         name={data.name}
+                    //         isSelected={props.selectedItemIds.includes(data.id)}
+                    //         onEditName={() => props.onEditGroupName(data.id)}
+                    //         onDelete={() => props.onDeleteGroup(data.id)}
+                    //         onAddPrToGroup={(prId) => props.onAddPrsToGroup([prId], data.id)}
+                    //         onMove={props.onMove}
+                    //         onSelect={() => _handleSelectItem(data.id)}
+                    //     >
+                    //         {data.prIds
+                    //             .map((prId, gId) => __renderPrListItem(props.prs[prId], gId, data.id))
+                    //             .filter(pr => pr !== null)
+                    //         }
+                    //     </PrListItemGroup>
+                    // })
                 }
             </div>
         }
@@ -113,3 +122,12 @@ function PrList(props) {
 }
 
 export default PrList;
+
+export function flattenStructure(structure) {
+  return structure.reduce((acc, el) => {
+      if (typeof el === 'string') {
+          return [...acc, el]
+      }
+      return [...acc, ...el.prIds]
+  }, []);
+}

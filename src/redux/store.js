@@ -7,11 +7,15 @@ export default function getStore(preloadedState) {
   return configureStore({
     reducer: (state, action) => {
       let newState = rootReducer(state, action)
-
-      return {
+      
+      let newCombineState = {
         ...newState,
         prs: prsSlice.reducer(newState.prs, action)
       }
+
+      // console.log(newCombineState);
+
+      return newCombineState;
     },
     devTools: process.env.NODE_ENV !== 'production',
     preloadedState
