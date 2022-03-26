@@ -1,52 +1,78 @@
 // Libraries
-import React from 'react';
+import React from "react";
 
-const settings = require('./settings/settings-utils.js');
+const settings = require("./settings/settings-utils.js");
+
+import { openUrl } from '../utils.js';
 
 // Components
 import PrStatusIndicator from "./utils/PrStatusIndicator";
-
+import { toggleItemSelection } from "../redux/selected_item_ids_slice";
+import { useDispatch, useSelector } from "react-redux";
 
 const PullListItem = React.forwardRef((props, ref) => {
-    let { filterText } = props;
+  let { filterText } = props;
 
-    function _getPrTitle() {
-        let name = 
-            settings.has('prTitleRewriter') 
-              ? props.name.replace(new RegExp(settings.get('prTitleRewriter')), '') 
-              : props.name
-        
+  let dispatch = useDispatch();
+  let isSelected = useSelector(state => state.selectedItemIds.includes(props.id))
 
-        if (filterText != '' || filterText != null) {
-            let matchStart = name.toLowerCase().indexOf(filterText.toLowerCase());
+  function _getPrTitle() {
+    let name = settings.has("prTitleRewriter")
+      ? props.name.replace(new RegExp(settings.get("prTitleRewriter")), "")
+      : props.name;
 
-            // sanity check to make sure the filter text is in the name
-            if (matchStart <= -1) return name;
+    if (filterText != "" || filterText != null) {
+      let matchStart = name.toLowerCase().indexOf(filterText.toLowerCase());
 
-            let prefix = name.substring(0, matchStart)
-            let match = name.substring(matchStart, matchStart+filterText.length);
-            let suffix = name.substring(matchStart+filterText.length)
+      // sanity check to make sure the filter text is in the name
+      if (matchStart <= -1) return name;
 
-            return <>{prefix}<mark>{match}</mark>{suffix}</>;
-        }
+      let prefix = name.substring(0, matchStart);
+      let match = name.substring(matchStart, matchStart + filterText.length);
+      let suffix = name.substring(matchStart + filterText.length);
 
-        return name;
+      return (
+        <>
+          {prefix}
+          <mark>{match}</mark>
+          {suffix}
+        </>
+      );
     }
 
-    return <div
-        ref={ref}
-        className={`pr-list-item ${props.isSelected ? 'selected' : ''} ${props.isHovered ? 'hovered': ''} ${props.className}`}
-        onClick={props.onClick}
-        style={props.style}
-        role="listitem"
-        onMouseOver={props.onMouseOver}
+    return name;
+  }
+
+  function _handleClick(e) {
+    if (e?.metaKey || e?.shiftKey) {
+      dispatch(toggleItemSelection(props.id));
+    } else {
+      openUrl(props.url);
+    }
+  }
+
+  return (
+    <div
+      ref={ref}
+      className={`pr-list-item ${isSelected ? "selected" : ""} ${
+        props.isHovered ? "hovered" : ""
+      } ${props.className}`}
+      onClick={_handleClick}
+      style={props.style}
+      role="listitem"
+      onMouseOver={props.onMouseOver}
     >
-        <PrStatusIndicator state={props.prStatus} contexts={props.prStatusContexts} isMerged={props.isClosed}/>
-        <div className={`pr-list-item__text ${props.isClosed ? 'merged' : ''}`}>
-            <span className='pr-list-item__repo-name'>{props.repo}</span>
-            {_getPrTitle()}
-        </div>
+      <PrStatusIndicator
+        state={props.prStatus}
+        contexts={props.prStatusContexts}
+        isMerged={props.isClosed}
+      />
+      <div className={`pr-list-item__text ${props.isClosed ? "merged" : ""}`}>
+        <span className="pr-list-item__repo-name">{props.repo}</span>
+        {_getPrTitle()}
+      </div>
     </div>
+  );
 });
 
 export default PullListItem;

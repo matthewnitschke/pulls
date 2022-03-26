@@ -1,15 +1,14 @@
-import { createAction } from '@reduxjs/toolkit'
+import { createReducer } from '@reduxjs/toolkit'
 
-export const setActiveQuery = createAction('root/setActiveQuery');
+import { setActiveQuery } from './actions.js';
 
-export default function rootReducer(state, action) {
-  switch (action.type) {
-    case 'root/setActiveQuery':
-      return { 
-        ...state,
-        activeQueryIndex: action.payload,
-      }
-    default:
-      return state
-  }
-}
+const rootReducer = createReducer({}, (builder) => {
+  builder.addCase(
+    setActiveQuery,
+    (state, action) => {
+      state.activeQueryIndex = action.payload
+    },
+  )
+})
+
+export default rootReducer;

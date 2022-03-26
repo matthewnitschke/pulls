@@ -22,24 +22,6 @@ function PrList(props) {
         return state.structure[queryObj.query] ?? [];
     });
 
-    function _handleSelectItem(prId) {
-        if (props.selectedItemIds.includes(prId)) {
-            props.setSelectedItemIds(
-                props.selectedItemIds.filter(selPrId => selPrId != prId)
-            );
-        } else {
-            props.setSelectedItemIds([...props.selectedItemIds, prId]);
-        }
-    }
-
-    function _handleClick(e, prId) {
-        if (e?.metaKey || e?.shiftKey) {
-            _handleSelectItem(prId)
-        } else {
-            openUrl(props.prs[prId].prUrl);
-        }
-    }
-
     function _handleFilterInputKeyDown(e) {
         if (e.key == 'Escape') {
             props.onHideWindow()
@@ -61,22 +43,14 @@ function PrList(props) {
             index={index}
             id={pr.id}
             groupId={groupId}
-            isSelected={props.selectedItemIds.includes(pr.id)}
             filterText={filterText}
             name={pr.name}
             repo={pr.repo}
-            onGroupPrs={props.onGroupPrs}
             isClosed={pr.prState == 'closed'}
+            url={pr.prUrl}
             prStatus={pr.prStatus}
-            prStatusContexts={pr.prStatusContexts}
-            onMove={props.onMove}
-            onClick={(e) => _handleClick(e, pr.id)} />;
+            prStatusContexts={pr.prStatusContexts} />;
     }
-
-    let flattenedStructure = flattenStructure(structure);
-    let prsNotInStructure = Object.keys(prs)
-      .filter(prId => !flattenedStructure.includes(prId))
-      .reduce((acc, prId) => ({...acc, [prId]: prs[prId] }), {});
 
     return <>
          <FilterInput
@@ -87,34 +61,24 @@ function PrList(props) {
         { Object.keys(prs).length > 0 &&        
             <div className="pr-list" role="list">
                 {
-                    Object.keys(prsNotInStructure).map((prId, i) => {
-                      return __renderPrListItem(prsNotInStructure[prId], i);
+                    structure
+                        .map((data, i) => {
+                        if (typeof data === 'string') {
+                            return __renderPrListItem(prs[data], i)
+                        }
+
+                        return <PrListItemGroup 
+                            key={data.id}
+                            id={data.id}
+                            index={i}
+                            name={data.name}
+                        >
+                            {data.prIds
+                                .map((prId, gId) => __renderPrListItem(prs[prId], gId, data.id))
+                                .filter(pr => pr !== null)
+                            }
+                        </PrListItemGroup>
                     })
-
-                    // structure
-                    //     .map((data, i) => {
-                    //     if (typeof data === 'string') {
-                    //         return __renderPrListItem(prs[data], i)
-                    //     }
-
-                    //     return <PrListItemGroup 
-                    //         key={data.id}
-                    //         id={data.id}
-                    //         index={i}
-                    //         name={data.name}
-                    //         isSelected={props.selectedItemIds.includes(data.id)}
-                    //         onEditName={() => props.onEditGroupName(data.id)}
-                    //         onDelete={() => props.onDeleteGroup(data.id)}
-                    //         onAddPrToGroup={(prId) => props.onAddPrsToGroup([prId], data.id)}
-                    //         onMove={props.onMove}
-                    //         onSelect={() => _handleSelectItem(data.id)}
-                    //     >
-                    //         {data.prIds
-                    //             .map((prId, gId) => __renderPrListItem(props.prs[prId], gId, data.id))
-                    //             .filter(pr => pr !== null)
-                    //         }
-                    //     </PrListItemGroup>
-                    // })
                 }
             </div>
         }

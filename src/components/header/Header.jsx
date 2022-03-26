@@ -16,17 +16,17 @@ import { ListItemText } from '@mui/material';
 import {fetchPrs} from '../../redux/prs_slice.js';
 
 function Header(props) {
-    let selectedItemIds = props.selectedItemIds ?? [];
-
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => setAnchorEl(event.currentTarget);
-    const handleClose = () => setAnchorEl(null);
-
-    let dispatch = useDispatch();
-    let queries = useSelector((state) => state.queries);
-    let activeQueryIndex = useSelector((state) => state.activeQueryIndex);
-    let isPrsQueryRunning = useSelector((state) => state.prs.status == 'loading');
+  
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => setAnchorEl(event.currentTarget);
+  const handleClose = () => setAnchorEl(null);
+  
+  let dispatch = useDispatch();
+  let queries = useSelector((state) => state.queries);
+  let activeQueryIndex = useSelector((state) => state.activeQueryIndex);
+  let isPrsQueryRunning = useSelector((state) => state.prs.status == 'loading');
+  let selectedItemIds = useSelector(state => state.selectedItemIds);
 
     return <div className='header'>
         <div className='main-header'>

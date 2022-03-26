@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+const settings = require('./components/settings/settings-utils.js');
+
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -9,7 +11,8 @@ import PullsApp from './components/PullsApp.jsx';
 import configureStore from './redux/store.js';
 import { Provider } from 'react-redux'
 
-import prsSlice, {fetchPrs} from './redux/prs_slice.js';
+import { fetchPrs } from './redux/actions';
+
 
 
 const theme = createTheme({
@@ -56,7 +59,6 @@ const theme = createTheme({
 
 let store = configureStore({
   activeQueryIndex: 0,
-  queryStatus: 'running',
 
   queries: [
     {
@@ -69,11 +71,7 @@ let store = configureStore({
     }
   ],
 
-  structure: {
-    'is:open is:pr author:matthewnitschke-wk archived:false': [
-      'uuid'
-    ]
-  }
+  structure: settings.get('structure')
 });
 
 let fullState = store.getState();

@@ -2,8 +2,10 @@
 const { ipcMain, globalShortcut, Menu, BrowserWindow, dialog, app } = require('electron');
 const { menubar } = require('menubar');
 
-const package = require('./package.json');
+const packageJson = require('./package.json');
 const settings = require('./src/components/settings/settings-utils.js');
+
+const { default: installExtension, REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer');
 
 const isDebug = process.env.DEBUG == "true";
 
@@ -27,7 +29,14 @@ const windowSettings = {
 }
 
 if (isDebug) {
-  app.whenReady().then(() => {
+  app.whenReady().then(async () => {
+    await installExtension(
+      [REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS], {
+        loadExtensionOptions: { allowFileAccess: true }
+    })
+      .then((name) => console.log(`Added Extension:  ${name}`))
+      .catch((err) => console.log("An error occurred: ", err));
+
     let win = new BrowserWindow(windowSettings);
     win.loadFile(`${__dirname}/dist/index.html`)
   })
@@ -100,7 +109,7 @@ function showAboutDialog() {
   dialog.showMessageBox(null, {
     title: 'About Pulls',
     message: 'About Pulls',
-    detail: `Version: ${package.version}`
+    detail: `Version: ${packageJson.version}`
   });
 }
 

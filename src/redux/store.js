@@ -1,23 +1,30 @@
-import { applyMiddleware, compose, createStore, combineReducers } from 'redux';
 import { configureStore } from '@reduxjs/toolkit';
-import rootReducer from './root_reducer.js';
-import prsSlice from './prs_slice.js';
+
+import rootReducer from './root_reducer';
+import prsReducer from './prs_slice';
+import structureReducer from './structure_slice';
+import selectedItemIdsReducer from './selected_item_ids_slice';
+
+import { activeQueryInjectorMiddleware, structurePersistanceMiddleware } from './middleware';
 
 export default function getStore(preloadedState) {
   return configureStore({
     reducer: (state, action) => {
       let newState = rootReducer(state, action)
       
-      let newCombineState = {
+      return {
         ...newState,
-        prs: prsSlice.reducer(newState.prs, action)
+        selectedItemIds: selectedItemIdsReducer(newState.selectedItemIds, action),
+        prs: prsReducer(newState.prs, action),
+        structure: structureReducer(newState.structure, action),
       }
-
-      // console.log(newCombineState);
-
-      return newCombineState;
     },
     devTools: process.env.NODE_ENV !== 'production',
-    preloadedState
+    preloadedState,
+    middleware: (getDefaultMiddleware) => [
+      ...getDefaultMiddleware(),
+      activeQueryInjectorMiddleware,
+      structurePersistanceMiddleware,
+    ],
   })
 }

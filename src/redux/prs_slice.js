@@ -1,24 +1,14 @@
-import { createAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
-import queryGithub from '../github_client.js';
-
-
-export const fetchPrs = createAsyncThunk(
-  'prs/fetch',
-  async (query, { rejectWithValue }) => {
-    try {
-      let resp = await queryGithub(query)
-      return resp;
-    } catch (err) {
-      console.error(err);
-      rejectWithValue(err);
-    }
-  }
-)
+import { fetchPrs } from './actions';
 
 const prsSlice = createSlice({
   name: 'prs',
-  initialState: { data: {}, status: 'idle' },
+  initialState: { 
+    data: {},
+    structure: {},
+    status: 'idle',
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchPrs.pending, (state) => {
@@ -34,4 +24,4 @@ const prsSlice = createSlice({
   }
 })
 
-export default prsSlice;
+export default prsSlice.reducer;

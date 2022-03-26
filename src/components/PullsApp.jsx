@@ -19,9 +19,15 @@ import { useSettings } from '../hooks/useSettings.js';
 import { useMenubarShow, useMenubarHide } from '../hooks/useMenubarEvents.js';
 import useHotkeys from '../hooks/useHotkeys.js';
 import useStructure, { flattenStructure } from '../hooks/useStructure.js';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
+import {groupPrs} from '../redux/structure_slice';
 
 import {setActiveQuery} from '../redux/root_reducer.js';
+
+import {selectSelectedPrIds} from '../redux/selectors';
+import {clearSelection} from '../redux/selected_item_ids_slice';
+import { fetchPrs } from '../redux/actions.js';
 
 
 function PullsApp({ automation = false }) {
@@ -34,37 +40,20 @@ function PullsApp({ automation = false }) {
     let queries = useSettings('githubQueries', []);
 
     let [query, setQuery] = useState({key: 'My PRs', value: 'is:open is:pr author:{githubUser} archived:false'});
-    
-    let { prs, prOrder, isRunning, rerunQuery } = usePrData(
-        query.value,
-        (structureToResetTo) => resetStructure(structureToResetTo),
-    );
 
-    let { 
-        structure,
-        groupPrs,
-        addPrsToGroup,
-        deleteGroup,
-        setGroupName,
-        moveGroup,
-        move,
-        resetStructure
-     } = useStructure(query.value, prOrder);
-
-    useMenubarHide(() => setSelectedItemIds([]));
+    useMenubarHide(() => dispatch(clearSelection()));
     
-    let structurePrIds = flattenStructure(structure);
-    let selectedPrIds = selectedItemIds.filter(id => structurePrIds.includes(id));
+    let selectedPrIds = useSelector(selectSelectedPrIds)
 
     useHotkeys('escape', () => ipcRenderer.send('hide-window'));
     useHotkeys('command+r', (e) => {
         e.preventDefault();
-        rerunQuery();
+        dispatch(fetchPrs())
     });
 
     useHotkeys('command+o', _openSelectedPrs);
     useHotkeys('command+c', _copySelectedPrs);
-    useHotkeys('command+g', () => _groupPrs(selectedPrIds));
+    useHotkeys('command+g', () => dispatch(groupPrs(selectedPrIds)));
 
     for (let i = 0; i <= 8; i ++) {
         useHotkeys(`command+${i+1}`, () => {
@@ -73,20 +62,7 @@ function PullsApp({ automation = false }) {
             }
         })
     }
-
-    async function _groupPrs(prIds) {
-        let groupName = await swal({
-            title: 'ENTER NAME OF GROUP',
-            content: 'input'
-        });
-
-        if (groupName) {
-            groupPrs(prIds, groupName);
-            setSelectedItemIds([]);
-        }
-    }
     
-
     function _openSelectedPrs() {
         selectedPrIds.map(id => prs[id].prUrl).map(openUrl);
         setSelectedItemIds([]);
@@ -107,41 +83,11 @@ function PullsApp({ automation = false }) {
 
     return <div className='pulls-app'>
         <Header
-            currentQuery={query}
-            queries={queries} 
-            onSetQuery={setQuery} 
-            selectedItemIds={selectedItemIds} 
-            onGroupSelectedPrs={() => _groupPrs(selectedPrIds)}
             onOpenSelectedPrs={_openSelectedPrs}
-            onCopySelectedPrs={_copySelectedPrs}
-            isQueryRunning={isRunning} />
+            onCopySelectedPrs={_copySelectedPrs} />
             
         <PrList
-            prs={prs}
-            structure={structure}
-            selectedItemIds={selectedItemIds}
-            onHideWindow={() => ipcRenderer.send('hide-window')}
-            setSelectedItemIds={setSelectedItemIds}
-            onGroupPrs={_groupPrs}
-            onAddPrsToGroup={addPrsToGroup}
-            onEditGroupName={async (groupId) => {
-                let group = structure.find(el => el.id == groupId)
-                let groupName = await swal({
-                    title: `ENTER THE NEW NAME OF "${group.name}"`,
-                    content: 'input'
-                });
-        
-                if (groupName) {
-                    setGroupName(groupId, groupName);
-                    setSelectedItemIds([])
-                }
-            }}
-            onDeleteGroup={async (groupId) => {
-                deleteGroup(groupId);
-                setSelectedItemIds([])
-            }} 
-            onMoveGroup={moveGroup} 
-            onMove={move} />
+            onHideWindow={() => ipcRenderer.send('hide-window')} />
         
         { automation && <input type="button" value="refresh" onClick={rerunQuery}/>}
     </div>
