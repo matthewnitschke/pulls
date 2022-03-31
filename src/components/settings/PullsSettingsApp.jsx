@@ -1,12 +1,10 @@
 const { ipcRenderer } = require('electron');
-const definedSettings = require('./settings-config.js');
 const settings = require('./settings-utils.js');
 
 import swal from 'sweetalert';
 
-import React from 'react';
-import SettingInput from './SettingInput';
-import { useSettings } from '../../hooks/useSettings';
+import React, { useState } from 'react';
+import PreferencesEditor from './PreferencesEditor.jsx';
 
 function PullsSettingsApp() {
     function _handleSave() {
@@ -37,14 +35,10 @@ function PullsSettingsApp() {
                 onClick={_handleDeleteAll}
             ></i>
         </div>
-        <div className="settings-editor-app-body">
-            {definedSettings.map(settingOptions => {
-                return <SettingInput
-                    key={settingOptions.settingsKey}
-                    {...settingOptions}
-                    onSave={_handleSave} />
-            })}
-        </div>
+
+        <PreferencesEditor
+            defaultValue={JSON.stringify(settings.get('preferences'), null, 2)}
+            onChange={val => settings.set('preferences', JSON.parse(val))} />
     </div>
 }
 
