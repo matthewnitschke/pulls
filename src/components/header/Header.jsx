@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { setActiveQuery } from '../../redux/root_reducer';
+import { setActiveQuery, fetchPrs } from '../../redux/actions';
 
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Menu from '@mui/material/Menu';
@@ -12,8 +12,6 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import SelectedPrsDetailMenu from './SelectedPrsDetailsMenu';
 import CircularProgress from '@mui/material/CircularProgress';
 import { ListItemText } from '@mui/material';
-
-import {fetchPrs} from '../../redux/prs_slice.js';
 
 function Header(props) {
   
