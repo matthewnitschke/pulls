@@ -36,7 +36,7 @@ loader.init().then(monaco => {
 			schema: preferencesSchema
         }]
     });
-})
+});
 
 
 const PreferencesEditor = React.forwardRef((props, ref) => {
