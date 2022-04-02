@@ -1,6 +1,5 @@
 // Libraries
 import React, { useState } from 'react';
-import { openUrl } from '../utils.js';
 
 import { useSelector } from 'react-redux';
 

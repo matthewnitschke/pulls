@@ -1,8 +1,12 @@
-import { createSlice, createAction, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { v4 as uuid } from 'uuid';
 import { fetchPrs } from './actions';
 
+import {settingsStore} from '../utils';
+
 import { selectActiveQuery } from './selectors';
+
+import swal from 'sweetalert';
 
 export const groupPrs = createAsyncThunk(
   'groupPrs',
@@ -37,7 +41,7 @@ export const renameGroup = createAsyncThunk(
 
 const structureSlice = createSlice({
   name: 'structure',
-  initialState: {},
+  initialState: settingsStore.get('structure'),
   reducers: {
     move: {
       reducer: (state, action) => {

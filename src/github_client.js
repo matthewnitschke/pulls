@@ -1,7 +1,7 @@
-import settings from './components/settings/settings-utils.js';
+import {getConfig} from './utils';
 
 export default async function queryGithub(ghQuery) {
-  let githubAuth = settings.get('github');
+  let githubAuth = (await getConfig()).githubToken;
   
   let res = await fetch(`https://api.github.com/graphql`, {
     body: JSON.stringify({
@@ -11,9 +11,10 @@ export default async function queryGithub(ghQuery) {
       Authorization: `bearer ${githubAuth}`,
     },
     method: "POST"
-  }).then((res) => res.json());
-  
-  let parsedData = res.data.search.edges
+  });
+
+  let jsonRes = await res.json();
+  let parsedData = jsonRes.data.search.edges
     .map(({ node }) => parsePullDataFromNode(node))
     .filter(pullData => pullData != null)
 

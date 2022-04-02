@@ -1,15 +1,19 @@
 
-const { ipcMain, globalShortcut, Menu, BrowserWindow, dialog, app } = require('electron');
+const { ipcMain, globalShortcut, Menu, BrowserWindow, dialog, app, shell } = require('electron');
 const { menubar } = require('menubar');
 
 const packageJson = require('./package.json');
-const settings = require('./src/components/settings/settings-utils.js');
+
+const {settingsStore} = require('./src/utils.js');
+const path = require('path');
 
 const { default: installExtension, REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer');
 
 const isDebug = process.env.DEBUG == "true";
 
-let windowHeight = settings.get('windowHeight');
+const homedir = require('os').homedir();
+
+let windowHeight = settingsStore.get('windowHeight');
 
 const windowSettings = {
   width: 600,
@@ -48,7 +52,6 @@ if (isDebug) {
   });
   
   mb.on('ready', () => {
-    settings.setDefaults();
 
     // globalShortcut.register('CommandOrControl+I', () => {
     //   mb.showWindow()
@@ -58,8 +61,6 @@ if (isDebug) {
   
     // sent from the frontend on escape key press
     ipcMain.on('hide-window', () => mb.hideWindow());
-    ipcMain.on('show-settings', showSettingsWindow);
-    ipcMain.on('settings-updated', () => mb.window.webContents.send('settings-updated'));
   })
   
   mb.on('show', () => {
@@ -80,7 +81,10 @@ if (isDebug) {
   mb.on('after-create-window', function() {
     const contextMenu = Menu.buildFromTemplate ([
       { label: 'About Pulls', click: showAboutDialog },
-      { label: 'Preferences', click: showSettingsWindow },
+      { 
+        label: 'Preferences', 
+        click: () => shell.openPath(path.join(homedir, '.pulls-config.yaml')), 
+      },
       // { label: 'Clear App Data', click: clearAppData },
       // { label: 'Display App Data', click: displayAppData },
       { label: 'Quit', click: mb.app.exit },
@@ -88,21 +92,6 @@ if (isDebug) {
 
     mb.tray.on ('right-click', () => mb.tray.popUpContextMenu(contextMenu))
   });
-}
-
-function showSettingsWindow() {
-  let win = new BrowserWindow({ 
-    width: 800,
-    height: 600,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
-    }
-  });
-  win.on('closed', () => {
-    win = null
-  });
-  win.loadURL(`file://${__dirname}/dist/settings-editor.html`);
 }
 
 function showAboutDialog() {
@@ -114,9 +103,9 @@ function showAboutDialog() {
 }
 
 function clearAppData() {
-  settings.set('savedStructure', []);
+  settingsStore.set('structure', {});
 }
 
 function displayAppData() {
-  dialog.showMessageBox('App Data', JSON.stringify(settings.get('savedStructure')))
+  dialog.showMessageBox('App Data', JSON.stringify(settingsStore.get('structure')))
 }

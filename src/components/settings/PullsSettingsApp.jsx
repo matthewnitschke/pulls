@@ -1,5 +1,5 @@
 const { ipcRenderer } = require('electron');
-const settings = require('./settings-utils.js');
+import { settingsStore as settings } from '../utils.js';
 
 import swal from 'sweetalert';
 

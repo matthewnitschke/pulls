@@ -1,24 +1,17 @@
 // Node
 const { ipcRenderer, clipboard } = require('electron');
 
-const settings = require('./settings/settings-utils.js');
-
 // Libraries
-import React, { useCallback, useState } from 'react';
-import swal from 'sweetalert';
+import React, { useState } from 'react';
 import { openUrl } from '../utils.js';
 
 // Components
 import PrList from './PrList.jsx';
 import Header from './header/Header.jsx';
-import MissingRequiredSettingsView from './MissingRequiredSettingsView.jsx';
 
 // Hooks
-import { usePrData } from '../hooks/usePrData.js';
-import { useSettings } from '../hooks/useSettings.js';
-import { useMenubarShow, useMenubarHide } from '../hooks/useMenubarEvents.js';
+import { useMenubarHide } from '../hooks/useMenubarEvents.js';
 import useHotkeys from '../hooks/useHotkeys.js';
-import useStructure, { flattenStructure } from '../hooks/useStructure.js';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {groupPrs} from '../redux/structure_slice';
@@ -31,15 +24,10 @@ import { fetchPrs } from '../redux/actions.js';
 
 
 function PullsApp({ automation = false }) {
-    let [ hasRequiredSettings, setHasRequiredSettings ] = useState(settings.hasRequiredSettings());
-    useMenubarShow(() => setHasRequiredSettings(settings.hasRequiredSettings()));
-    let [ selectedItemIds, setSelectedItemIds ] = useState([]);
 
     let dispatch = useDispatch();
 
-    let queries = useSettings('githubQueries', []);
-
-    let [query, setQuery] = useState({key: 'My PRs', value: 'is:open is:pr author:{githubUser} archived:false'});
+    let queries = useSelector(state => state.queries)
 
     useMenubarHide(() => dispatch(clearSelection()));
     
@@ -77,9 +65,13 @@ function PullsApp({ automation = false }) {
         clipboard.writeText(prText, 'selection')
     }
 
-    if (!hasRequiredSettings) {
-        return <MissingRequiredSettingsView />
+    if (queries == null || queries.length <= 0) {
+      return <div>No Queries</div>
     }
+
+    // if (!hasRequiredSettings) {
+    //     return <MissingRequiredSettingsView />
+    // }
 
     return <div className='pulls-app'>
         <Header

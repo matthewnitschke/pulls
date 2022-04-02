@@ -10,10 +10,8 @@ export const fetchPrs = createAsyncThunk(
       let resp = await queryGithub(query ?? selectActiveQuery(getState()))
       return resp;
     } catch (err) {
-      console.error(err);
+      // console.error(err);
       rejectWithValue(err);
     }
   }
 )
-
-export const setActiveQuery = createAction('setActiveQuery');

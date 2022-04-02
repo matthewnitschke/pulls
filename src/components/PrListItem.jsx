@@ -1,7 +1,7 @@
 // Libraries
 import React from "react";
 
-const settings = require("./settings/settings-utils.js");
+import {useConfigValue} from '../hooks/useConfigValue';
 
 import { openUrl } from '../utils.js';
 
@@ -16,9 +16,11 @@ const PullListItem = React.forwardRef((props, ref) => {
   let dispatch = useDispatch();
   let isSelected = useSelector(state => state.selectedItemIds.includes(props.id))
 
+  let prTitleRewriter = useConfigValue(config => config.prTitleRewriter, null)
+
   function _getPrTitle() {
-    let name = settings.has("prTitleRewriter")
-      ? props.name.replace(new RegExp(settings.get("prTitleRewriter")), "")
+    let name = prTitleRewriter != null
+      ? props.name.replace(new RegExp(prTitleRewriter), '')
       : props.name;
 
     if (filterText != "" || filterText != null) {

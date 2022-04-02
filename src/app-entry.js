@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-const settings = require('./components/settings/settings-utils.js');
+
 
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DndProvider } from 'react-dnd'
@@ -12,7 +12,10 @@ import configureStore from './redux/store.js';
 import { Provider } from 'react-redux'
 
 import { fetchPrs } from './redux/actions';
+import { updateFromConfig } from './redux/root_reducer.js';
+const { ipcRenderer } = require('electron');
 
+const fs = require('fs');
 
 
 const theme = createTheme({
@@ -57,25 +60,19 @@ const theme = createTheme({
   }
 });
 
-let store = configureStore({
-  activeQueryIndex: 0,
 
-  queries: [
-    {
-      label: 'My PRs',
-      query: 'is:open is:pr author:matthewnitschke-wk archived:false'
-    },
-    {
-      label: 'Assigned PRs',
-      query: 'is:open is:pr team-review-requested:Workiva/ir-platform'
-    }
-  ],
+let store = configureStore();
 
-  structure: settings.get('structure')
-});
+const configFilePath = '/Users/matthewnitschke/.pulls-config.yaml';
+store.dispatch(updateFromConfig(configFilePath))
+  .then(() => store.dispatch(fetchPrs()));
 
-let fullState = store.getState();
-store.dispatch(fetchPrs(fullState.queries[fullState.activeQueryIndex].query))
+fs.watch(configFilePath, () => 
+  store.dispatch(updateFromConfig(configFilePath))
+    .then(() => store.dispatch(fetchPrs()))
+)
+
+ipcRenderer.on('menubar-show', () => store.dispatch(fetchPrs()));
 
 ReactDOM.render(
     <DndProvider backend={HTML5Backend}>

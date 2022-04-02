@@ -2,7 +2,8 @@
 import { useState, useEffect, useRef } from 'react';
 import swal from 'sweetalert';
 import toMils from 'to-mils';
-import settings from 'src/components/settings/settings-utils.js';
+
+import { settingsStore as settings } from '../utils.js';
 
 // Hooks
 import useInterval from './useInterval.js';

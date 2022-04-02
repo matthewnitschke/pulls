@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useRef } from 'react';
 import { v4 as uuid } from 'uuid';
 
-import settings from 'src/components/settings/settings-utils.js';
+import { settingsStore as settings } from '../utils.js';
 
 export default function useStructure(query, prOrder) {
     let queryKey = encodeURIComponent(query);

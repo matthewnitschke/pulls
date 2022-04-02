@@ -1,7 +1,8 @@
 import React from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { setActiveQuery, fetchPrs } from '../../redux/actions';
+import { fetchPrs } from '../../redux/actions';
+import { setActiveQuery } from '../../redux/root_reducer';
 
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Menu from '@mui/material/Menu';
