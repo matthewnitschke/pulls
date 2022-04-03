@@ -22,9 +22,8 @@ import { setActiveQuery } from '../redux/root_reducer.js';
 
 import { selectSelectedPrIds } from '../redux/selectors';
 import { clearSelection } from '../redux/selected_item_ids_slice';
-import { fetchPrs } from '../redux/actions.js';
+import { fetchPrs } from '../redux/prs_slice';
 import { updateFromConfig } from '../redux/root_reducer.js';
-import {configFilePath} from '../utils';
 
 function PullsApp({ automation = false }) {
 

@@ -1,7 +1,7 @@
 import { createReducer, createAction, createAsyncThunk } from '@reduxjs/toolkit'
 
 import { getConfig } from '../utils';
-import { fetchPrs } from './actions';
+import { fetchPrs } from './prs_slice';
 
 export const setActiveQuery = activeQueryIndex => dispatch => {
   dispatch(setActiveQueryInt(activeQueryIndex))

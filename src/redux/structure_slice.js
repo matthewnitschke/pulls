@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { v4 as uuid } from 'uuid';
-import { fetchPrs } from './actions';
+import { fetchPrs } from './prs_slice';
 
 import {settingsStore} from '../utils';
 

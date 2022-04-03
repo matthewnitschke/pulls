@@ -5,8 +5,10 @@ import { openUrl } from '../utils.js';
 
 // Components
 import PrStatusIndicator from "./utils/PrStatusIndicator";
+import ItemActionsMenu from "./ItemActionsMenu";
 import { toggleItemSelection } from "../redux/selected_item_ids_slice";
 import { useDispatch, useSelector } from "react-redux";
+import { selectActiveQuery } from "../redux/selectors.js";
 
 const PullListItem = React.forwardRef((props, ref) => {
   let { filterText } = props;
@@ -14,7 +16,13 @@ const PullListItem = React.forwardRef((props, ref) => {
   let dispatch = useDispatch();
   let isSelected = useSelector(state => state.selectedItemIds.includes(props.id))
 
-  let prTitleRewriter = useSelector(state => state.config.prTitleRewriter)
+  let actions = useSelector(state => {
+    let activeQuery = state.config.queries[state.activeQueryIndex]
+
+    return activeQuery.prActions
+  })
+
+  let prTitleRewriter = useSelector(state => state.config.prTitleRewriter);
 
   function _getPrTitle() {
     let name = prTitleRewriter != null
@@ -71,6 +79,11 @@ const PullListItem = React.forwardRef((props, ref) => {
         <span className="pr-list-item__repo-name">{props.repo}</span>
         {_getPrTitle()}
       </div>
+      { (actions?.length ?? 0) > 0 &&
+        <div>
+          <ItemActionsMenu actions={actions} itemId={props.id} />
+        </div>
+      }
     </div>
   );
 });

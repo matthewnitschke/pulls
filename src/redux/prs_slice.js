@@ -1,6 +1,25 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk} from '@reduxjs/toolkit'
 
-import { fetchPrs } from './actions';
+import queryGithub from '../github_client.js';
+import { selectActiveQuery } from './selectors.js';
+
+export const fetchPrs = createAsyncThunk(
+  'fetchPrs',
+  async (arg, { getState, rejectWithValue }) => {
+    try {
+      let state = getState();
+      
+      let activeQuery = selectActiveQuery(state);
+      if (activeQuery == null) return rejectWithValue('No Query Found')
+
+      let resp = await queryGithub(activeQuery, state.config.githubToken)
+
+      return resp;
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+)
 
 const prsSlice = createSlice({
   name: 'prs',

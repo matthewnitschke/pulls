@@ -28,6 +28,29 @@ export default async function queryGithub(ghQuery, githubToken) {
   return prData;
 }
 
+export async function githubRequest({ 
+  path, 
+  method,
+  body,
+}, githubToken) {
+  let res = await fetch(
+    `https://api.github.com/${path}`,
+    {
+      body: JSON.stringify(body ?? {}),
+      headers: {
+        Authorization: `bearer ${githubToken}`, 
+      },
+      method: method ?? 'POST'
+    }
+  )
+
+  let jsonRes = await res.json();
+
+  if (!res.ok) {
+    throw new Error(jsonRes.message);
+  }
+}
+
 
 function parsePullDataFromNode(node) {
   try {
