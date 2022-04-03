@@ -1,8 +1,6 @@
 // Libraries
 import React from "react";
 
-import {useConfigValue} from '../hooks/useConfigValue';
-
 import { openUrl } from '../utils.js';
 
 // Components
@@ -16,7 +14,7 @@ const PullListItem = React.forwardRef((props, ref) => {
   let dispatch = useDispatch();
   let isSelected = useSelector(state => state.selectedItemIds.includes(props.id))
 
-  let prTitleRewriter = useConfigValue(config => config.prTitleRewriter, null)
+  let prTitleRewriter = useSelector(state => state.config.prTitleRewriter)
 
   function _getPrTitle() {
     let name = prTitleRewriter != null

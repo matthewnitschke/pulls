@@ -1,14 +1,13 @@
 import {getConfig} from './utils';
 
-export default async function queryGithub(ghQuery) {
-  let githubAuth = (await getConfig()).githubToken;
+export default async function queryGithub(ghQuery, githubToken) {
   
   let res = await fetch(`https://api.github.com/graphql`, {
     body: JSON.stringify({
       query: buildGraphQLQuery(ghQuery)
     }),
     headers: {
-      Authorization: `bearer ${githubAuth}`,
+      Authorization: `bearer ${githubToken}`,
     },
     method: "POST"
   });

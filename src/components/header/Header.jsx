@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchPrs } from '../../redux/actions';
 import { setActiveQuery } from '../../redux/root_reducer';
 
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -22,7 +21,7 @@ function Header(props) {
   const handleClose = () => setAnchorEl(null);
   
   let dispatch = useDispatch();
-  let queries = useSelector((state) => state.queries);
+  let queries = useSelector((state) => state.config.queries);
   let activeQueryIndex = useSelector((state) => state.activeQueryIndex);
   let isPrsQueryRunning = useSelector((state) => state.prs.status == 'loading');
   let selectedItemIds = useSelector(state => state.selectedItemIds);
@@ -64,7 +63,6 @@ function Header(props) {
                     key={query.label}
                     onClick={() => {
                         dispatch(setActiveQuery(i))
-                        dispatch(fetchPrs(queries[i].query))
                         handleClose();
                     }}
                 >

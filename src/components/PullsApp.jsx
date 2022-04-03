@@ -1,8 +1,10 @@
 // Node
 const { ipcRenderer, clipboard } = require('electron');
 
+import fs from 'fs';
+
 // Libraries
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { openUrl } from '../utils.js';
 
 // Components
@@ -10,28 +12,39 @@ import PrList from './PrList.jsx';
 import Header from './header/Header.jsx';
 
 // Hooks
-import { useMenubarHide } from '../hooks/useMenubarEvents.js';
+import { useMenubarHide, useMenubarShow } from '../hooks/useMenubarEvents.js';
 import useHotkeys from '../hooks/useHotkeys.js';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {groupPrs} from '../redux/structure_slice';
 
-import {setActiveQuery} from '../redux/root_reducer.js';
+import { setActiveQuery } from '../redux/root_reducer.js';
 
-import {selectSelectedPrIds} from '../redux/selectors';
-import {clearSelection} from '../redux/selected_item_ids_slice';
+import { selectSelectedPrIds } from '../redux/selectors';
+import { clearSelection } from '../redux/selected_item_ids_slice';
 import { fetchPrs } from '../redux/actions.js';
-
+import { updateFromConfig } from '../redux/root_reducer.js';
+import {configFilePath} from '../utils';
 
 function PullsApp({ automation = false }) {
 
     let dispatch = useDispatch();
 
-    let queries = useSelector(state => state.queries)
+    let queries = useSelector(state => state.config.queries ?? [])
+    let selectedPrIds = useSelector(selectSelectedPrIds)
+
+    useEffect(() => {
+      dispatch(updateFromConfig())
+        .then(() => dispatch(fetchPrs()));
+  
+      // fs.watch(configFilePath, () => 
+      //   dispatch(updateFromConfig())
+      //     .then(() => dispatch(fetchPrs()))
+      // )
+    }, []);
 
     useMenubarHide(() => dispatch(clearSelection()));
-    
-    let selectedPrIds = useSelector(selectSelectedPrIds)
+    useMenubarShow(() => dispatch(fetchPrs()));
 
     useHotkeys('escape', () => ipcRenderer.send('hide-window'));
     useHotkeys('command+r', (e) => {
@@ -64,14 +77,6 @@ function PullsApp({ automation = false }) {
         
         clipboard.writeText(prText, 'selection')
     }
-
-    if (queries == null || queries.length <= 0) {
-      return <div>No Queries</div>
-    }
-
-    // if (!hasRequiredSettings) {
-    //     return <MissingRequiredSettingsView />
-    // }
 
     return <div className='pulls-app'>
         <Header

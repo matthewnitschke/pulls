@@ -1,10 +1,11 @@
 
 import { settingsStore } from '../utils.js';
+import {selectActiveQuery} from './selectors';
 
 export const activeQueryInjectorMiddleware = store => next => action => {
   let state = store.getState();
 
-  action.meta = {...action.meta, activeQuery: state.queries[state.activeQueryIndex]?.query}
+  action.meta = {...action.meta, activeQuery: selectActiveQuery(state)}
 
   next(action);
 }

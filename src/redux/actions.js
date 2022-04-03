@@ -5,13 +5,18 @@ import { selectActiveQuery } from './selectors.js';
 
 export const fetchPrs = createAsyncThunk(
   'fetchPrs',
-  async (query, { getState, rejectWithValue }) => {
+  async (arg, { getState, rejectWithValue }) => {
     try {
-      let resp = await queryGithub(query ?? selectActiveQuery(getState()))
+      let state = getState();
+      
+      let activeQuery = selectActiveQuery(state);
+      if (activeQuery == null) return rejectWithValue('No Query Found')
+
+      let resp = await queryGithub(activeQuery, state.config.githubToken)
+
       return resp;
     } catch (err) {
-      // console.error(err);
-      rejectWithValue(err);
+      return rejectWithValue(err);
     }
   }
 )

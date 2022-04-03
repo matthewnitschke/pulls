@@ -7,18 +7,19 @@ import { useSelector } from 'react-redux';
 import PrListItemGroup from './PrListItemGroup.jsx';
 import FilterInput from './FilterInput.jsx';
 import DraggablePrListItem from './DraggablePrListItem.jsx';
+import { selectActiveQuery } from '../redux/selectors.js';
 
 function PrList(props) {
     let [ filterText, setFilterText ] = useState('');
 
     let prs = useSelector(state => {
-        let queryObj = state.queries[state.activeQueryIndex];
-        return state.prs.data[queryObj.query] ?? {};
+      let activeQuery = selectActiveQuery(state);
+      return state.prs.data[activeQuery] ?? {};
     });
 
     let structure = useSelector(state => {
-        let queryObj = state.queries[state.activeQueryIndex];
-        return state.structure[queryObj.query] ?? [];
+      let activeQuery = selectActiveQuery(state);
+      return state.structure[activeQuery] ?? [];
     });
 
     function _handleFilterInputKeyDown(e) {
