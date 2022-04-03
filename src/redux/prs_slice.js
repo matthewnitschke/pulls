@@ -16,6 +16,7 @@ const prsSlice = createSlice({
       })
       .addCase(fetchPrs.rejected, (state, action) => {
         state.status = 'error'
+        state.errorMessage = action.payload;
       })
       .addCase(fetchPrs.fulfilled, (state, action) => {
         state.status = 'loaded'

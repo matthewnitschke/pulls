@@ -1,7 +1,5 @@
-import {getConfig} from './utils';
-
 export default async function queryGithub(ghQuery, githubToken) {
-  
+
   let res = await fetch(`https://api.github.com/graphql`, {
     body: JSON.stringify({
       query: buildGraphQLQuery(ghQuery)
@@ -11,8 +9,13 @@ export default async function queryGithub(ghQuery, githubToken) {
     },
     method: "POST"
   });
-
+  
   let jsonRes = await res.json();
+
+  if (!res.ok) {
+    throw new Error(jsonRes.message);
+  }
+
   let parsedData = jsonRes.data.search.edges
     .map(({ node }) => parsePullDataFromNode(node))
     .filter(pullData => pullData != null)

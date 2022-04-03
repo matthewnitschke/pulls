@@ -39,7 +39,13 @@ const configSlice = createSlice({
         let {queries, prTitleRewriter, githubToken} = action.payload;
         state.queries = queries;
         state.prTitleRewriter = prTitleRewriter;
-        state.githubToken = githubToken;
+
+        // if the githubToken starts with a $, consider it an environment var
+        if (githubToken[0] == '$') {
+          state.githubToken = process.env[githubToken.slice(1)];
+        } else {
+          state.githubToken = githubToken
+        }
 
         state.isValid = true;
       })

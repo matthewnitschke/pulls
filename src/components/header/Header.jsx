@@ -11,6 +11,7 @@ import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import SelectedPrsDetailMenu from './SelectedPrsDetailsMenu';
 import CircularProgress from '@mui/material/CircularProgress';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { ListItemText } from '@mui/material';
 
 function Header(props) {
@@ -23,8 +24,10 @@ function Header(props) {
   let dispatch = useDispatch();
   let queries = useSelector((state) => state.config.queries);
   let activeQueryIndex = useSelector((state) => state.activeQueryIndex);
-  let isPrsQueryRunning = useSelector((state) => state.prs.status == 'loading');
   let selectedItemIds = useSelector(state => state.selectedItemIds);
+
+  let prQueryStatus = useSelector(state => state.prs.status);
+  let prQueryErrorMsg = useSelector(state => state.prs.errorMessage);
 
     return <div className='header'>
         <div className='main-header'>
@@ -85,8 +88,15 @@ function Header(props) {
                 </div>
                 
                 {
-                    isPrsQueryRunning &&
-                    <CircularProgress size='1rem' style={{ marginLeft: '.5rem' }}/>
+                  prQueryStatus == 'loading' &&
+                  <CircularProgress size='1rem' style={{ marginLeft: '.5rem' }}/>
+                }
+                {
+                  prQueryStatus == 'error' &&
+                  <>
+                    {prQueryErrorMsg}
+                    <ErrorOutlineIcon size='1rem' style={{ marginLeft: '.5rem' }}/>
+                  </>
                 }
             </div>
         </div>

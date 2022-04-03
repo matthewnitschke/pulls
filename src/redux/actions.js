@@ -16,7 +16,7 @@ export const fetchPrs = createAsyncThunk(
 
       return resp;
     } catch (err) {
-      return rejectWithValue(err);
+      return rejectWithValue(err.message);
     }
   }
 )
