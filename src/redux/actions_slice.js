@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import { githubRequest } from "../github_client";
 
 export const executeAction = createAsyncThunk(
@@ -6,7 +6,7 @@ export const executeAction = createAsyncThunk(
   async ({ actionKey, itemId }, { rejectWithValue, getState }) => {
     let state = getState();
 
-    let action = state.actions[actionKey];
+    let action = state.config.actions[actionKey];
 
     let url = action.url;
     let method = action.method;
@@ -29,14 +29,19 @@ export const executeAction = createAsyncThunk(
     } catch(e) {
       return rejectWithValue(e.message);
     }
-
   }
 );
 
-const actionsSlice = createSlice({
-  name: 'actions',
-  initialState: {},
-})
+// const actionsSlice = createSlice({
+//   name: 'actions',
+//   initialState: {},
+//   extraReducers: builder => {
+//     builder
+//       .addCase(executeAction.pending, (state, action) => {
+
+//       })
+//   }
+// })
 
 
-export default actionsSlice.reducer;
+// export default actionsSlice.reducer;

@@ -8,7 +8,6 @@ import PrStatusIndicator from "./utils/PrStatusIndicator";
 import ItemActionsMenu from "./ItemActionsMenu";
 import { toggleItemSelection } from "../redux/selected_item_ids_slice";
 import { useDispatch, useSelector } from "react-redux";
-import { selectActiveQuery } from "../redux/selectors.js";
 
 const PullListItem = React.forwardRef((props, ref) => {
   let { filterText } = props;
