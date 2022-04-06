@@ -20,4 +20,4 @@ const selectedItemIdsSlice = createSlice({
 });
 
 export default selectedItemIdsSlice.reducer;
-export const {toggleItemSelection, clearSelection} = selectedItemIdsSlice.actions;
+export const { toggleItemSelection, clearSelection } = selectedItemIdsSlice.actions;

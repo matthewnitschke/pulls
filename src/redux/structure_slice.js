@@ -84,6 +84,14 @@ const structureSlice = createSlice({
 
       let group = structure.find(el => el.id == groupId);
       structure.splice(structure.indexOf(group), 1, ...group.prIds)
+    },
+
+    toggleGroupOpen: (state, action) => {
+      let groupId = action.payload;
+      let structure = state[action.meta.activeQuery];
+
+      let group = structure.find(el => el.id == groupId);
+      group.isOpen = !group.isOpen;
     }
   },
   extraReducers: (builder) => {
@@ -107,6 +115,7 @@ const structureSlice = createSlice({
         structure[structure.indexOf(prIds[0])] = {
           id: uuid(),
           name: groupName,
+          isOpen: false,
           prIds
         }
 
@@ -139,4 +148,4 @@ export function flattenStructure(structure) {
 }
 
 export default structureSlice.reducer;
-export const { move, deleteGroup } = structureSlice.actions
+export const { move, deleteGroup, toggleGroupOpen } = structureSlice.actions

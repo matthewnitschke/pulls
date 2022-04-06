@@ -2,11 +2,12 @@ import React, { useState, useRef } from "react";
 
 import {useDispatch, useSelector} from 'react-redux';
 
-import {renameGroup, deleteGroup, move} from '../redux/structure_slice';
+import {renameGroup, deleteGroup, move, toggleGroupOpen} from '../redux/structure_slice';
 
 import PrListItemGroupMenuItem from "./PrListItemGroupDetailsMenu.jsx";
 
 import useSortableItem from "../hooks/useSortableItem.js";
+import { selectActiveQuery } from "../redux/selectors";
 
 function PrListItemGroup({
   name,
@@ -17,7 +18,7 @@ function PrListItemGroup({
   let dispatch = useDispatch();
   let isSelected = useSelector(state => state.selectedItemIds.includes(id))
 
-  let [isOpen, setIsOpen] = useState(false);
+  let isOpen = useSelector(state => state.structure[selectActiveQuery(state)].find(el => el.id == id)?.isOpen == true);
 
   let { ref, isDragging, className } = useSortableItem({
     id,
@@ -49,7 +50,7 @@ function PrListItemGroup({
           if (e?.metaKey || e?.shiftKey) {
             dispatch(toggleItemSelection(id));
           } else {
-            setIsOpen(!isOpen);
+            dispatch(toggleGroupOpen(id));
           }
         }}
       >
