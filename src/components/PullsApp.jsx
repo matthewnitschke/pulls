@@ -25,23 +25,23 @@ import { clearSelection } from '../redux/selected_item_ids_slice';
 import { fetchPrs } from '../redux/actions.js';
 import { updateFromConfig } from '../redux/root_reducer.js';
 import {configFilePath} from '../utils';
+import toMils from 'to-mils';
 
 function PullsApp({ automation = false }) {
 
     let dispatch = useDispatch();
 
     let queries = useSelector(state => state.config.queries ?? [])
-    let selectedPrIds = useSelector(selectSelectedPrIds)
+    let selectedPrIds = useSelector(selectSelectedPrIds);
 
+    let queryInterval = useSelector(state => state.config.queryInterval ?? '5min');
     useEffect(() => {
-      dispatch(updateFromConfig())
-        .then(() => dispatch(fetchPrs()));
-  
-      // fs.watch(configFilePath, () => 
-      //   dispatch(updateFromConfig())
-      //     .then(() => dispatch(fetchPrs()))
-      // )
-    }, []);
+      let sub = setInterval(() => {
+        dispatch(fetchPrs())
+      }, toMils(queryInterval));
+
+      return () => clearInterval(sub);
+    }, [queryInterval]);
 
     useMenubarHide(() => dispatch(clearSelection()));
     useMenubarShow(() => dispatch(fetchPrs()));
