@@ -36,8 +36,9 @@ const configSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(updateConfig.fulfilled, (state, action) => {
-        let {queries, prTitleRewriter, githubToken} = action.payload;
+        let {queries, prTitleRewriter, queryInterval, githubToken} = action.payload;
         state.queries = queries;
+        state.queryInterval = queryInterval;
         state.prTitleRewriter = prTitleRewriter;
 
         // if the githubToken starts with a $, consider it an environment var
