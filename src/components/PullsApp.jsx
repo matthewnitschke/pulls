@@ -36,15 +36,11 @@ function PullsApp({ automation = false }) {
 
     let queryInterval = useSelector(state => state.config.queryInterval ?? '5min');
     useEffect(() => {
-      console.log(`setting interval ${queryInterval}`)
       let sub = setInterval(() => {
         dispatch(fetchPrs())
       }, toMils(queryInterval));
 
-      return () => {
-        console.log('clearing interval')
-        clearInterval(sub);
-      };
+      return () => clearInterval(sub);
     }, [queryInterval]);
 
     useMenubarHide(() => dispatch(clearSelection()));
