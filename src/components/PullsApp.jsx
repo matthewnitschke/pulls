@@ -20,7 +20,7 @@ import {groupPrs} from '../redux/structure_slice';
 
 import { setActiveQuery } from '../redux/root_reducer.js';
 
-import { selectSelectedPrIds } from '../redux/selectors';
+import { selectActiveQuery, selectSelectedPrIds } from '../redux/selectors';
 import { clearSelection } from '../redux/selected_item_ids_slice';
 import { fetchPrs } from '../redux/actions.js';
 import { updateFromConfig } from '../redux/root_reducer.js';
@@ -32,6 +32,7 @@ function PullsApp({ automation = false }) {
     let dispatch = useDispatch();
 
     let queries = useSelector(state => state.config.queries ?? [])
+    let prs = useSelector(state => state.prs.data[selectActiveQuery(state)]);
     let selectedPrIds = useSelector(selectSelectedPrIds);
 
     let queryInterval = useSelector(state => state.config.queryInterval ?? '5min');
@@ -65,8 +66,9 @@ function PullsApp({ automation = false }) {
     }
     
     function _openSelectedPrs() {
-        selectedPrIds.map(id => prs[id].prUrl).map(openUrl);
-        setSelectedItemIds([]);
+      selectedPrIds.map(id => prs[id].prUrl).map(openUrl);
+
+      setSelectedItemIds([]);
     }
 
     function _copySelectedPrs() {
