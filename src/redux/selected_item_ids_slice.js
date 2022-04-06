@@ -13,9 +13,7 @@ const selectedItemIdsSlice = createSlice({
         state.push(itemId)
       }
     },
-    clearSelection: (state) => {
-      state = []
-    }
+    clearSelection: () => []
   }
 });
 

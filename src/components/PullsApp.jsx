@@ -30,6 +30,7 @@ function PullsApp({ automation = false }) {
     let queries = useSelector(state => state.config.queries ?? [])
     let prs = useSelector(state => state.prs.data[selectActiveQuery(state)]);
     let selectedPrIds = useSelector(selectSelectedPrIds);
+    console.log(selectedPrIds);
 
     let queryInterval = useSelector(state => state.config.queryInterval ?? '5min');
     useEffect(() => {
