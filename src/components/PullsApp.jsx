@@ -1,10 +1,8 @@
 // Node
 const { ipcRenderer, clipboard } = require('electron');
 
-import fs from 'fs';
-
 // Libraries
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { openUrl } from '../utils.js';
 
 // Components
@@ -23,8 +21,6 @@ import { setActiveQuery } from '../redux/root_reducer.js';
 import { selectActiveQuery, selectSelectedPrIds } from '../redux/selectors';
 import { clearSelection } from '../redux/selected_item_ids_slice';
 import { fetchPrs } from '../redux/actions.js';
-import { updateFromConfig } from '../redux/root_reducer.js';
-import {configFilePath} from '../utils';
 import toMils from 'to-mils';
 
 function PullsApp({ automation = false }) {

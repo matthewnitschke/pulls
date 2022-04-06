@@ -63,7 +63,7 @@ fs.watch(
   configFilePath,
   () => store.dispatch(updateConfig())
 )
-store.dispatch(updateConfig())
+store.dispatch(updateConfig());
 
 
 ReactDOM.render(
