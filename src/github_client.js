@@ -1,15 +1,14 @@
 export default async function queryGithub(ghQuery, githubToken) {
-
   let res = await fetch(`https://api.github.com/graphql`, {
     body: JSON.stringify({
-      query: buildGraphQLQuery(ghQuery)
+      query: buildGraphQLQuery(ghQuery),
     }),
     headers: {
       Authorization: `bearer ${githubToken}`,
     },
-    method: "POST"
+    method: "POST",
   });
-  
+
   let jsonRes = await res.json();
 
   if (!res.ok) {
@@ -18,20 +17,22 @@ export default async function queryGithub(ghQuery, githubToken) {
 
   let parsedData = jsonRes.data.search.edges
     .map(({ node }) => parsePullDataFromNode(node))
-    .filter(pullData => pullData != null)
+    .filter((pullData) => pullData != null);
 
-  let prData = parsedData.reduce((acc, pr) => ({
-    ...acc,
-    [pr.id]: pr
-  }), {});
+  let prData = parsedData.reduce(
+    (acc, pr) => ({
+      ...acc,
+      [pr.id]: pr,
+    }),
+    {}
+  );
 
   return prData;
 }
 
-
 function parsePullDataFromNode(node) {
   try {
-    let status = node.commits.nodes[0].commit.status
+    let status = node.commits.nodes[0].commit.status;
 
     return {
       id: node.id,
@@ -41,16 +42,16 @@ function parsePullDataFromNode(node) {
       pull: node.number,
 
       prState: node.state,
-      prStatus: status != null ? status.state.toLowerCase() : 'no-status-found',
+      prStatus: status != null ? status.state.toLowerCase() : "no-status-found",
       prStatusContexts: status?.contexts ?? [],
       name: node.title,
       prUrl: node.url,
       branch: node.headRef.name,
 
-      rawData: node
-    }
+      rawData: node,
+    };
   } catch (err) {
-    console.error('Unable to parse pull data', node, err)
+    console.error("Unable to parse pull data", node, err);
   }
 }
 
@@ -111,5 +112,5 @@ function buildGraphQLQuery(ghQuery) {
           }
       }
   }
-  `
+  `;
 }

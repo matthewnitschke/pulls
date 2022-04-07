@@ -1,36 +1,36 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React from "react";
+import ReactDOM from "react-dom";
 
-import { HTML5Backend } from 'react-dnd-html5-backend'
-import { DndProvider } from 'react-dnd'
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { DndProvider } from "react-dnd";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-import PullsApp from './components/PullsApp.jsx';
-import ConfigValidator from './components/ConfigValidator.jsx';
-import configureStore from './redux/store.js';
-import { Provider } from 'react-redux'
+import PullsApp from "./components/PullsApp.jsx";
+import ConfigValidator from "./components/ConfigValidator.jsx";
+import configureStore from "./redux/store.js";
+import { Provider } from "react-redux";
 
-import fs from 'fs';
-import { configFilePath } from './utils.js';
+import fs from "fs";
+import { configFilePath } from "./utils.js";
 
-import { updateConfig } from './redux/config_slice.js';
+import { updateConfig } from "./redux/config_slice.js";
 
 const theme = createTheme({
   palette: {
-    type: 'dark',
+    type: "dark",
     primary: {
-      main: '#adbac7',
+      main: "#adbac7",
     },
     secondary: {
-      main: '#768390',
+      main: "#768390",
     },
     text: {
-      primary: '#adbac7',
-      secondary: '#768390',
+      primary: "#adbac7",
+      secondary: "#768390",
     },
     background: {
-      default: '#22272d',
-      paper: '#2d333b',
+      default: "#22272d",
+      paper: "#2d333b",
     },
   },
 
@@ -38,33 +38,29 @@ const theme = createTheme({
     MuiPopover: {
       styleOverrides: {
         paper: {
-          border: 'solid 1px #444c56',
-        }
-      }
+          border: "solid 1px #444c56",
+        },
+      },
     },
     MuiMenu: {
       defaultProps: {
         MenuListProps: {
-          'dense': true
-        }
+          dense: true,
+        },
       },
       styleOverrides: {
         paper: {
           width: 170,
-        }
-      }
+        },
+      },
     },
-  }
+  },
 });
 
 let store = configureStore();
 
-fs.watch(
-  configFilePath,
-  () => store.dispatch(updateConfig())
-)
+fs.watch(configFilePath, () => store.dispatch(updateConfig()));
 store.dispatch(updateConfig());
-
 
 ReactDOM.render(
   <DndProvider backend={HTML5Backend}>
@@ -76,5 +72,5 @@ ReactDOM.render(
       </ThemeProvider>
     </Provider>
   </DndProvider>,
-  document.getElementById('app')
+  document.getElementById("app")
 );

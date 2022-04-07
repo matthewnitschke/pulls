@@ -1,7 +1,7 @@
 // Libraries
 import React from "react";
 
-import { openUrl } from '../utils.js';
+import { openUrl } from "../utils.js";
 
 // Components
 import PrStatusIndicator from "./utils/PrStatusIndicator";
@@ -12,14 +12,17 @@ const PullListItem = React.forwardRef((props, ref) => {
   let { filterText } = props;
 
   let dispatch = useDispatch();
-  let isSelected = useSelector(state => state.selectedItemIds.includes(props.id))
+  let isSelected = useSelector((state) =>
+    state.selectedItemIds.includes(props.id)
+  );
 
-  let prTitleRewriter = useSelector(state => state.config.prTitleRewriter)
+  let prTitleRewriter = useSelector((state) => state.config.prTitleRewriter);
 
   function _getPrTitle() {
-    let name = prTitleRewriter != null
-      ? props.name.replace(new RegExp(prTitleRewriter), '')
-      : props.name;
+    let name =
+      prTitleRewriter != null
+        ? props.name.replace(new RegExp(prTitleRewriter), "")
+        : props.name;
 
     if (filterText != "" || filterText != null) {
       let matchStart = name.toLowerCase().indexOf(filterText.toLowerCase());

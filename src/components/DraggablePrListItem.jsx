@@ -15,11 +15,11 @@ function DraggablePrListItem(props) {
     index: props.index,
     onDrop: (item, hoverState, newIndex) => {
       if (hoverState == "above") {
-        dispatch(move(item.id, newIndex, props.groupId))
+        dispatch(move(item.id, newIndex, props.groupId));
       } else if (hoverState == "below") {
-        dispatch(move(item.id, newIndex + 1, props.groupId))
+        dispatch(move(item.id, newIndex + 1, props.groupId));
       } else {
-        dispatch(groupPrs([item.id, props.id], 'newGroup'))
+        dispatch(groupPrs([item.id, props.id], "newGroup"));
       }
     },
   });

@@ -2,41 +2,36 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
   "properties": {
-      "githubToken": {
-          "description": "Your github access token, found here: https://github.com/settings/tokens",
-          "type": "string"
-      },
-      "queries": {
-          "description": "The list of query configurations which drive what prs are displayed",
-          "type": "array",
-          "items": {
-              "type": "object",
-              "properties": {
-                  "query": {
-                      "type": "string",
-                      "description": "The github search syntax query to use to retrieve the list of prs. Use `{githubUser}` as the wildcard for your github username. More information: https://docs.github.com/en/search-github/searching-on-github/searching-issues-and-pull-requests."
-                  },
-                  "label": {
-                      "type": "string",
-                      "description": "The label to associate with this query"
-                  }
-              }
+    "githubToken": {
+      "description": "Your github access token, found here: https://github.com/settings/tokens",
+      "type": "string"
+    },
+    "queries": {
+      "description": "The list of query configurations which drive what prs are displayed",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "The github search syntax query to use to retrieve the list of prs. Use `{githubUser}` as the wildcard for your github username. More information: https://docs.github.com/en/search-github/searching-on-github/searching-issues-and-pull-requests."
+          },
+          "label": {
+            "type": "string",
+            "description": "The label to associate with this query"
           }
-      },
-      "prTitleRewriter": {
-          "description": "A regex string that selects content in a pr title to remove. Can be useful to remove unhelpful information like a jira ticket, and cleanup the list of prs",
-          "type": "string"
-      },
-      "windowHeight": {
-          "description": "The height of the popover window, in pixels. Requires app restart on change",
-          "type": "number",
-          "default": 700
-      },
-      "queryInterval": {
-        "description": "The interval time to between re-runs of the currently active query. In \"[number]hrs/min/sec\"",
-        "type": "string",
-        "default": "5min"
+        }
       }
+    },
+    "prTitleRewriter": {
+      "description": "A regex string that selects content in a pr title to remove. Can be useful to remove unhelpful information like a jira ticket, and cleanup the list of prs",
+      "type": "string"
+    },
+    "queryInterval": {
+      "description": "The interval time to between re-runs of the currently active query. In \"[number]hrs/min/sec\"",
+      "type": "string",
+      "default": "5min"
+    }
   },
   "required": ["queries", "githubToken"],
   "additionalProperties": false

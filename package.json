@@ -10,7 +10,8 @@
     "build": "parcel index.html --target electron --public-url ./",
     "build-ci": "parcel build index.html --target electron --public-url ./",
     "package": "electron-packager . pulls --platform=darwin --out packaged --extendInfo ./buildFiles/Info.plist --overwrite",
-    "test": "jest"
+    "test": "jest",
+    "format": "prettier --write ."
   },
   "jest": {
     "roots": [
@@ -66,6 +67,7 @@
     "jest-css-modules-transform": "^4.3.0",
     "jest-fetch-mock": "^3.0.3",
     "parcel-bundler": "^1.12.4",
+    "prettier": "2.6.2",
     "sass": "^1.26.3"
   },
   "publishConfig": {

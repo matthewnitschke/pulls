@@ -1,21 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const selectedItemIdsSlice = createSlice({
-  name: 'selectedItemIds',
+  name: "selectedItemIds",
   initialState: [],
   reducers: {
     toggleItemSelection: (state, action) => {
       let itemId = action.payload;
 
       if (state.includes(itemId)) {
-        state.splice(state.indexOf(itemId), 1)
+        state.splice(state.indexOf(itemId), 1);
       } else {
-        state.push(itemId)
+        state.push(itemId);
       }
     },
-    clearSelection: () => []
-  }
+    clearSelection: () => [],
+  },
 });
 
 export default selectedItemIdsSlice.reducer;
-export const { toggleItemSelection, clearSelection } = selectedItemIdsSlice.actions;
+export const { toggleItemSelection, clearSelection } =
+  selectedItemIdsSlice.actions;
