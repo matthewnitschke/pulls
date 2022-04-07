@@ -11,10 +11,12 @@ import swal from 'sweetalert';
 export const groupPrs = createAsyncThunk(
   'groupPrs',
   async (prIds) => {
-    let groupName = await swal({
-      title: 'ENTER NAME OF GROUP',
-      content: 'input'
-    });
+    // let groupName = await swal({
+    //   title: 'ENTER NAME OF GROUP',
+    //   content: 'input'
+    // });
+
+    let groupName = 'asdf'
 
     return { prIds, groupName }
   }
