@@ -20,7 +20,9 @@ const prsSlice = createSlice({
       })
       .addCase(fetchPrs.fulfilled, (state, action) => {
         state.status = 'loaded'
-        state.data[action.meta.activeQuery] = action.payload
+
+        // use activeQuery from payload instead of meta to ensure the correct active query is used
+        state.data[action.payload.activeQuery] = action.payload.resp
       })
   }
 })

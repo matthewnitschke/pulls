@@ -24,7 +24,6 @@ import { fetchPrs } from '../redux/actions.js';
 import toMils from 'to-mils';
 
 function PullsApp({ automation = false }) {
-
     let dispatch = useDispatch();
 
     let queries = useSelector(state => state.config.queries ?? [])
