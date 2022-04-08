@@ -93,11 +93,11 @@ const structureSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchPrs.fulfilled, (state, action) => {
-      let query = action.meta.activeQuery;
+      let query = action.payload.activeQuery;
       let flattenedStructure = flattenStructure(state[query] ?? []);
 
       state[query] = [
-        ...Object.keys(action.payload).filter(
+        ...Object.keys(action.payload.resp).filter(
           (prId) => !flattenedStructure.includes(prId)
         ),
         ...(state[query] ?? []),
