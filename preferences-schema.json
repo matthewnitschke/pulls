@@ -21,13 +21,42 @@
             "description": "The label to associate with this query"
           },
           "prActions": {
-            "type": "array"
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "description": "The label to use for this action",
+                  "actionKey": "the action to run, correlates to the key in the [actions] section"
+                }
+              }
+            }
           }
         }
       }
     },
     "actions": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "method": {
+          "type": "string",
+          "description": "The http method to use for this request"
+        },
+        "url": {
+          "type": "string",
+          "description": "the url for this api request"
+        },
+        "refreshAfterExecute": {
+          "type": "boolean",
+          "description": "Whether or not to refresh the list of prs after the action has been run",
+          "default": false
+        },
+        "body": {
+          "type": "object",
+          "description": "any body parameters for the api request"
+        }
+      }
     },
     "prTitleRewriter": {
       "description": "A regex string that selects content in a pr title to remove. Can be useful to remove unhelpful information like a jira ticket, and cleanup the list of prs",

@@ -5,6 +5,7 @@ import prsReducer from './prs_slice';
 import structureReducer from './structure_slice';
 import selectedItemIdsReducer from './selected_item_ids_slice';
 import configReducer from './config_slice';
+import actionsReducer from './actions_slice';
 
 import { activeQueryInjectorMiddleware, structurePersistanceMiddleware } from './middleware';
 
@@ -19,6 +20,7 @@ export default function getStore(preloadedState) {
         selectedItemIds: selectedItemIdsReducer(newState.selectedItemIds, action),
         prs: prsReducer(newState.prs, action),
         structure: structureReducer(newState.structure, action),
+        actions: actionsReducer(newState.actions, action)
       };
     },
     devTools: process.env.NODE_ENV !== 'production',

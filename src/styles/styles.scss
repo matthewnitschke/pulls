@@ -132,10 +132,8 @@
     font-size: 15px;
     font-weight: 600;
 
-    // lazy matthew selecting things lazily. Just selecting the icons
-    svg,
-    i {
-      padding-top: 5px;
+    .status-icon {
+      padding-top: 6px;
     }
 
     .pr-list-item__text {
@@ -150,12 +148,19 @@
       }
     }
 
+    .overflow-menu-icon {
+      margin-bottom: -2px;
+      svg { visibility: hidden; }
+    }
+    &:hover .overflow-menu-icon svg, .overflow-menu-icon svg.is-open {
+      visibility: visible;
+    }
+
     &.hovered {
       opacity: 0.5;
     }
 
-    &.selected,
-    &:hover {
+    &.selected, &:hover {
       background-color: #2d333b;
     }
 

@@ -1,13 +1,10 @@
 // Libraries
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { openUrl } from '../utils.js';
-
-// Components
 import PrStatusIndicator from './utils/PrStatusIndicator';
 import ItemActionsMenu from './ItemActionsMenu';
-import { toggleItemSelection } from '../redux/selected_item_ids_slice';
-import { useDispatch, useSelector } from 'react-redux';
 import { toggleItemSelection } from '../redux/selected_item_ids_slice';
 
 const PullListItem = React.forwardRef((props, ref) => {
@@ -72,7 +69,7 @@ const PullListItem = React.forwardRef((props, ref) => {
         {_getPrTitle()}
       </div>
       {(actions?.length ?? 0) > 0 && (
-        <div>
+        <div className='overflow-menu-icon'>
           <ItemActionsMenu actions={actions} itemId={props.id} />
         </div>
       )}
