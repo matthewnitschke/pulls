@@ -5,7 +5,7 @@ import { getConfig } from '../utils';
 import Ajv from 'ajv';
 const settingsSchema = require('../../preferences-schema.json');
 
-const ajv = new Ajv();
+const ajv = new Ajv({ useDefaults: true });
 const validate = ajv.compile(settingsSchema);
 
 export const updateConfig = createAsyncThunk('updateConfig', async (arg, { rejectWithValue }) => {
@@ -20,10 +20,14 @@ export const updateConfig = createAsyncThunk('updateConfig', async (arg, { rejec
   return newConfig;
 });
 
+// validate empty object to apply defaults for initialState
+let initialState = {};
+validate(initialState);
+
 const configSlice = createSlice({
   name: 'config',
   initialState: {
-    queries: [],
+    ...initialState,
     errors: [],
     isValid: true,
   },
@@ -31,19 +35,20 @@ const configSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(updateConfig.fulfilled, (state, action) => {
-        let { queries, prTitleRewriter, queryInterval, githubToken } = action.payload;
-        state.queries = queries;
-        state.queryInterval = queryInterval;
-        state.prTitleRewriter = prTitleRewriter;
 
         // if the githubToken starts with a $, consider it an environment var
+        let githubToken = action.payload.githubToken;
         if (githubToken[0] == '$') {
-          state.githubToken = process.env[githubToken.slice(1)];
-        } else {
-          state.githubToken = githubToken;
+          githubToken = process.env[githubToken.slice(1)];
         }
 
         state.isValid = true;
+
+        return {
+          ...action.payload,
+          githubToken,
+          isValid: true
+        }
       })
       .addCase(updateConfig.rejected, (state, action) => {
         state.isValid = false;

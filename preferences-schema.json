@@ -9,6 +9,7 @@
     "queries": {
       "description": "The list of query configurations which drive what prs are displayed",
       "type": "array",
+      "default": [],
       "items": {
         "type": "object",
         "properties": {
@@ -28,11 +29,11 @@
       "type": "string"
     },
     "queryInterval": {
-      "description": "The interval time to between re-runs of the currently active query. In \"[number]hrs/min/sec\"",
+      "description": "The interval time to between re-runs of the currently active query. In \"<number>hrs/min/sec\"",
       "type": "string",
       "default": "5min"
     }
   },
-  "required": ["queries", "githubToken"],
+  "required": ["githubToken"],
   "additionalProperties": false
 }
