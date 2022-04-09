@@ -35,7 +35,11 @@ function Header(props) {
           <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />}>
             <Typography color="text.primary">PULLS</Typography>
             {queries.length > 1 && (
-              <Link color="inherit" underline="hover" onClick={handleClick}>
+              <Link 
+                color="inherit" 
+                underline="hover" 
+                onClick={handleClick}
+              >
                 {queries[activeQueryIndex].label}
               </Link>
             )}
