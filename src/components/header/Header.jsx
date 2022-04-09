@@ -1,18 +1,18 @@
-import React from "react";
+import React from 'react';
 
-import { useDispatch, useSelector } from "react-redux";
-import { setActiveQuery } from "../../redux/root_reducer";
+import { useDispatch, useSelector } from 'react-redux';
+import { setActiveQuery } from '../../redux/root_reducer';
 
-import Breadcrumbs from "@mui/material/Breadcrumbs";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import SelectedPrsDetailMenu from "./SelectedPrsDetailsMenu";
-import CircularProgress from "@mui/material/CircularProgress";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import { ListItemText } from "@mui/material";
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import SelectedPrsDetailMenu from './SelectedPrsDetailsMenu';
+import CircularProgress from '@mui/material/CircularProgress';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { ListItemText } from '@mui/material';
 
 function Header(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -32,10 +32,7 @@ function Header(props) {
     <div className="header">
       <div className="main-header">
         <div className="df aic">
-          <Breadcrumbs
-            aria-label="breadcrumb"
-            separator={<NavigateNextIcon fontSize="small" />}
-          >
+          <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />}>
             <Typography color="text.primary">PULLS</Typography>
             {queries.length > 1 && (
               <Link color="inherit" underline="hover" onClick={handleClick}>
@@ -49,10 +46,10 @@ function Header(props) {
           anchorEl={anchorEl}
           open={open}
           onClose={handleClose}
-          PaperProps={{ style: { transform: "translateY(5px)" } }}
+          PaperProps={{ style: { transform: 'translateY(5px)' } }}
           anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "left",
+            vertical: 'bottom',
+            horizontal: 'left',
           }}
         >
           {queries.map((query, i) => (
@@ -76,7 +73,7 @@ function Header(props) {
         <div className="df aic">
           <div
             style={{
-              visibility: selectedItemIds.length > 0 ? "visible" : "hidden",
+              visibility: selectedItemIds.length > 0 ? 'visible' : 'hidden',
             }}
           >
             <SelectedPrsDetailMenu
@@ -86,13 +83,11 @@ function Header(props) {
             />
           </div>
 
-          {prQueryStatus == "loading" && (
-            <CircularProgress size="1rem" style={{ marginLeft: ".5rem" }} />
-          )}
-          {prQueryStatus == "error" && (
+          {prQueryStatus == 'loading' && <CircularProgress size="1rem" style={{ marginLeft: '.5rem' }} />}
+          {prQueryStatus == 'error' && (
             <>
               {prQueryErrorMsg}
-              <ErrorOutlineIcon size="1rem" style={{ marginLeft: ".5rem" }} />
+              <ErrorOutlineIcon size="1rem" style={{ marginLeft: '.5rem' }} />
             </>
           )}
         </div>

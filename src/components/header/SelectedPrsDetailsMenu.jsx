@@ -1,15 +1,15 @@
-import React from "react";
+import React from 'react';
 
-import IconButton from "@mui/material/IconButton";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import Typography from "@mui/material/Typography";
-import LayersIcon from "@mui/icons-material/Layers";
-import CopyAllIcon from "@mui/icons-material/CopyAll";
-import LaunchIcon from "@mui/icons-material/Launch";
+import IconButton from '@mui/material/IconButton';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
+import LayersIcon from '@mui/icons-material/Layers';
+import CopyAllIcon from '@mui/icons-material/CopyAll';
+import LaunchIcon from '@mui/icons-material/Launch';
 
 function SelectedPrsDetailMenu(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -23,11 +23,7 @@ function SelectedPrsDetailMenu(props) {
 
   return (
     <>
-      <IconButton
-        onClick={handleClick}
-        aria-label="selected pr details"
-        size="small"
-      >
+      <IconButton onClick={handleClick} aria-label="selected pr details" size="small">
         <MoreVertIcon color="primary" />
       </IconButton>
       <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>

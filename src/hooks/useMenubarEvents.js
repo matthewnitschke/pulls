@@ -1,8 +1,8 @@
 // Node
-const { ipcRenderer } = require("electron");
+const { ipcRenderer } = require('electron');
 
 // Libraries
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 function _onIPCEvent(ipcEventName, callback, runOnInit = false) {
   ipcRenderer.on(ipcEventName, callback);
@@ -17,9 +17,9 @@ function _onIPCEvent(ipcEventName, callback, runOnInit = false) {
 }
 
 export function useMenubarShow(onShow, runOnInit) {
-  useEffect(() => _onIPCEvent("menubar-show", onShow, runOnInit), []);
+  useEffect(() => _onIPCEvent('menubar-show', onShow, runOnInit), []);
 }
 
 export function useMenubarHide(onHide, runOnInit) {
-  useEffect(() => _onIPCEvent("menubar-hide", onHide, runOnInit), []);
+  useEffect(() => _onIPCEvent('menubar-hide', onHide, runOnInit), []);
 }

@@ -1,28 +1,16 @@
-const {
-  ipcMain,
-  globalShortcut,
-  Menu,
-  BrowserWindow,
-  dialog,
-  app,
-  shell,
-} = require("electron");
-const { menubar } = require("menubar");
+const { ipcMain, globalShortcut, Menu, BrowserWindow, dialog, app, shell } = require('electron');
+const { menubar } = require('menubar');
 
-const packageJson = require("./package.json");
+const packageJson = require('./package.json');
 
-const { settingsStore } = require("./src/utils.js");
-const path = require("path");
+const { settingsStore } = require('./src/utils.js');
+const path = require('path');
 
-const {
-  default: installExtension,
-  REDUX_DEVTOOLS,
-  REACT_DEVELOPER_TOOLS,
-} = require("electron-devtools-installer");
+const { default: installExtension, REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer');
 
-const isDebug = process.env.DEBUG == "true";
+const isDebug = process.env.DEBUG == 'true';
 
-const homedir = require("os").homedir();
+const homedir = require('os').homedir();
 
 const windowSettings = {
   width: 600,
@@ -34,7 +22,7 @@ const windowSettings = {
         resizable: false,
         minimizable: false,
         closable: false,
-        titleBarStyle: "customButtonsOnHover",
+        titleBarStyle: 'customButtonsOnHover',
       }
     : {}),
   webPreferences: {
@@ -49,7 +37,7 @@ if (isDebug) {
       loadExtensionOptions: { allowFileAccess: true },
     })
       .then((name) => console.log(`Added Extension:  ${name}`))
-      .catch((err) => console.log("An error occurred: ", err));
+      .catch((err) => console.log('An error occurred: ', err));
 
     let win = new BrowserWindow(windowSettings);
     win.loadFile(`${__dirname}/dist/index.html`);
@@ -61,7 +49,7 @@ if (isDebug) {
     browserWindow: windowSettings,
   });
 
-  mb.on("ready", () => {
+  mb.on('ready', () => {
     // globalShortcut.register('CommandOrControl+I', () => {
     //   mb.showWindow()
     // })
@@ -69,15 +57,15 @@ if (isDebug) {
     // settings.onDidChange('globalShowHotkey', setGlobalHotkey())
 
     // sent from the frontend on escape key press
-    ipcMain.on("hide-window", () => mb.hideWindow());
+    ipcMain.on('hide-window', () => mb.hideWindow());
   });
 
-  mb.on("show", () => {
-    mb.window.webContents.send("menubar-show");
+  mb.on('show', () => {
+    mb.window.webContents.send('menubar-show');
   });
 
-  mb.on("hide", () => {
-    mb.window.webContents.send("menubar-hide");
+  mb.on('hide', () => {
+    mb.window.webContents.send('menubar-hide');
   });
 
   // mb.on('will-quit', () => {
@@ -86,37 +74,34 @@ if (isDebug) {
   // })
 
   //right click menu for Tray
-  mb.on("after-create-window", function () {
+  mb.on('after-create-window', function () {
     const contextMenu = Menu.buildFromTemplate([
-      { label: "About Pulls", click: showAboutDialog },
+      { label: 'About Pulls', click: showAboutDialog },
       {
-        label: "Preferences",
-        click: () => shell.openPath(path.join(homedir, ".pulls-config.yaml")),
+        label: 'Preferences',
+        click: () => shell.openPath(path.join(homedir, '.pulls-config.yaml')),
       },
       // { label: 'Clear App Data', click: clearAppData },
       // { label: 'Display App Data', click: displayAppData },
-      { label: "Quit", click: mb.app.exit },
+      { label: 'Quit', click: mb.app.exit },
     ]);
 
-    mb.tray.on("right-click", () => mb.tray.popUpContextMenu(contextMenu));
+    mb.tray.on('right-click', () => mb.tray.popUpContextMenu(contextMenu));
   });
 }
 
 function showAboutDialog() {
   dialog.showMessageBox(null, {
-    title: "About Pulls",
-    message: "About Pulls",
+    title: 'About Pulls',
+    message: 'About Pulls',
     detail: `Version: ${packageJson.version}`,
   });
 }
 
 function clearAppData() {
-  settingsStore.set("structure", {});
+  settingsStore.set('structure', {});
 }
 
 function displayAppData() {
-  dialog.showMessageBox(
-    "App Data",
-    JSON.stringify(settingsStore.get("structure"))
-  );
+  dialog.showMessageBox('App Data', JSON.stringify(settingsStore.get('structure')));
 }

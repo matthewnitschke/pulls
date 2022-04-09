@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const selectedItemIdsSlice = createSlice({
-  name: "selectedItemIds",
+  name: 'selectedItemIds',
   initialState: [],
   reducers: {
     toggleItemSelection: (state, action) => {
@@ -18,5 +18,4 @@ const selectedItemIdsSlice = createSlice({
 });
 
 export default selectedItemIdsSlice.reducer;
-export const { toggleItemSelection, clearSelection } =
-  selectedItemIdsSlice.actions;
+export const { toggleItemSelection, clearSelection } = selectedItemIdsSlice.actions;

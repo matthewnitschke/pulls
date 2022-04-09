@@ -1,53 +1,46 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { v4 as uuid } from "uuid";
-import { fetchPrs } from "./prs_slice";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { v4 as uuid } from 'uuid';
+import { fetchPrs } from './prs_slice';
 
-import { settingsStore } from "../utils";
+import { settingsStore } from '../utils';
 
-import { selectActiveQuery } from "./selectors";
+import { selectActiveQuery } from './selectors';
 
-import swal from "sweetalert";
+import swal from 'sweetalert';
 
-export const groupPrs = createAsyncThunk("groupPrs", async (prIds) => {
+export const groupPrs = createAsyncThunk('groupPrs', async (prIds) => {
   let groupName = await swal({
-    title: "ENTER NAME OF GROUP",
-    content: "input",
+    title: 'ENTER NAME OF GROUP',
+    content: 'input',
   });
 
   return { prIds, groupName };
 });
 
-export const renameGroup = createAsyncThunk(
-  "renameGroup",
-  async (groupId, { getState }) => {
-    let state = getState();
-    let currentQuery = selectActiveQuery(state);
+export const renameGroup = createAsyncThunk('renameGroup', async (groupId, { getState }) => {
+  let state = getState();
+  let currentQuery = selectActiveQuery(state);
 
-    let currentGroupName = state.structure[currentQuery].find(
-      (el) => el.id == groupId
-    ).name;
+  let currentGroupName = state.structure[currentQuery].find((el) => el.id == groupId).name;
 
-    let groupName = await swal({
-      title: `ENTER THE NEW NAME OF "${currentGroupName}"`,
-      content: "input",
-    });
+  let groupName = await swal({
+    title: `ENTER THE NEW NAME OF "${currentGroupName}"`,
+    content: 'input',
+  });
 
-    return { groupId, groupName };
-  }
-);
+  return { groupId, groupName };
+});
 
 const structureSlice = createSlice({
-  name: "structure",
-  initialState: settingsStore.get("structure"),
+  name: 'structure',
+  initialState: settingsStore.get('structure'),
   reducers: {
     move: {
       reducer: (state, action) => {
         let { itemId, index, groupId } = action.payload;
         let structure = state[action.meta.activeQuery];
 
-        let enclosingGroupPrIds = structure.find((el) =>
-          el.prIds?.includes(itemId)
-        )?.prIds;
+        let enclosingGroupPrIds = structure.find((el) => el.prIds?.includes(itemId))?.prIds;
 
         let element;
         if (enclosingGroupPrIds != null) {
@@ -97,9 +90,7 @@ const structureSlice = createSlice({
       let flattenedStructure = flattenStructure(state[query] ?? []);
 
       state[query] = [
-        ...Object.keys(action.payload.resp).filter(
-          (prId) => !flattenedStructure.includes(prId)
-        ),
+        ...Object.keys(action.payload.resp).filter((prId) => !flattenedStructure.includes(prId)),
         ...(state[query] ?? []),
       ];
     });
@@ -136,7 +127,7 @@ export function flattenStructure(structure) {
   if (structure == null) return [];
 
   return structure.reduce((acc, el) => {
-    if (typeof el === "string") {
+    if (typeof el === 'string') {
       return [...acc, el];
     }
     return [...acc, ...el.prIds];

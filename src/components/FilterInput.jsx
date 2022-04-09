@@ -1,11 +1,11 @@
-import React, { useRef } from "react";
+import React, { useRef } from 'react';
 
-import useHotkeys from "../hooks/useHotkeys.js";
+import useHotkeys from '../hooks/useHotkeys.js';
 
 function FilterInput(props) {
   const filterInputRef = useRef(null);
 
-  useHotkeys("command+l", () => filterInputRef.current.focus());
+  useHotkeys('command+l', () => filterInputRef.current.focus());
 
   return (
     <div className="filter-prs-input-anchor">

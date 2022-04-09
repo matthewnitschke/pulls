@@ -1,5 +1,5 @@
-import { settingsStore } from "../utils.js";
-import { selectActiveQuery } from "./selectors";
+import { settingsStore } from '../utils.js';
+import { selectActiveQuery } from './selectors';
 
 export const activeQueryInjectorMiddleware = (store) => (next) => (action) => {
   let state = store.getState();
@@ -15,10 +15,7 @@ export const structurePersistanceMiddleware = (store) => (next) => (action) => {
   let afterState = store.getState();
 
   // TODO: LOL FIND A BETTER SOLUTION
-  if (
-    JSON.stringify(initialState.structure) !==
-    JSON.stringify(afterState.structure)
-  ) {
-    settingsStore.set("structure", afterState.structure);
+  if (JSON.stringify(initialState.structure) !== JSON.stringify(afterState.structure)) {
+    settingsStore.set('structure', afterState.structure);
   }
 };

@@ -1,11 +1,6 @@
-import {
-  createReducer,
-  createAction,
-  createAsyncThunk,
-} from "@reduxjs/toolkit";
+import { createReducer, createAction } from '@reduxjs/toolkit';
 
-import { getConfig } from "../utils";
-import { fetchPrs } from "./prs_slice";
+import { fetchPrs } from './prs_slice';
 
 export const setActiveQuery = (activeQueryIndex) => (dispatch) => {
   dispatch(setActiveQueryInt(activeQueryIndex));
@@ -13,25 +8,16 @@ export const setActiveQuery = (activeQueryIndex) => (dispatch) => {
 };
 
 /// Internal version of setActiveQuery, only updates the reducer
-const setActiveQueryInt = createAction("setActiveQuery");
-
-export const updateFromConfig = createAsyncThunk(
-  "updateFromConfig",
-  async () => await getConfig()
-);
+const setActiveQueryInt = createAction('setActiveQuery');
 
 const rootReducer = createReducer(
   {
     activeQueryIndex: 0,
-    queries: [],
   },
   (builder) => {
     builder
       .addCase(setActiveQueryInt, (state, action) => {
         state.activeQueryIndex = action.payload;
-      })
-      .addCase(updateFromConfig.fulfilled, (state, action) => {
-        state.queries = action.payload.queries;
       });
   }
 );

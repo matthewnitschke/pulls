@@ -1,13 +1,13 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef } from 'react';
 
-import { useDrag, useDrop } from "react-dnd";
+import { useDrag, useDrop } from 'react-dnd';
 
 function useSortableItem(props) {
   const ref = useRef();
   const [hoverState, setHoverState] = useState();
 
   const [{ isHovered }, drop] = useDrop({
-    accept: "pr",
+    accept: 'pr',
     hover(_, monitor) {
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
       const clientOffset = monitor.getClientOffset();
@@ -19,16 +19,13 @@ function useSortableItem(props) {
       const lowerBound = hoverBoundingRect.bottom - moveBoundSize;
 
       if (clientOffset.y < upperBound) {
-        setHoverState("above");
-      } else if (
-        clientOffset.y > lowerBound &&
-        props.allowBelowHover != false
-      ) {
-        setHoverState("below");
+        setHoverState('above');
+      } else if (clientOffset.y > lowerBound && props.allowBelowHover != false) {
+        setHoverState('below');
       } else if (props.allowMiddleHover != false) {
-        setHoverState("middle");
+        setHoverState('middle');
       } else {
-        setHoverState("");
+        setHoverState('');
       }
     },
     drop(item) {
@@ -44,7 +41,7 @@ function useSortableItem(props) {
   });
 
   const [{ isDragging }, drag] = useDrag({
-    type: "pr",
+    type: 'pr',
     item: () => ({ id: props.id, index: props.index }),
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
@@ -53,14 +50,14 @@ function useSortableItem(props) {
 
   drag(drop(ref));
 
-  let dragClass = "";
+  let dragClass = '';
   if (isHovered) {
-    if (hoverState == "above") {
-      dragClass = "drag-above";
-    } else if (hoverState == "below") {
-      dragClass = "drag-below";
-    } else if (hoverState == "middle") {
-      dragClass = "drag-middle";
+    if (hoverState == 'above') {
+      dragClass = 'drag-above';
+    } else if (hoverState == 'below') {
+      dragClass = 'drag-below';
+    } else if (hoverState == 'middle') {
+      dragClass = 'drag-middle';
     }
   }
 

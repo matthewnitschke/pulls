@@ -1,4 +1,4 @@
-@import "shared-settings.scss";
+@import 'shared-settings.scss';
 
 #app {
   height: 100%;
@@ -35,14 +35,14 @@
         color: #fff;
 
         &.required::after {
-          content: "*";
+          content: '*';
           margin-left: 0.2rem;
           color: red;
         }
       }
 
-      input[type="text"],
-      input[type="password"] {
+      input[type='text'],
+      input[type='password'] {
         background-color: #1c2128;
         border: solid 1px #444c56;
         color: #adbac7;

@@ -1,4 +1,4 @@
-import { flattenStructure } from "./structure_slice";
+import { flattenStructure } from './structure_slice';
 
 export function selectActiveQuery(state) {
   return state.config.queries[state.activeQueryIndex]?.query;
@@ -10,7 +10,5 @@ export function selectSelectedPrIds(state) {
 
   let flattenedStructure = flattenStructure(state.structure[activeQuery]);
 
-  return state.selectedItemIds.filter((itemId) =>
-    flattenedStructure.includes(itemId)
-  );
+  return state.selectedItemIds.filter((itemId) => flattenedStructure.includes(itemId));
 }

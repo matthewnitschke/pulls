@@ -1,27 +1,20 @@
-import React from "react";
+import React from 'react';
 
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
 
-import {
-  renameGroup,
-  deleteGroup,
-  move,
-  toggleGroupOpen,
-} from "../redux/structure_slice";
+import { renameGroup, deleteGroup, move, toggleGroupOpen } from '../redux/structure_slice';
 
-import PrListItemGroupMenuItem from "./PrListItemGroupDetailsMenu.jsx";
+import PrListItemGroupMenuItem from './PrListItemGroupDetailsMenu.jsx';
 
-import useSortableItem from "../hooks/useSortableItem.js";
-import { selectActiveQuery } from "../redux/selectors";
+import useSortableItem from '../hooks/useSortableItem.js';
+import { selectActiveQuery } from '../redux/selectors';
 
 function PrListItemGroup({ name, id, index, children }) {
   let dispatch = useDispatch();
   let isSelected = useSelector((state) => state.selectedItemIds.includes(id));
 
   let isOpen = useSelector(
-    (state) =>
-      state.structure[selectActiveQuery(state)].find((el) => el.id == id)
-        ?.isOpen == true
+    (state) => state.structure[selectActiveQuery(state)].find((el) => el.id == id)?.isOpen == true
   );
 
   let { ref, isDragging, className } = useSortableItem({
@@ -30,9 +23,9 @@ function PrListItemGroup({ name, id, index, children }) {
     allowMiddleHover: false,
     allowBelowHover: false,
     onDrop: (item, hoverState, newIndex) => {
-      if (hoverState == "above") {
+      if (hoverState == 'above') {
         dispatch(move(item.id, newIndex)); // intentionally pass no group ids
-      } else if (hoverState == "below") {
+      } else if (hoverState == 'below') {
         dispatch(move(item.id, newIndex + 1));
       }
     },
@@ -44,11 +37,11 @@ function PrListItemGroup({ name, id, index, children }) {
     <div
       key={name}
       ref={ref}
-      style={{ visibility: isDragging ? "hidden" : "visible" }}
+      style={{ visibility: isDragging ? 'hidden' : 'visible' }}
       className={`pr-list-item-group ${className}`}
     >
       <div
-        className={`pr-list-item-group__label ${isSelected ? "selected" : ""}`}
+        className={`pr-list-item-group__label ${isSelected ? 'selected' : ''}`}
         onClick={(e) => {
           if (e?.metaKey || e?.shiftKey) {
             dispatch(toggleItemSelection(id));

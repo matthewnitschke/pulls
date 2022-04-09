@@ -6,7 +6,7 @@ export default async function queryGithub(ghQuery, githubToken) {
     headers: {
       Authorization: `bearer ${githubToken}`,
     },
-    method: "POST",
+    method: 'POST',
   });
 
   let jsonRes = await res.json();
@@ -42,7 +42,7 @@ function parsePullDataFromNode(node) {
       pull: node.number,
 
       prState: node.state,
-      prStatus: status != null ? status.state.toLowerCase() : "no-status-found",
+      prStatus: status != null ? status.state.toLowerCase() : 'no-status-found',
       prStatusContexts: status?.contexts ?? [],
       name: node.title,
       prUrl: node.url,
@@ -51,7 +51,7 @@ function parsePullDataFromNode(node) {
       rawData: node,
     };
   } catch (err) {
-    console.error("Unable to parse pull data", node, err);
+    console.error('Unable to parse pull data', node, err);
   }
 }
 

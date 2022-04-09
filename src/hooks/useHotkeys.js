@@ -1,6 +1,6 @@
 // Libraries
-import { useEffect } from "react";
-import Mousetrap from "mousetrap";
+import { useEffect } from 'react';
+import Mousetrap from 'mousetrap';
 
 function useHotkeys(keyCombo, onPress) {
   useEffect(() => {

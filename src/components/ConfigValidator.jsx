@@ -1,7 +1,7 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React from 'react';
+import { useSelector } from 'react-redux';
 
-import { openConfigFile } from "../utils";
+import { openConfigFile } from '../utils';
 
 export default function ConfigValidator(props) {
   let isValid = useSelector((state) => state.config.isValid);
@@ -9,12 +9,12 @@ export default function ConfigValidator(props) {
 
   if (!isValid) {
     return (
-      <div className="p3" style={{ color: "#adbac7" }}>
+      <div className="p3" style={{ color: '#adbac7' }}>
         <div className="">
-          Pulls config file contains errors. Click{" "}
+          Pulls config file contains errors. Click{' '}
           <a className="unstyled" href="#" onClick={openConfigFile}>
             Here
-          </a>{" "}
+          </a>{' '}
           to fill out necessary values.
         </div>
 

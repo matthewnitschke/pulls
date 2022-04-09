@@ -1,6 +1,6 @@
-@import "shared-settings.scss";
+@import 'shared-settings.scss';
 
-@import "./swal.scss";
+@import './swal.scss';
 
 #app {
   // we have to make room for the window arrow
@@ -87,7 +87,7 @@
 
   &.drag-above:before,
   &.drag-below:after {
-    content: "";
+    content: '';
     height: 10px;
     width: calc(100% - 6px);
     border: 3px solid lightgrey;

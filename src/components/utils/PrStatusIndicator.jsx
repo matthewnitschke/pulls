@@ -1,21 +1,21 @@
-import React from "react";
+import React from 'react';
 
-import Popover from "@mui/material/Popover";
+import Popover from '@mui/material/Popover';
 
-import { makeStyles } from "@material-ui/core/styles";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
+import { makeStyles } from '@material-ui/core/styles';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
-import StatusIcon from "./PrStatusIcon";
+import StatusIcon from './PrStatusIcon';
 
-import { openUrl } from "../../utils.js";
+import { openUrl } from '../../utils.js';
 
 const useStyles = makeStyles((theme) => ({
   popover: {
-    pointerEvents: "none",
+    pointerEvents: 'none',
   },
   popoverContent: {
-    pointerEvents: "auto",
+    pointerEvents: 'auto',
   },
 }));
 
@@ -38,11 +38,7 @@ export default function PrStatusIndicator(props) {
 
   return (
     <>
-      <div
-        aria-haspopup="true"
-        onMouseEnter={handlePopoverOpen}
-        onMouseLeave={handlePopoverClose}
-      >
+      <div aria-haspopup="true" onMouseEnter={handlePopoverOpen} onMouseLeave={handlePopoverClose}>
         <StatusIcon state={props.state} />
         <Menu
           anchorEl={anchorEl}
@@ -53,12 +49,12 @@ export default function PrStatusIndicator(props) {
             paper: classes.popoverContent,
           }}
           anchorOrigin={{
-            vertical: "top",
-            horizontal: "right",
+            vertical: 'top',
+            horizontal: 'right',
           }}
           transformOrigin={{
-            vertical: "top",
-            horizontal: "left",
+            vertical: 'top',
+            horizontal: 'left',
           }}
         >
           {props.contexts?.map((el, i) => (
@@ -71,7 +67,7 @@ export default function PrStatusIndicator(props) {
             >
               <>
                 <StatusIcon state={el.state} />
-                <span style={{ marginLeft: ".5rem" }}>{el.context}</span>
+                <span style={{ marginLeft: '.5rem' }}>{el.context}</span>
               </>
             </MenuItem>
           ))}
