@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const selectedItemIdsSlice = createSlice({
   name: 'selectedItemIds',
@@ -8,16 +8,14 @@ const selectedItemIdsSlice = createSlice({
       let itemId = action.payload;
 
       if (state.includes(itemId)) {
-        state.splice(state.indexOf(itemId), 1)
+        state.splice(state.indexOf(itemId), 1);
       } else {
-        state.push(itemId)
+        state.push(itemId);
       }
     },
-    clearSelection: (state) => {
-      state = []
-    }
-  }
+    clearSelection: () => [],
+  },
 });
 
 export default selectedItemIdsSlice.reducer;
-export const {toggleItemSelection, clearSelection} = selectedItemIdsSlice.actions;
+export const { toggleItemSelection, clearSelection } = selectedItemIdsSlice.actions;

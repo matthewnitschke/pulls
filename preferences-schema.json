@@ -37,11 +37,13 @@
       "description": "The height of the popover window, in pixels. Requires app restart on change",
       "type": "number",
       "default": 700
+    },
+    "queryInterval": {
+      "description": "The interval time to between re-runs of the currently active query. In \"[number]hrs/min/sec\"",
+      "type": "string",
+      "default": "5min"
     }
   },
-  "required": [
-    "queries",
-    "githubToken"
-  ],
+  "required": ["queries", "githubToken"],
   "additionalProperties": false
 }

@@ -1,5 +1,5 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { githubRequest } from "../github_client";
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { githubRequest } from '../github_client';
 
 export const executeAction = createAsyncThunk(
   'executeAction',
@@ -15,18 +15,18 @@ export const executeAction = createAsyncThunk(
     // item is a pull request
     if (state.prs.hasOwnProperty(itemId)) {
       let pr = state.prs[itemId];
-      url = url.replace('${owner}', pr.org)
-      url = url.replace('${repo}', pr.repo)
-      url = url.replace('${pull_number}', pr.pull)
+      url = url.replace('${owner}', pr.org);
+      url = url.replace('${repo}', pr.repo);
+      url = url.replace('${pull_number}', pr.pull);
     }
 
     try {
       return await githubRequest({
         path: url,
         method,
-        body
-      })
-    } catch(e) {
+        body,
+      });
+    } catch (e) {
       return rejectWithValue(e.message);
     }
   }
@@ -42,6 +42,5 @@ export const executeAction = createAsyncThunk(
 //       })
 //   }
 // })
-
 
 // export default actionsSlice.reducer;

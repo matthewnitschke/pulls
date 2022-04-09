@@ -1,6 +1,6 @@
-@import "shared-settings.scss";
+@import 'shared-settings.scss';
 
-@import "./swal.scss";
+@import './swal.scss';
 
 #app {
   // we have to make room for the window arrow
@@ -87,7 +87,7 @@
 
   &.drag-above:before,
   &.drag-below:after {
-    content: "";
+    content: '';
     height: 10px;
     width: calc(100% - 6px);
     border: 3px solid lightgrey;
@@ -211,9 +211,9 @@
       }
     }
 
-    &:not(:first-child) .pr-list-item-group__label {
-      border-top: solid 1px #373e47;
-    }
+    // &:not(:first-child) .pr-list-item-group__label {
+    //   border-top: solid 1px #373e47;
+    // }
 
     .pr-list-item-group__body {
       border-top: solid 1px #373e47;

@@ -11,15 +11,15 @@ import { activeQueryInjectorMiddleware, structurePersistanceMiddleware } from '.
 export default function getStore(preloadedState) {
   return configureStore({
     reducer: (state, action) => {
-      let newState = rootReducer(state, action)
-      
+      let newState = rootReducer(state, action);
+
       return {
         ...newState,
         config: configReducer(newState.config, action),
         selectedItemIds: selectedItemIdsReducer(newState.selectedItemIds, action),
         prs: prsReducer(newState.prs, action),
         structure: structureReducer(newState.structure, action),
-      }
+      };
     },
     devTools: process.env.NODE_ENV !== 'production',
     preloadedState,
@@ -28,5 +28,5 @@ export default function getStore(preloadedState) {
       activeQueryInjectorMiddleware,
       structurePersistanceMiddleware,
     ],
-  })
+  });
 }

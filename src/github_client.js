@@ -1,15 +1,14 @@
 export default async function queryGithub(ghQuery, githubToken) {
-
   let res = await fetch(`https://api.github.com/graphql`, {
     body: JSON.stringify({
-      query: buildGraphQLQuery(ghQuery)
+      query: buildGraphQLQuery(ghQuery),
     }),
     headers: {
       Authorization: `bearer ${githubToken}`,
     },
-    method: "POST"
+    method: 'POST',
   });
-  
+
   let jsonRes = await res.json();
 
   if (!res.ok) {
@@ -18,31 +17,27 @@ export default async function queryGithub(ghQuery, githubToken) {
 
   let parsedData = jsonRes.data.search.edges
     .map(({ node }) => parsePullDataFromNode(node))
-    .filter(pullData => pullData != null)
+    .filter((pullData) => pullData != null);
 
-  let prData = parsedData.reduce((acc, pr) => ({
-    ...acc,
-    [pr.id]: pr
-  }), {});
+  let prData = parsedData.reduce(
+    (acc, pr) => ({
+      ...acc,
+      [pr.id]: pr,
+    }),
+    {}
+  );
 
   return prData;
 }
 
-export async function githubRequest({ 
-  path, 
-  method,
-  body,
-}, githubToken) {
-  let res = await fetch(
-    `https://api.github.com/${path}`,
-    {
-      body: JSON.stringify(body ?? {}),
-      headers: {
-        Authorization: `bearer ${githubToken}`, 
-      },
-      method: method ?? 'POST'
-    }
-  )
+export async function githubRequest({ path, method, body }, githubToken) {
+  let res = await fetch(`https://api.github.com/${path}`, {
+    body: JSON.stringify(body ?? {}),
+    headers: {
+      Authorization: `bearer ${githubToken}`,
+    },
+    method: method ?? 'POST',
+  });
 
   let jsonRes = await res.json();
 
@@ -51,10 +46,9 @@ export async function githubRequest({
   }
 }
 
-
 function parsePullDataFromNode(node) {
   try {
-    let status = node.commits.nodes[0].commit.status
+    let status = node.commits.nodes[0].commit.status;
 
     return {
       id: node.id,
@@ -70,10 +64,10 @@ function parsePullDataFromNode(node) {
       prUrl: node.url,
       branch: node.headRef.name,
 
-      rawData: node
-    }
+      rawData: node,
+    };
   } catch (err) {
-    console.error('Unable to parse pull data', node, err)
+    console.error('Unable to parse pull data', node, err);
   }
 }
 
@@ -134,5 +128,5 @@ function buildGraphQLQuery(ghQuery) {
           }
       }
   }
-  `
+  `;
 }
