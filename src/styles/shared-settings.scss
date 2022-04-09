@@ -1,76 +1,76 @@
 @import 'gravitons-sass/dist/gravitons.css';
 
 :root {
-    --pr-status-color-success: #2cbe4e;
-    --pr-status-color-pending: #dbab09;
-    --pr-status-color-failure: #cb2431;
+  --pr-status-color-success: #2cbe4e;
+  --pr-status-color-pending: #dbab09;
+  --pr-status-color-failure: #cb2431;
 
-    --grey-accent-color: #eaeaea;
-    --header-color: #2d333b; // #85c73f;
-    --header-color-light: #85c73f54;
-    --text-color: #333;
+  --header-color: #2d333b; // #85c73f;
+  --header-color-light: #85c73f54;
+  --text-color: #333;
 
-    --dotted-border: 2px dotted lightgrey;
+  --dotted-border: 2px dotted lightgrey;
 }
 
-html, body {
-    height: 100%;
+html,
+body {
+  height: 100%;
 }
 
 @mixin clickable {
-    cursor: pointer;
+  cursor: pointer;
 
-    &:hover {
-        opacity: .5;
-    }
+  &:hover {
+    opacity: 0.5;
+  }
 }
 
 .clickable {
-    @include clickable;
+  @include clickable;
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    margin: 0;
-    color: var(--text-color);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans',
+    'Droid Sans', 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  margin: 0;
+  color: var(--text-color);
 }
 
 h2 {
-    text-transform: uppercase;
-    font-weight: 600;
-    padding-left: 1.2rem;
-    font-size: 1rem;
-    margin: 0;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding-left: 1.2rem;
+  font-size: 1rem;
+  margin: 0;
 }
 
 a:not(.unstyled) {
-    @include clickable;
-    &>i {
-        margin: 0 .3rem;
-    }
+  @include clickable;
+  & > i {
+    margin: 0 0.3rem;
+  }
 
-    &.disabled {
-        cursor: not-allowed;
-        opacity: .5;
-    }
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 }
 
 .block {
-    padding: 1rem 0;
+  padding: 1rem 0;
 
-    &.block--bordered {
-        border-bottom: var(--dotted-border);
-    }
+  &.block--bordered {
+    border-bottom: var(--dotted-border);
+  }
 
-    &.block--bordered:last-child {
-        border-bottom: none;
-    }
+  &.block--bordered:last-child {
+    border-bottom: none;
+  }
 }
 
 .header {
-    padding: 0.5rem 1.2rem;
-    padding-right: .7rem;
+  padding: 0.5rem 1.2rem;
 
-    background-color: var(--header-color);
-    color: #FFF;
+  background-color: var(--header-color);
+  color: #fff;
 }

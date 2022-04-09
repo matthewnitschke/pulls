@@ -4,28 +4,35 @@ import PrListItem from './PrListItem.jsx';
 
 import useSortableItem from '../hooks/useSortableItem.js';
 
-function DraggablePrListItem(props) {
-    const {ref, isHovered, isDragging, className} = useSortableItem({
-        id: props.id, 
-        index: props.index,
-        onDrop: (item, hoverState, newIndex) => {
-            if (hoverState == 'above') {
-                props.onMove(item.id, newIndex, props.groupId)
-            } else if (hoverState == 'below') {
-                props.onMove(item.id, newIndex+1, props.groupId)
-            } else {
-                props.onGroupPrs([item.id, props.id])
-            }
-        },
-    });
+import { groupPrs, move } from '../redux/structure_slice';
+import { useDispatch } from 'react-redux';
 
-    return <PrListItem 
-        {...props}
-        isHovered={isHovered}
-        style={{ visibility: isDragging ? 'hidden' : 'visible' }}
-        className={className}
-        ref={ref}
+function DraggablePrListItem(props) {
+  const dispatch = useDispatch();
+
+  const { ref, isHovered, isDragging, className } = useSortableItem({
+    id: props.id,
+    index: props.index,
+    onDrop: (item, hoverState, newIndex) => {
+      if (hoverState == 'above') {
+        dispatch(move(item.id, newIndex, props.groupId));
+      } else if (hoverState == 'below') {
+        dispatch(move(item.id, newIndex + 1, props.groupId));
+      } else {
+        dispatch(groupPrs([item.id, props.id], 'newGroup'));
+      }
+    },
+  });
+
+  return (
+    <PrListItem
+      {...props}
+      isHovered={isHovered}
+      style={{ visibility: isDragging ? 'hidden' : 'visible' }}
+      className={className}
+      ref={ref}
     />
+  );
 }
 
 export default DraggablePrListItem;
