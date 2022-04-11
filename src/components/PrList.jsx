@@ -14,7 +14,7 @@ function PrList(props) {
 
   let prs = useSelector((state) => {
     let activeQuery = selectActiveQuery(state);
-    return state.prs.data[activeQuery] ?? {};
+    return state.prs[activeQuery]?.data ?? {};
   });
 
   let structure = useSelector((state) => {

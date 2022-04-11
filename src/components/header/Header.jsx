@@ -13,6 +13,7 @@ import SelectedPrsDetailMenu from './SelectedPrsDetailsMenu';
 import CircularProgress from '@mui/material/CircularProgress';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { ListItemText } from '@mui/material';
+import { selectActiveQuery } from '../../redux/selectors';
 
 function Header(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -25,8 +26,7 @@ function Header(props) {
   let activeQueryIndex = useSelector((state) => state.activeQueryIndex);
   let selectedItemIds = useSelector((state) => state.selectedItemIds);
 
-  let prQueryStatus = useSelector((state) => state.prs.status);
-  let prQueryErrorMsg = useSelector((state) => state.prs.errorMessage);
+  let activeQueryObj = useSelector((state) => state.prs[selectActiveQuery(state)] ?? {});
 
   return (
     <div className="header">
@@ -87,10 +87,10 @@ function Header(props) {
             />
           </div>
 
-          {prQueryStatus == 'loading' && <CircularProgress size="1rem" style={{ marginLeft: '.5rem' }} />}
-          {prQueryStatus == 'error' && (
+          {activeQueryObj.status == 'loading' && <CircularProgress size="1rem" style={{ marginLeft: '.5rem' }} />}
+          {activeQueryObj.status == 'error' && (
             <>
-              {prQueryErrorMsg}
+              {activeQueryObj.errorMessage}
               <ErrorOutlineIcon size="1rem" style={{ marginLeft: '.5rem' }} />
             </>
           )}

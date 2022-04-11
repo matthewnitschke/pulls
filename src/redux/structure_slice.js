@@ -86,13 +86,42 @@ const structureSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchPrs.fulfilled, (state, action) => {
-      let query = action.payload.activeQuery;
-      let flattenedStructure = flattenStructure(state[query] ?? []);
+      let arg = action.meta.arg;
 
-      state[query] = [
-        ...Object.keys(action.payload.resp).filter((prId) => !flattenedStructure.includes(prId)),
-        ...(state[query] ?? []),
-      ];
+      // if parent is null, this is the fulfilled result of the root query
+      if (arg.parent == null) {
+        let flattenedStructure = flattenStructure(state[arg.query] ?? []);
+  
+        state[arg.query] = [
+          ...Object.keys(action.payload).filter((prId) => !flattenedStructure.includes(prId)),
+          ...(state[arg.query] ?? []),
+        ];
+      } else {
+        let childIndex = state[arg.parent].findIndex((item) => item.query == arg.query)
+
+        if (childIndex == -1) {
+          state[arg.parent][0] = {
+            id: uuid(),
+            isOpen: false,
+            query: arg.query,
+            name: 'DYNAMIC',
+            prIds: Object.keys(action.payload)
+          }
+        } else {
+          let queryPrIds = Object.keys(action.payload);
+          let currentPrIds = state[arg.parent][childIndex].prIds;
+
+          let newPrIds = [
+            // add any new prs found from the result of the query
+            ...queryPrIds.filter((prId) => !currentPrIds.includes(prId)),
+
+            // filter the current prs from the result of the query. Persist the order
+            ...currentPrIds.filter((prId) => queryPrIds.includes(prId))
+          ]
+
+          state[arg.parent][childIndex].prIds = newPrIds
+        }
+      }
     });
 
     builder.addCase(groupPrs.fulfilled, (state, action) => {

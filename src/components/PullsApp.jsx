@@ -20,32 +20,32 @@ import { setActiveQuery } from '../redux/root_reducer.js';
 
 import { selectActiveQuery, selectSelectedPrIds } from '../redux/selectors';
 import { clearSelection } from '../redux/selected_item_ids_slice';
-import { fetchPrs } from '../redux/prs_slice';
+import { refreshCurrentPrs } from '../redux/prs_slice';
 import toMils from 'to-mils';
 
 function PullsApp({ automation = false }) {
   let dispatch = useDispatch();
 
   let queries = useSelector((state) => state.config.queries ?? []);
-  let prs = useSelector((state) => state.prs.data[selectActiveQuery(state)]);
+  let prs = useSelector((state) => state.prs[selectActiveQuery(state)]?.data ?? {});
   let selectedPrIds = useSelector(selectSelectedPrIds);
 
   let queryInterval = useSelector((state) => state.config.queryInterval ?? '5min');
   useEffect(() => {
     let sub = setInterval(() => {
-      dispatch(fetchPrs());
+      dispatch(refreshCurrentPrs());
     }, toMils(queryInterval));
 
     return () => clearInterval(sub);
   }, [queryInterval]);
 
   useMenubarHide(() => dispatch(clearSelection()));
-  useMenubarShow(() => dispatch(fetchPrs()));
+  useMenubarShow(() => dispatch(refreshCurrentPrs()));
 
   useHotkeys('escape', () => ipcRenderer.send('hide-window'));
   useHotkeys('command+r', (e) => {
     e.preventDefault();
-    dispatch(fetchPrs());
+    dispatch(refreshCurrentPrs());
   });
 
   useHotkeys('command+o', _openSelectedPrs);

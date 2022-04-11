@@ -1,10 +1,10 @@
 import { createReducer, createAction } from '@reduxjs/toolkit';
 
-import { fetchPrs } from './prs_slice';
+import { refreshCurrentPrs } from './prs_slice';
 
 export const setActiveQuery = (activeQueryIndex) => (dispatch) => {
   dispatch(setActiveQueryInt(activeQueryIndex));
-  dispatch(fetchPrs());
+  dispatch(refreshCurrentPrs());
 };
 
 /// Internal version of setActiveQuery, only updates the reducer
