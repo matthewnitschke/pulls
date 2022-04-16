@@ -21,6 +21,9 @@
       "<rootDir>",
       "node_modules",
       "src"
+    ],
+    "setupFiles": [
+      "./test/setup-jest.js"
     ]
   },
   "dependencies": {

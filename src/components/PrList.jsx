@@ -66,11 +66,9 @@ function PrList(props) {
               return __renderPrListItem(prs[data], i);
             }
 
-            return (
-              <PrListItemGroup key={data.id} id={data.id} index={i} name={data.name}>
-                {data.prIds.map((prId, gId) => __renderPrListItem(prs[prId], gId, data.id)).filter((pr) => pr !== null)}
-              </PrListItemGroup>
-            );
+            return <PrListItemGroup key={data.id} id={data.id} index={i} name={data.name}>
+              {data.prIds.map((prId, gId) => __renderPrListItem(prs[prId], gId, data.id)).filter((pr) => pr !== null)}
+            </PrListItemGroup>
           })}
         </div>
       )}

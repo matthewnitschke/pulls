@@ -9,8 +9,9 @@ export default async function queryGithub(ghQuery, githubToken) {
     method: 'POST',
   });
 
+  
   let jsonRes = await res.json();
-
+  
   if (!res.ok) {
     throw new Error(jsonRes.message);
   }
