@@ -33,7 +33,7 @@ export const renameGroup = createAsyncThunk('renameGroup', async (groupId, { get
 
 const structureSlice = createSlice({
   name: 'structure',
-  initialState: settingsStore.get('structure'),
+  initialState: settingsStore.get('structure') ?? {},
   reducers: {
     move: {
       reducer: (state, action) => {
