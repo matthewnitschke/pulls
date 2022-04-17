@@ -1,5 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { DndProvider } from 'react-dnd';
@@ -62,7 +63,9 @@ let store = configureStore();
 fs.watch(configFilePath, () => store.dispatch(updateConfig()));
 store.dispatch(updateConfig());
 
-ReactDOM.render(
+const container = document.getElementById('app');
+const root = createRoot(container);
+root.render(
   <DndProvider backend={HTML5Backend}>
     <Provider store={store}>
       <ThemeProvider theme={theme}>
@@ -71,6 +74,5 @@ ReactDOM.render(
         </ConfigValidator>
       </ThemeProvider>
     </Provider>
-  </DndProvider>,
-  document.getElementById('app')
+  </DndProvider>
 );
