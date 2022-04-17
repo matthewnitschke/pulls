@@ -104,7 +104,7 @@ const structureSlice = createSlice({
             id: uuid(),
             isOpen: false,
             query: arg.query,
-            name: 'DYNAMIC',
+            name: arg.groupName,
             prIds: Object.keys(action.payload)
           }
         } else {

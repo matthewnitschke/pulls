@@ -16,6 +16,7 @@ export const refreshCurrentPrs = createAsyncThunk('refreshCurrentPrs', async (ar
     queryObj.children.forEach((childQuery) => {
       dispatch(fetchPrs({
         query: childQuery.query,
+        groupName: childQuery.label,
         parent: activeQuery,
       }));
     })

@@ -8,6 +8,8 @@ const path = require('path');
 
 const { default: installExtension, REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer');
 
+const os = require('os');
+
 const isDebug = process.env.DEBUG == 'true';
 
 const menu = [
@@ -23,12 +25,15 @@ const menu = [
   },
   {
     label: 'Preferences',
-    click: () => shell.openPath(path.join(homedir, '.pulls-config.yaml')),
+    click: () => shell.openPath(path.join(os.homedir(), '.pulls-config.yaml')),
   },
-  ...(isDebug ? [{ 
-    label: 'Clear All Structure',
-    click: () => settingsStore.set('structure', {}),
-  }] : []),
+  ...(isDebug ? [
+    {
+      label: 'Clear All Structure',
+      click: () => settingsStore.set('structure', {}),
+    },
+    { role: 'toggleDevTools' }
+  ] : []),
   { 
     label: 'Quit', 
     click: () => {

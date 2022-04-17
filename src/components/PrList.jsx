@@ -13,8 +13,21 @@ function PrList(props) {
   let [filterText, setFilterText] = useState('');
 
   let prs = useSelector((state) => {
-    let activeQuery = selectActiveQuery(state);
-    return state.prs[activeQuery]?.data ?? {};
+    if (state.prs == null) return {}
+ 
+    let activeQueryObj = state.config.queries[state.activeQueryIndex]
+
+    let stateObj = { ...state.prs[activeQueryObj?.query]?.data ?? {} }
+
+    activeQueryObj?.children?.forEach((childQuery) => {
+      Object.keys(state.prs[childQuery.query]?.data ?? {}).forEach((childQueryId) => {
+        stateObj[childQueryId] = state.prs[childQuery.query].data[childQueryId]
+      })
+    })
+
+    console.log(stateObj)
+
+    return stateObj;
   });
 
   let structure = useSelector((state) => {
