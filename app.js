@@ -10,7 +10,7 @@ const { default: installExtension, REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } = req
 
 const isDebug = process.env.DEBUG == 'true';
 
-const homedir = require('os').homedir();
+const os = require('os');
 
 const windowSettings = {
   width: 600,
@@ -79,7 +79,7 @@ if (isDebug) {
       { label: 'About Pulls', click: showAboutDialog },
       {
         label: 'Preferences',
-        click: () => shell.openPath(path.join(homedir, '.pulls-config.yaml')),
+        click: () => shell.openPath(path.join(os.homedir(), '.pulls-config.yaml')),
       },
       // { label: 'Clear App Data', click: clearAppData },
       // { label: 'Display App Data', click: displayAppData },
