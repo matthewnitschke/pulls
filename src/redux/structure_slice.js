@@ -7,6 +7,7 @@ import { settingsStore } from '../utils';
 import { selectActiveQuery } from './selectors';
 
 import swal from 'sweetalert';
+import queryGithub from '../github_client';
 
 export const groupPrs = createAsyncThunk('groupPrs', async (prIds) => {
   let groupName = await swal({
@@ -29,6 +30,31 @@ export const renameGroup = createAsyncThunk('renameGroup', async (groupId, { get
   });
 
   return { groupId, groupName };
+});
+
+// Github search is known to be a bit flakey sometimes. This results is random responses that dont contain all pr data
+// in order to combat this, synchronizeStructure is run on a long interval (6hrs or so)
+// 
+// [synchronizeStructure] is a process that takes each defined query, runs duplicate requests against github 3 times, and 
+// resets structure based on the mode of the prIds (most common)
+export const synchronizeStructure = createAsyncThunk('synchronizeStructure', async (_, { getState }) => {
+  let state = getState();
+
+  let queries = state.config.queries.map(({ query }) => query);
+
+  let queryRes = {};
+  for (let query of queries) {
+    let queryIter = [];
+    for (let i = 0; i < 3; i ++) {
+      queryIter.push(await queryGithub(query, state.config.githubToken));
+    }
+    
+    let queryStrings = queryIter.map((res) => Object.keys(res).join(','))
+    
+    queryRes[query] = mode(queryStrings).split(',')
+  }
+
+  return queryRes
 });
 
 const structureSlice = createSlice({
@@ -120,6 +146,15 @@ const structureSlice = createSlice({
       let group = structure.find((el) => el.id == groupId);
       group.name = groupName;
     });
+
+    builder.addCase(synchronizeStructure.fulfilled, (state, action) => {
+      let queries = action.payload;
+
+      return Object.keys(queries).reduce((acc, query) => {
+        acc[query] = filterStructure(state[query], prId => queries[query].includes(prId))
+        return acc;
+      }, {});
+    });
   },
 });
 
@@ -132,6 +167,32 @@ export function flattenStructure(structure) {
     }
     return [...acc, ...el.prIds];
   }, []);
+}
+
+export function filterStructure(structure, filterLambda) {
+  return structure.reduce((acc, el) => {
+      if (typeof el === 'string') {
+          if (filterLambda(el)) {
+              return [...acc, el]
+          }
+          return acc
+      }
+
+      let newGroupIds = el.prIds.filter(filterLambda)
+      if (newGroupIds.length <= 0) return acc;
+      return [
+          ...acc,
+          {...el, prIds: newGroupIds}
+      ]
+  }, [])
+}
+
+
+function mode(arr) {
+  return arr.sort((a, b) =>
+    arr.filter(v => v === a).length
+    - arr.filter(v => v === b).length
+  ).pop();
 }
 
 export default structureSlice.reducer;
