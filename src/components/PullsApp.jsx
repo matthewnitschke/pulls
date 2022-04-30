@@ -21,7 +21,6 @@ import { setActiveQuery } from '../redux/root_reducer.js';
 import { selectActiveQuery, selectSelectedPrIds } from '../redux/selectors';
 import { clearSelection } from '../redux/selected_item_ids_slice';
 import { fetchPrs } from '../redux/prs_slice';
-import { synchronizeStructure } from '../redux/structure_slice';
 import toMils from 'to-mils';
 
 function PullsApp({ automation = false }) {
@@ -83,7 +82,6 @@ function PullsApp({ automation = false }) {
       <PrList onHideWindow={() => ipcRenderer.send('hide-window')} />
 
       {automation && <input type="button" value="refresh" onClick={rerunQuery} />}
-      <input type="button" value="sync" onClick={() => dispatch(synchronizeStructure())} />
     </div>
   );
 }
