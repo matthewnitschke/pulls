@@ -1,27 +1,17 @@
-// Node
 const { ipcRenderer, clipboard } = require('electron');
-
-// Libraries
 import React, { useEffect } from 'react';
-import { openUrl } from '../utils.js';
-
-// Components
 import PrList from './PrList.jsx';
 import Header from './header/Header.jsx';
-
-// Hooks
-import { useMenubarHide, useMenubarShow } from '../hooks/useMenubarEvents.js';
 import useHotkeys from '../hooks/useHotkeys.js';
+import toMils from 'to-mils';
+import { openUrl } from '../utils.js';
+import { useMenubarHide, useMenubarShow } from '../hooks/useMenubarEvents.js';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { groupPrs } from '../redux/structure_slice';
-
 import { setActiveQuery } from '../redux/root_reducer.js';
-
 import { selectActiveQuery, selectSelectedPrIds } from '../redux/selectors';
 import { clearSelection } from '../redux/selected_item_ids_slice';
 import { fetchPrs } from '../redux/prs_slice';
-import toMils from 'to-mils';
 
 function PullsApp({ automation = false }) {
   let dispatch = useDispatch();
