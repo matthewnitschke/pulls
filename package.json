@@ -7,10 +7,17 @@
     "preinstall": "export NPM_CONFIG_REGISTRY=\"\"",
     "start": "electron app.js",
     "clean": "rm -r .cache dist node_modules packaged",
-    "build": "parcel settings-editor.html index.html --target electron --public-url ./",
-    "build-ci": "parcel build settings-editor.html index.html --target electron --public-url ./",
+    "build": "parcel index.html --target renderer --public-url ./",
+    "build-ci": "parcel build index.html --target renderer --public-url ./",
     "package": "electron-packager . pulls --platform=darwin --out packaged --extendInfo ./buildFiles/Info.plist --overwrite",
-    "test": "jest"
+    "test": "jest",
+    "format": "prettier --write ."
+  },
+  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "targets": {
+    "renderer": {
+      "context": "electron-renderer"
+    }
   },
   "jest": {
     "roots": [
@@ -20,47 +27,55 @@
       "<rootDir>",
       "node_modules",
       "src"
+    ],
+    "setupFiles": [
+      "./test/setup-jest.js"
     ]
   },
   "dependencies": {
-    "@emotion/react": "^11.8.1",
-    "@emotion/styled": "^11.6.0",
-    "@fortawesome/fontawesome-free": "^5.12.1",
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
+    "@fortawesome/fontawesome-free": "^6.1.1",
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
+    "@monaco-editor/react": "^4.3.1",
     "@mui/icons-material": "^5.0.3",
     "@mui/material": "^5.0.3",
-    "balloon-css": "^1.0.4",
+    "@reduxjs/toolkit": "^1.8.0",
+    "ajv": "^8.11.0",
     "electron-store": "^8.0.1",
     "gravitons-sass": "^1.2.0",
     "menubar": "^9.0.0",
     "mousetrap": "^1.6.5",
-    "node-fetch": "^2.6.0",
-    "react": "^17.0.2",
+    "node-fetch": "^3.2.3",
+    "react": "^18.0.0",
     "react-dnd": "^14.0.4",
     "react-dnd-html5-backend": "^14.0.2",
-    "react-dom": "^17.0.2",
+    "react-dom": "^18.0.0",
+    "react-redux": "^8.0.0",
+    "redux-devtools-extension": "^2.13.9",
     "sweetalert": "^2.1.2",
     "to-mils": "^1.0.2",
-    "uuid": "^3.4.0"
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
     "@babel/plugin-syntax-jsx": "^7.16.0",
     "@babel/plugin-transform-runtime": "^7.16.4",
-    "@babel/preset-env": "^7.16.0",
-    "@babel/preset-react": "^7.16.0",
+    "@parcel/transformer-sass": "^2.4.1",
     "@testing-library/dom": "^8.11.1",
     "@testing-library/jest-dom": "^5.15.0",
-    "@testing-library/react": "^12.1.2",
+    "@testing-library/react": "^13.1.1",
     "@testing-library/user-event": "^13.5.0",
     "babel-jest": "^27.3.1",
-    "electron": "^15.3.1",
-    "electron-packager": "^14.2.1",
+    "electron": "^18.0.4",
+    "electron-devtools-installer": "^3.2.0",
+    "electron-packager": "^15.4.0",
     "jest": "^27.3.1",
     "jest-css-modules-transform": "^4.3.0",
     "jest-fetch-mock": "^3.0.3",
-    "parcel-bundler": "^1.12.4",
+    "parcel": "^2.4.1",
+    "prettier": "2.6.2",
     "sass": "^1.26.3"
   },
   "publishConfig": {

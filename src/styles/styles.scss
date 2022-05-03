@@ -3,349 +3,274 @@
 @import './swal.scss';
 
 #app {
-    // we have to make room for the window arrow
-    height: calc(100% - 10px);
-    background-color: #22272d;
+  // we have to make room for the window arrow
+  height: calc(100% - 10px);
+  background-color: #22272d;
 }
 
 .window-arrow-wrapper {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 
-    .window-arrow {
-        width: 0; 
-        height: 0; 
-        border-left: 10px solid transparent;
-        border-right: 10px solid transparent;
-        border-bottom: 10px solid var(--header-color);
-    }
+  .window-arrow {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid var(--header-color);
+  }
 }
 
 .pulls-app {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 
-    .header {
-        flex-grow: 0;
-        flex-shrink: 0;
+  .header {
+    flex-grow: 0;
+    flex-shrink: 0;
 
-        .main-header {
-            display:flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 1.2rem;
-            font-size: .75rem;
-            position: relative;
-            color: #adbac7;
-            height: 2.5rem;
-        }
+    .main-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
 
-        .detail-header {
-            width: 100%;
-            display: grid;
-            grid-template-columns: 1rem auto 1rem;
-            grid-template-rows: auto auto;
-            column-gap: .5rem;
-            row-gap: .3rem;
-            padding-top: .5rem;
-
-            .repo-name {
-                text-transform: uppercase;
-                font-weight: 600;
-            }
-
-            .pr-name {
-                word-break: break-word;
-                grid-column-start: 2;
-                color: var(--text-color);
-                font-weight: 800;
-                font-size: 1rem;
-                margin: .3rem;
-            }
-
-            .open-in-github-button {
-                color: var(--text-color);
-            }
-        }
-
-        .header-text {
-            font-size: 1.4rem;
-            font-weight: 600;
-        }
-
-        .header-back-button, .header-add-button {
-            @include clickable;
-        }
-
-        .header-back-button {
-            font-size: 18px;
-        }
+      padding-bottom: 1rem;
+      padding-top: 0.3rem;
+      font-size: 0.75rem;
     }
+  }
 }
 
 .filter-prs-input-anchor {
-    position: relative;
-    margin-bottom: 1.5rem;
-    
-    .filter-prs-input-wrapper {
-        position: absolute;
-        display: flex;
-    
-        top: -1rem;
-        left: .7rem;
-        right: .7rem;
-        
-        .filter-prs-input {
-            border-radius: 1rem;
-            width: 100%;
-            border: solid 1px #444c56;
-            outline: none;
-            padding: .4rem 1rem;
+  position: relative;
+  margin-bottom: 1.5rem;
 
-            color: #c2c3c3;
-            background-color: #22272d;
-        }
-    
-        .fa-search {
-            position: absolute;
-            right: .8rem;
-            top: .28rem;
-            color: #c2c3c3;
-        }
+  .filter-prs-input-wrapper {
+    position: absolute;
+    display: flex;
+
+    top: -1rem;
+    left: 0.7rem;
+    right: 0.7rem;
+
+    .filter-prs-input {
+      border-radius: 1rem;
+      width: 100%;
+      border: solid 1px #444c56;
+      outline: none;
+      padding: 0.4rem 1rem;
+
+      color: #c2c3c3;
+      background-color: #22272d;
     }
+
+    .fa-search {
+      position: absolute;
+      right: 0.7rem;
+      top: 0.4rem;
+      color: #c2c3c3;
+    }
+  }
 }
 
 @mixin draggableItem {
-    position: relative;
+  position: relative;
 
-    &:not(:first-child) {
-        border-top: solid 1px #373e47;
-    }
+  &:not(:first-child) {
+    border-top: solid 1px #373e47;
+  }
 
-    &.drag-middle {
-        background-color: lightgrey;
-    }
+  &.drag-middle {
+    background-color: lightgrey;
+  }
 
-    &.drag-above:before, &.drag-below:after {
-        content: '';
-        height: 10px;
-        width: calc(100% - 6px);
-        border: 3px solid lightgrey;
-        position: absolute;
-        top: 0px;
-        left: 0px;
-    }
-    
-    &.drag-above:before {
-        border-bottom: 0;
-    }
-    &.drag-below:after {
-        border-top: 0;
-        bottom: 0px;
-        top: auto;
-    }
+  &.drag-above:before,
+  &.drag-below:after {
+    content: '';
+    height: 10px;
+    width: calc(100% - 6px);
+    border: 3px solid lightgrey;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+  }
+
+  &.drag-above:before {
+    border-bottom: 0;
+  }
+  &.drag-below:after {
+    border-top: 0;
+    bottom: 0px;
+    top: auto;
+  }
 }
 
 .pr-list {
-    overflow: auto;
+  overflow: auto;
 
-    .pr-list-item {
-        padding: .7rem 1rem;
-        font-size: .75rem;
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: none; /* color of the tracking area */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #444c56;
+    border-radius: 20px;
+    scrollbar-width: thin;
+  }
+
+  .pr-list-item {
+    padding: 0.7rem 1rem;
+    font-size: 0.75rem;
+    display: flex;
+    cursor: pointer;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    // lazy matthew selecting things lazily. Just selecting the icons
+    svg,
+    i {
+      padding-top: 5px;
+    }
+
+    .pr-list-item__text {
+      width: 100%;
+      padding-left: 0.4rem;
+      line-height: 1.6;
+      color: #adbac7;
+
+      .pr-list-item__repo-name {
+        color: #768390;
+        padding-right: 7px;
+      }
+    }
+
+    &.hovered {
+      opacity: 0.5;
+    }
+
+    &.selected,
+    &:hover {
+      background-color: #2d333b;
+    }
+
+    @include draggableItem;
+  }
+
+  .pr-list-item-group {
+    @include draggableItem;
+
+    .pr-list-item-group__label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+
+      &.selected,
+      &:hover {
+        background-color: #2d333b;
+      }
+
+      & > div > i {
+        margin-right: 0.4rem;
+        width: 16px;
+      }
+
+      color: #768390;
+      padding: 0.7rem 1rem;
+      font-weight: 600;
+      line-height: 1.6;
+
+      &:hover .pr-list-item__button-group svg,
+      .pr-list-item__button-group svg.is-open {
+        visibility: visible;
+      }
+
+      .pr-list-item__button-group {
         display: flex;
-        cursor: pointer;
+        align-items: center;
 
-        font-size: 15px;
-        font-weight: 600;
-
-        // lazy matthew selecting things lazily. Just selecting the icons
-        svg, i {
-            padding-top: 5px;
+        svg {
+          visibility: hidden;
         }
 
-        .pr-list-item__text {
-            width: 100%;
-            padding-left: .4rem;
-            line-height: 1.6;
-            color: #adbac7;
-
-            .pr-list-item__repo-name {
-                color: #768390;
-                padding-right: 7px;
-            }
+        & > i:not(:last-child) {
+          margin-right: 0.7rem;
         }
 
-        &.hovered {
-            opacity: .5;
+        .fa-pen,
+        .fa-trash {
+          @include clickable;
         }
-
-        &.selected, &:hover {
-            background-color: #2d333b;
-        }
-
-        @include draggableItem;
+      }
     }
 
-    .pr-list-item-group {
-        @include draggableItem;
-    
-        .pr-list-item-group__label {
-
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            user-select: none;
-
-            &.selected, &:hover {
-                background-color: #2d333b;
-            }
-
-            & > div > i {
-                margin-right: .4rem;
-                width: 16px;
-            }
-
-            color: #768390;
-            padding: .7rem 1rem;
-            font-weight: 600;
-            line-height: 1.6;
-
-            &:hover .pr-list-item__button-group svg, .pr-list-item__button-group svg.is-open {
-                visibility: visible;
-            }
-            
-            .pr-list-item__button-group {
-                display: flex;
-                align-items: center;
-
-                svg {
-                    visibility: hidden;
-                }
-
-                & > i:not(:last-child) {
-                    margin-right: .7rem;
-                }
-
-                .fa-pen, .fa-trash {
-                    @include clickable;
-                }
-
-            }
-        }
-
-        &:not(:first-child) .pr-list-item-group__label {
-            border-top: solid 1px #373e47;
-        }
-
-        .pr-list-item-group__body {
-            border-top: solid 1px #373e47;
-            padding-left: 2rem;
-        }
+    .pr-list-item-group__body {
+      border-top: solid 1px #373e47;
+      padding-left: 2rem;
     }
+  }
 }
 
-
 .pr-status-indicator {
-    &.success, &.SUCCESS {
-        color: #2cbe4e;
-    }
-    &.pending, &.PENDING {
-        color: #dbab09;
-    }
-    &.failure, &.FAILURE {
-        color: #cb2431;
-    }
-    &.no-status-found {
-        color: lightgrey;
-    }
+  &.success,
+  &.SUCCESS {
+    color: #2cbe4e;
+  }
+  &.pending,
+  &.PENDING {
+    color: #dbab09;
+  }
+  &.failure,
+  &.FAILURE {
+    color: #cb2431;
+  }
+  &.no-status-found {
+    color: lightgrey;
+  }
 }
 
 .status-item {
-    padding: 0.2rem 0;
-    font-size: 0.75rem;
-    margin-left: 1rem;
+  padding: 0.2rem 0;
+  font-size: 0.75rem;
+  margin-left: 1rem;
 
-    .toolbar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-        .buttons-wrapper {
-            font-size: 1.6rem;
-        }
-
-        .repo-name {
-            font-style: italic;
-            margin-right: .5rem;
-        }
+    .buttons-wrapper {
+      font-size: 1.6rem;
     }
 
-    .list-item {
-        margin: .4rem 0;
+    .repo-name {
+      font-style: italic;
+      margin-right: 0.5rem;
     }
+  }
 
-    .delete-pr {
-        @include clickable;
-        position: absolute;
-        bottom: .5rem;
-        right: .5rem;
-        color: #cb2431;
-    }
-}
+  .list-item {
+    margin: 0.4rem 0;
+  }
 
-.unclean-repo-warning {
-    color: #dbab09;
-    --balloon-color: #dbab09;
-    border: none;
-    background: none;
-    font-size: 1rem;
-}
-
-.pure-table.pure-table-bordered {
-    td {
-        background-color: #FFF;
-    }
-}
-
-.far.fa-trash-alt.delete-pr {
-    position: fixed;
-    right: .5rem;
-    bottom: .5rem;
+  .delete-pr {
+    @include clickable;
+    position: absolute;
+    bottom: 0.5rem;
+    right: 0.5rem;
+    color: #cb2431;
+  }
 }
 
 .group-prs-icon {
-    @include clickable();
+  @include clickable();
 
-    padding-right: .5rem;
-}
-
-.refresh-button {
-    @include clickable();
-
-    &.refreshing {
-        -webkit-animation: fa-spin 1s infinite linear;
-        animation: fa-spin 1s infinite linear;
-    }
-}
-
-.tab-view {
-    display: flex;
-    justify-content: center;
-    background-color: var(--grey-accent-color);
-    padding-top: 1rem;
-
-    .tab {
-        padding-bottom: .2rem;
-        margin: 0 .5rem;
-        text-transform: uppercase;
-        font-weight: 600;
-        font-size: .7rem;
-        color: grey;
-        
-        &.selected {
-            color: var(--header-color);
-        }
-    }
+  padding-right: 0.5rem;
 }

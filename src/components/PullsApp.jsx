@@ -1,149 +1,79 @@
-// Node
 const { ipcRenderer, clipboard } = require('electron');
-
-const settings = require('./settings/settings-utils.js');
-
-// Libraries
-import React, { useState } from 'react';
-import swal from 'sweetalert';
-import { openUrl, removeTicketFromPrTitle } from '../utils.js';
-
-// Components
+import React, { useEffect } from 'react';
 import PrList from './PrList.jsx';
 import Header from './header/Header.jsx';
-import MissingRequiredSettingsView from './MissingRequiredSettingsView.jsx';
-import Spinner from './utils/Spinner.jsx';
-
-// Hooks
-import { usePrData } from '../hooks/usePrData.js';
-import { useMenubarShow, useMenubarHide } from '../hooks/useMenubarEvents.js';
 import useHotkeys from '../hooks/useHotkeys.js';
-import useStructure, { flattenStructure } from '../hooks/useStructure.js';
-
+import toMils from 'to-mils';
+import { openUrl } from '../utils.js';
+import { useMenubarHide, useMenubarShow } from '../hooks/useMenubarEvents.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { groupPrs } from '../redux/structure_slice';
+import { setActiveQuery } from '../redux/root_reducer.js';
+import { selectActiveQuery, selectSelectedPrIds } from '../redux/selectors';
+import { clearSelection } from '../redux/selected_item_ids_slice';
+import { fetchPrs } from '../redux/prs_slice';
 
 function PullsApp({ automation = false }) {
-    let [ hasRequiredSettings, setHasRequiredSettings ] = useState(settings.hasRequiredSettings());
-    useMenubarShow(() => setHasRequiredSettings(settings.hasRequiredSettings()));
-    let [ selectedItemIds, setSelectedItemIds ] = useState([]);
-    
-    let { prs, prOrder, isRunning, rerunQuery } = usePrData((structureToResetTo) => {
-        resetStructure(structureToResetTo);
+  let dispatch = useDispatch();
+
+  let queries = useSelector((state) => state.config.queries ?? []);
+  let prs = useSelector((state) => state.prs.data[selectActiveQuery(state)]);
+  let selectedPrIds = useSelector(selectSelectedPrIds);
+
+  let queryInterval = useSelector((state) => state.config.queryInterval ?? '5min');
+  useEffect(() => {
+    let sub = setInterval(() => {
+      dispatch(fetchPrs());
+    }, toMils(queryInterval));
+
+    return () => clearInterval(sub);
+  }, [queryInterval]);
+
+  useMenubarHide(() => dispatch(clearSelection()));
+  useMenubarShow(() => dispatch(fetchPrs()));
+
+  useHotkeys('escape', () => ipcRenderer.send('hide-window'));
+  useHotkeys('command+r', (e) => {
+    e.preventDefault();
+    dispatch(fetchPrs());
+  });
+
+  useHotkeys('command+o', _openSelectedPrs);
+  useHotkeys('command+c', _copySelectedPrs);
+  useHotkeys('command+g', () => dispatch(groupPrs(selectedPrIds)));
+
+  for (let i = 0; i <= 8; i++) {
+    useHotkeys(`command+${i + 1}`, () => {
+      if (queries.length - 1 >= i) {
+        dispatch(setActiveQuery(i));
+      }
     });
-    let { 
-        structure,
-        groupPrs, 
-        addPrsToGroup,
-        deleteGroup,
-        setGroupName,
-        moveGroup,
-        move,
-        resetStructure
-     } = useStructure(prOrder);
+  }
 
-    useMenubarHide(() => setSelectedItemIds([]));
-    
-    let structurePrIds = flattenStructure(structure);
-    let selectedPrIds = selectedItemIds.filter(id => structurePrIds.includes(id));
+  function _openSelectedPrs() {
+    selectedPrIds.map((id) => prs[id].prUrl).map(openUrl);
 
-    useHotkeys('escape', () => ipcRenderer.send('hide-window'));
-    useHotkeys('command+r', (e) => {
-        e.preventDefault();
-        rerunQuery();
-    });
+    setSelectedItemIds([]);
+  }
 
-    useHotkeys('command+o', _openSelectedPrs);
-    useHotkeys('command+c', _copySelectedPrs);
-    useHotkeys('command+g', () => _groupPrs(selectedPrIds));
+  function _copySelectedPrs() {
+    let prText = selectedPrIds
+      .map((id) => prs[id])
+      .map((pr) => `${pr.prUrl} (${pr.name})`)
+      .join('\n');
 
-    async function _groupPrs(prIds) {
-        let groupName = await swal({
-            title: 'ENTER NAME OF GROUP',
-            content: 'input'
-        });
+    clipboard.writeText(prText, 'selection');
+  }
 
-        if (groupName) {
-            groupPrs(prIds, groupName);
-            setSelectedItemIds([]);
-        }
-    }
-    
+  return (
+    <div className="pulls-app">
+      <Header onOpenSelectedPrs={_openSelectedPrs} onCopySelectedPrs={_copySelectedPrs} />
 
-    function _openSelectedPrs() {
-        selectedPrIds.map(id => prs[id].prUrl).map(openUrl);
-        setSelectedItemIds([]);
-    }
+      <PrList onHideWindow={() => ipcRenderer.send('hide-window')} />
 
-    function _copySelectedPrs() {
-        let prText = selectedPrIds
-            .map(id => prs[id])
-            .map(pr => `${pr.prUrl} (${removeTicketFromPrTitle(pr.name)})`)
-            .join('\n')
-        
-        clipboard.writeText(prText, 'selection')
-    }
-
-    if (!hasRequiredSettings) {
-        return <MissingRequiredSettingsView />
-    }
-
-    return <div className='pulls-app'>
-        <Header
-            selectedItemIds={selectedItemIds}
-            structure={structure}
-            onGroupSelectedPrs={() => _groupPrs(selectedPrIds)}
-            onAddToSelectedGroup={() => {
-                let selectedGroupId = selectedItemIds.find(el => !selectedPrIds.includes(el))
-                addPrsToGroup(selectedPrIds, selectedGroupId);
-                setSelectedItemIds([])
-            }}
-            onOpenSelectedPrs={_openSelectedPrs}
-            onCopySelectedPrs={_copySelectedPrs} />
-    
-
-        <PrList
-            prs={prs}
-            structure={structure}
-            selectedItemIds={selectedItemIds}
-            onHideWindow={() => ipcRenderer.send('hide-window')}
-            setSelectedItemIds={setSelectedItemIds}
-            onGroupPrs={_groupPrs}
-            onMove={move}
-            onAddPrsToGroup={addPrsToGroup}
-            onEditGroupName={async (groupId) => {
-                let group = structure.find(el => el.id == groupId)
-                let groupName = await swal({
-                    title: `ENTER THE NEW NAME OF "${group.name}"`,
-                    content: 'input'
-                });
-        
-                if (groupName) {
-                    setGroupName(groupId, groupName);
-                    setSelectedItemIds([])
-                }
-            }}
-            onDeleteGroup={async (groupId) => {
-                deleteGroup(groupId);
-                setSelectedItemIds([])
-            }} 
-            onMoveGroup={moveGroup} 
-            onMove={move} />
-
-        { isRunning && Object.keys(prs).length == 0 &&
-            <div
-                style={{
-                    position: "fixed",
-                    top: "8rem",
-                    fontSize: "2rem",
-                    left: "50%", 
-                    color: "#adbac7",
-                }}
-            >
-                <Spinner />
-            </div>
-        }
-        
-        { automation && <input type="button" value="refresh" onClick={rerunQuery}/>}
+      {automation && <input type="button" value="refresh" onClick={rerunQuery} />}
     </div>
+  );
 }
 
 export default PullsApp;
