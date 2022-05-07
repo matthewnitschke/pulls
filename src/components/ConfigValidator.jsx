@@ -5,7 +5,7 @@ import { openConfigFile } from '../utils';
 
 export default function ConfigValidator(props) {
   let isValid = useSelector((state) => state.config.isValid);
-  let errors = useSelector((state) => state.config.errors);
+  let errors = useSelector((state) => state.config.errors)
 
   if (!isValid) {
     return (
@@ -20,7 +20,7 @@ export default function ConfigValidator(props) {
 
         <h3 className="mt3">Validation Errors</h3>
         <ul>
-          {errors.map((err, i) => (
+          {errors?.map((err, i) => (
             <li key={i}>{err.message}</li>
           ))}
         </ul>

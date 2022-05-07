@@ -6,8 +6,6 @@ const packageJson = require('./package.json');
 const { settingsStore } = require('./src/utils.js');
 const path = require('path');
 
-const { default: installExtension, REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer');
-
 const isDebug = process.env.DEBUG == 'true';
 
 const os = require('os');
@@ -32,6 +30,7 @@ const windowSettings = {
 };
 
 if (isDebug) {
+  const { default: installExtension, REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer');
   app.whenReady().then(async () => {
     await installExtension([REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS], {
       loadExtensionOptions: { allowFileAccess: true },

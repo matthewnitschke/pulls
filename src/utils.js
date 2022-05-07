@@ -13,7 +13,7 @@ module.exports = {
   openConfigFile: async () => shell.openPath(configFilePath),
   getConfig: async () => {
     let fileContent = await fs.readFile(configFilePath, 'utf8');
-    return yaml.safeLoad(fileContent);
+    return yaml.load(fileContent);
   },
   settingsStore: store,
   configFilePath,
