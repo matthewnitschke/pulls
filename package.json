@@ -67,7 +67,7 @@
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^14.2.0",
     "babel-jest": "^28.1.0",
-    "electron": "^18.0.4",
+    "electron": "^19.0.1",
     "electron-devtools-installer": "^3.2.0",
     "electron-packager": "^15.5.0",
     "jest": "^28.1.0",
