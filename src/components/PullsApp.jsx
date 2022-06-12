@@ -52,8 +52,6 @@ function PullsApp({ automation = false }) {
 
   function _openSelectedPrs() {
     selectedPrIds.map((id) => prs[id].prUrl).map(openUrl);
-
-    setSelectedItemIds([]);
   }
 
   function _copySelectedPrs() {
