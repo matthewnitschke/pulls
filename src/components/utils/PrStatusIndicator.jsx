@@ -1,23 +1,11 @@
 import React from 'react';
 
-import Popover from '@mui/material/Popover';
-
-import { makeStyles } from '@material-ui/core/styles';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
 import StatusIcon from './PrStatusIcon';
 
 import { openUrl } from '../../utils.js';
-
-const useStyles = makeStyles((theme) => ({
-  popover: {
-    pointerEvents: 'none',
-  },
-  popoverContent: {
-    pointerEvents: 'auto',
-  },
-}));
 
 export default function PrStatusIndicator(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -32,8 +20,6 @@ export default function PrStatusIndicator(props) {
     setAnchorEl(null);
   };
 
-  const classes = useStyles();
-
   const open = Boolean(anchorEl);
 
   return (
@@ -44,9 +30,15 @@ export default function PrStatusIndicator(props) {
           anchorEl={anchorEl}
           open={open}
           onClose={handlePopoverClose}
-          className={classes.popover}
-          classes={{
-            paper: classes.popoverContent,
+          sx={{
+            popover: {
+              pointerEvents: 'none'
+            },
+            paper: {
+              popoverContent: {
+                pointerEvents: 'auto'
+              }
+            }
           }}
           anchorOrigin={{
             vertical: 'top',

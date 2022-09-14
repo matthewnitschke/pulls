@@ -34,3 +34,6 @@ root.render(
     </Provider>
   </DndProvider>
 );
+
+
+postMessage({ payload: 'removeLoading' }, '*')

@@ -1,9 +1,12 @@
-const { createSlice, createAsyncThunk } = require('@reduxjs/toolkit');
+import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 
 import { getConfig } from '../utils';
 
 import Ajv from 'ajv';
-const settingsSchema = require('../../preferences-schema.json');
+
+import settingsSchema from "../../preferences-schema.json" assert { type: "json" };
+
+console.log(settingsSchema);
 
 const ajv = new Ajv({ useDefaults: true });
 const validate = ajv.compile(settingsSchema);
