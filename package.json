@@ -1,87 +1,55 @@
 {
   "name": "pulls",
+  "productName": "Electron",
+  "private": true,
   "version": "1.0.0",
-  "main": "app.js",
   "license": "MIT",
+  "main": "dist/electron/main/index.js",
   "scripts": {
-    "preinstall": "export NPM_CONFIG_REGISTRY=\"\"",
-    "start": "electron app.js",
-    "clean": "rm -r .parcel-cache dist node_modules packaged",
-    "build": "parcel index.html --target renderer --public-url ./",
-    "build-ci": "parcel build index.html --target renderer --public-url ./",
-    "package": "electron-packager . pulls --platform=darwin --out packaged --extendInfo ./buildFiles/Info.plist --overwrite",
-    "test": "jest",
-    "format": "prettier --write ."
+    "dev": "vite",
+    "build": "tsc && vite build && electron-builder"
   },
-  "browserslist": "> 0.5%, last 2 versions, not dead",
-  "targets": {
-    "renderer": {
-      "context": "electron-renderer"
-    }
-  },
-  "jest": {
-    "roots": [
-      "<rootDir>"
-    ],
-    "moduleDirectories": [
-      "<rootDir>",
-      "node_modules",
-      "src"
-    ],
-    "setupFiles": [
-      "./test/setup-jest.js"
-    ]
+  "engines": {
+    "node": "^14.18.0 || >=16.0.0"
   },
   "dependencies": {
-    "@emotion/react": "^11.9.0",
-    "@emotion/styled": "^11.8.1",
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
     "@fortawesome/fontawesome-free": "^6.1.1",
-    "@material-ui/core": "^4.12.3",
-    "@material-ui/icons": "^4.11.2",
-    "@mui/icons-material": "^5.8.0",
-    "@mui/material": "^5.8.1",
+    "@mui/icons-material": "^5.10.3",
+    "@mui/material": "^5.10.5",
     "@reduxjs/toolkit": "^1.8.2",
     "ajv": "^8.11.0",
     "electron-store": "^8.0.1",
     "gravitons-sass": "^1.2.0",
     "js-yaml": "^4.1.0",
-    "menubar": "^9.0.0",
+    "menubar": "^9.2.2",
     "mousetrap": "^1.6.5",
-    "react": "^18.1.0",
-    "react-dnd": "^15.1.2",
-    "react-dnd-html5-backend": "^15.1.2",
-    "react-dom": "^18.1.0",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
     "react-redux": "^8.0.2",
     "sweetalert": "^2.1.2",
     "to-mils": "^1.0.2",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.18.2",
-    "@babel/plugin-syntax-jsx": "^7.17.12",
-    "@babel/plugin-transform-runtime": "^7.18.2",
-    "@parcel/transformer-sass": "^2.6.0",
-    "@testing-library/dom": "^8.11.1",
-    "@testing-library/jest-dom": "^5.15.0",
-    "@testing-library/react": "^13.3.0",
-    "@testing-library/user-event": "^14.2.0",
-    "babel-jest": "^28.1.0",
-    "electron": "^19.0.1",
-    "electron-devtools-installer": "^3.2.0",
-    "electron-packager": "^15.5.0",
-    "jest": "^28.1.0",
-    "jest-css-modules-transform": "^4.4.2",
-    "jest-fetch-mock": "^3.0.3",
-    "os-browserify": "^0.3.0",
-    "parcel": "^2.6.0",
-    "path-browserify": "^1.0.1",
-    "prettier": "2.6.2",
-    "process": "^0.11.10",
-    "redux-devtools-extension": "^2.13.9",
-    "sass": "^1.52.1",
-    "util": "^0.12.4"
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
+    "@vitejs/plugin-react": "^2.0.1",
+    "electron": "^20.0.2",
+    "electron-builder": "^23.3.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "sass": "^1.54.4",
+    "typescript": "^4.7.4",
+    "vite": "^3.0.7",
+    "vite-plugin-electron": "^0.9.2"
   },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+  "debug": {
+    "env": {
+      "VITE_DEV_SERVER_HOSTNAME": "127.0.0.1",
+      "VITE_DEV_SERVER_PORT": 7777,
+      "VITE_DEV_SERVER_URL": "http://127.0.0.1:7777"
+    }
   }
 }
