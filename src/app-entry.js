@@ -10,8 +10,6 @@ import { Provider } from 'react-redux';
 import fs from 'fs';
 import { configFilePath } from './utils.js';
 import { updateConfig } from './redux/config_slice.js';
-import { synchronizeStructure } from './redux/structure_slice.js';
-import toMils from 'to-mils';
 import theme from './styles/mui-theme.js';
 
 let store = configureStore();
@@ -19,9 +17,9 @@ let store = configureStore();
 fs.watch(configFilePath, () => store.dispatch(updateConfig()));
 store.dispatch(updateConfig());
 
-setInterval(() => {
-  store.dispatch(synchronizeStructure());
-}, toMils('30min')); // temporary to spike under, should be way bigger (6hrs or so)
+// setInterval(() => {
+//   store.dispatch(synchronizeStructure());
+// }, toMils('30min')); // temporary to spike under, should be way bigger (6hrs or so)
 
 const container = document.getElementById('app');
 const root = createRoot(container);

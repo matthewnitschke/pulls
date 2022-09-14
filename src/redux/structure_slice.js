@@ -170,7 +170,7 @@ export function flattenStructure(structure) {
 }
 
 export function filterStructure(structure, filterLambda) {
-  return structure.reduce((acc, el) => {
+  return (structure ?? {}).reduce((acc, el) => {
       if (typeof el === 'string') {
           if (filterLambda(el)) {
               return [...acc, el]
