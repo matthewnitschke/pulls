@@ -3,6 +3,8 @@ import { release } from 'os'
 import { join } from 'path'
 import { menubar } from 'menubar';
 
+import {settingsStore} from '../../src/utils.js';
+
 import os from 'os';
 
 if (!app.requestSingleInstanceLock()) {
@@ -52,6 +54,10 @@ mb.on('after-create-window', function () {
     {
       label: 'Preferences',
       click: () => shell.openPath(join(os.homedir(), '.pulls-config.yaml')),
+    },
+    {
+      label: 'Clear App Data',
+      click: () => settingsStore.clear(),
     },
     { label: 'Quit', click: () => mb.app.exit() },
   ]);
