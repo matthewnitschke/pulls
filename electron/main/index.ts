@@ -21,46 +21,61 @@ const preload = join(__dirname, '../preload/index.js')
 const url = process.env.VITE_DEV_SERVER_URL
 const indexHtml = join(process.env.DIST, 'index.html')
 
-const mb = menubar({
-  index: app.isPackaged ? indexHtml : url,
-  icon: join(process.env.PUBLIC, 'IconTemplate.png'),
-  browserWindow: {
-    width: 600,
-    height: 750,
-    transparent: true,
-    frame: false,
-    resizable: false,
-    minimizable: false,
-    closable: false,
-    titleBarStyle: 'customButtonsOnHover',
-    webPreferences: {
-      preload,
-      nodeIntegration: true,
-      contextIsolation: false,
-    },
-  }
-});
-
-mb.on('ready', () => {
-  // sent from the frontend on escape key press
-  ipcMain.on('hide-window', () => mb.hideWindow());
-});
-
-mb.on('show', () => mb.window.webContents.send('menubar-show'));
-mb.on('hide', () => mb.window.webContents.send('menubar-hide'));
-
-mb.on('after-create-window', function () {
-  const contextMenu = Menu.buildFromTemplate([
-    {
-      label: 'Preferences',
-      click: () => shell.openPath(join(os.homedir(), '.pulls-config.yaml')),
-    },
-    {
-      label: 'Clear App Data',
-      click: () => settingsStore.clear(),
-    },
-    { label: 'Quit', click: () => mb.app.exit() },
-  ]);
-
-  mb.tray.on('right-click', () => mb.tray.popUpContextMenu(contextMenu));
-});
+if (import.meta.env.MODE == 'window') {
+  app.whenReady().then(() => {
+    const win = new BrowserWindow({
+      width: 800,
+      height: 600,
+      webPreferences: {
+        preload,
+        nodeIntegration: true,
+        contextIsolation: false,
+      },
+    })
+    win.loadURL(url)
+  })
+} else {
+  const mb = menubar({
+    index: app.isPackaged ? indexHtml : url,
+    icon: join(process.env.PUBLIC, 'IconTemplate.png'),
+    browserWindow: {
+      width: 600,
+      height: 750,
+      transparent: true,
+      frame: false,
+      resizable: false,
+      minimizable: false,
+      closable: false,
+      titleBarStyle: 'customButtonsOnHover',
+      webPreferences: {
+        preload,
+        nodeIntegration: true,
+        contextIsolation: false,
+      },
+    }
+  });
+  
+  mb.on('ready', () => {
+    // sent from the frontend on escape key press
+    ipcMain.on('hide-window', () => mb.hideWindow());
+  });
+  
+  mb.on('show', () => mb.window.webContents.send('menubar-show'));
+  mb.on('hide', () => mb.window.webContents.send('menubar-hide'));
+  
+  mb.on('after-create-window', function () {
+    const contextMenu = Menu.buildFromTemplate([
+      {
+        label: 'Preferences',
+        click: () => shell.openPath(join(os.homedir(), '.pulls-config.yaml')),
+      },
+      {
+        label: 'Clear App Data',
+        click: () => settingsStore.clear(),
+      },
+      { label: 'Quit', click: () => mb.app.exit() },
+    ]);
+  
+    mb.tray.on('right-click', () => mb.tray.popUpContextMenu(contextMenu));
+  });
+}
