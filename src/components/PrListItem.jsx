@@ -4,7 +4,7 @@ import React from 'react';
 import { openUrl } from '../utils.js';
 
 // Components
-import PrStatusIndicator from './utils/PrStatusIndicator';
+import StatusIcon from './utils/PrStatusIcon';
 import { toggleItemSelection } from '../redux/selected_item_ids_slice';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -58,7 +58,7 @@ const PullListItem = React.forwardRef((props, ref) => {
       role="listitem"
       onMouseOver={props.onMouseOver}
     >
-      <PrStatusIndicator state={props.prStatus} contexts={props.prStatusContexts} isMerged={props.isClosed} />
+      <StatusIcon state={props.prStatus} />
       <div className={`pr-list-item__text ${props.isClosed ? 'merged' : ''}`}>
         <span className="pr-list-item__repo-name">{props.repo}</span>
         {_getPrTitle()}
