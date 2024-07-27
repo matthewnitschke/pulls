@@ -24,7 +24,7 @@ function createWindow(): void {
         width: 600,
         height: 750,
         transparent: true,
-        frame: false,
+        frame: true,
         resizable: false,
         minimizable: false,
         closable: false,

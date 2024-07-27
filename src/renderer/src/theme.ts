@@ -14,7 +14,7 @@ export const theme = createTheme({
       secondary: '#768390',
     },
     background: {
-      default: '#22272d',
+      // default: '#22272d',
       paper: '#2d333b',
     },
   },
@@ -26,18 +26,18 @@ export const theme = createTheme({
 
   components: {
     MuiCssBaseline: {
-      styleOverrides: {
-        "*": {
-          margin: 0,
-          padding: 0
-        },
-        "html, body, #root": {
-          height: "100%",
-        },
-        ul: {
-          listStyle: "none"
-        }
-      }
+      // styleOverrides: {
+      //   "*": {
+      //     margin: 0,
+      //     padding: 0
+      //   },
+      //   "html, body, #root": {
+      //     height: "100%",
+      //   },
+      //   ul: {
+      //     listStyle: "none"
+      //   }
+      // }
     },
 
     MuiDialog: {
