@@ -1,15 +1,12 @@
 import Typography from "@mui/material/Typography";
-import { ChevronRight } from "@mui/icons-material";
 import StatusIcon from "./utils/PrStatusIcon";
 import { useAppDispatch, useAppSelector } from "@renderer/redux/store";
-import { ListItem, ListItemButton, ListItemIcon, ListItemText, Stack } from "@mui/material";
+import { ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { togglePrSelected } from "@renderer/redux/selected_prs_slice";
-import { Fragment } from "react/jsx-runtime";
 import { selectActiveQuery } from "@renderer/redux/selectors";
 
-export const CustomNode = (props) => {
+export const CustomNode = (props: any) => {
   const indent = props.depth * 30;
-  console.log(':: CustomNode', props.node.id);
 
   let dispatch = useAppDispatch();
 
@@ -29,7 +26,7 @@ export const CustomNode = (props) => {
     return state.selectedPrs.includes(props.node.id);
   });
 
-  const handleClick = (e) => {
+  const handleClick = (e: any) => {
     if (e.metaKey) {
       dispatch(togglePrSelected(props.node.id));
     } else {

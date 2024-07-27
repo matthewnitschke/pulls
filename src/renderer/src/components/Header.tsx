@@ -4,12 +4,12 @@ import { setActiveQuery } from "@renderer/redux/active_query_slice";
 import { useAppDispatch, useAppSelector } from "@renderer/redux/store";
 import { Fragment, useState } from "react";
 
-export default function Header(props) {
+export default function Header() {
   const dispatch = useAppDispatch();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const handleClick = (e) => setAnchorEl(e.currentTarget);
+  const handleClick = (e: React.MouseEvent<HTMLElement>) => setAnchorEl(e.currentTarget as any);
   const handleClose = () => setAnchorEl(null);
 
   let queries = useAppSelector((state) => state.config.data?.queries);
@@ -32,12 +32,13 @@ export default function Header(props) {
         }}
       >
         <Breadcrumbs separator={<NavigateNext fontSize="small"/>}>
-          <Typography color="text.primary">PULLS</Typography>
+          <Typography color="text.primary" fontWeight={500}>PULLS</Typography>
           <Link
             color="inherit"
             underline="hover"
             sx={{ cursor: 'pointer' }}
             onClick={handleClick}
+            fontWeight={500}
           >
             {queries[activeQueryIndex]?.label}
           </Link>

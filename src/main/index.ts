@@ -1,7 +1,9 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, Menu } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import { menubar } from 'menubar';
+import * as os from 'os';
 
 import * as fs from 'fs/promises';
 import { homedir } from 'os';
@@ -11,28 +13,77 @@ import Store from 'electron-store';
 
 const store = new Store();
 
+const windowMode = false;
+
 function createWindow(): void {
-  // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
-    show: false,
-    autoHideMenuBar: true,
-    ...(process.platform === 'linux' ? { icon } : {}),
-    webPreferences: {
-      preload: join(__dirname, '../preload/index.js'),
-      sandbox: false
+
+  if (!windowMode) {
+    const mb = menubar({
+      index: process.env['ELECTRON_RENDERER_URL'],
+      browserWindow: {
+        width: 600,
+        height: 750,
+        transparent: true,
+        frame: false,
+        resizable: false,
+        minimizable: false,
+        closable: false,
+        titleBarStyle: 'customButtonsOnHover',
+        webPreferences: {
+          preload: join(__dirname, '../preload/index.js'),
+          sandbox: false,
+        }
+      }
+    });
+
+    mb.on('show', () => mb.window?.webContents.send('menubar-show'));
+    mb.on('hide', () => mb.window?.webContents.send('menubar-hide'));
+    mb.on('after-create-window', function () {
+      const contextMenu = Menu.buildFromTemplate([
+        {
+          label: 'Preferences',
+          click: () => shell.openPath(join(os.homedir(), '.pulls-config.yaml')),
+        },
+        {
+          label: 'Clear App Data',
+          click: () => store.clear(),
+        },
+        { label: 'Quit', click: () => mb.app.exit() },
+      ]);
+
+      mb.tray.on('right-click', () => mb.tray.popUpContextMenu(contextMenu));
+    });
+  } else {
+    // Create the browser window.
+    const mainWindow = new BrowserWindow({
+      width: 900,
+      height: 670,
+      show: false,
+      autoHideMenuBar: true,
+      ...(process.platform === 'linux' ? { icon } : {}),
+      webPreferences: {
+        preload: join(__dirname, '../preload/index.js'),
+        sandbox: false
+      }
+    })
+
+    mainWindow.on('ready-to-show', () => {
+      mainWindow.show()
+    })
+
+    mainWindow.webContents.setWindowOpenHandler((details) => {
+      shell.openExternal(details.url)
+      return { action: 'deny' }
+    })
+
+    // HMR for renderer base on electron-vite cli.
+    // Load the remote URL for development or the local html file for production.
+    if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
+      mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
+    } else {
+      mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
     }
-  })
-
-  mainWindow.on('ready-to-show', () => {
-    mainWindow.show()
-  })
-
-  mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url)
-    return { action: 'deny' }
-  })
+  }
 
   ipcMain.handle('get-config', async () => {
     let configStr = await fs.readFile(`${homedir()}/.pulls-config.yaml`, 'utf8');
@@ -50,14 +101,6 @@ function createWindow(): void {
 
   ipcMain.handle('get-structure', async () =>  store.get('structure'));
   ipcMain.handle('set-structure', async (e, structure) => store.set('structure', structure));
-
-  // HMR for renderer base on electron-vite cli.
-  // Load the remote URL for development or the local html file for production.
-  if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-    mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
-  } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
-  }
 }
 
 // This method will be called when Electron has finished

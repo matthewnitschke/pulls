@@ -84,10 +84,7 @@ const structureSlice = createSlice({
           .forEach((node) => state[query].unshift(node))
       }
     })
-    .addCase(loadStructure.fulfilled, (_, action) => {
-      console.log(action.payload);
-      return action.payload;
-    })
+    .addCase(loadStructure.fulfilled, (_, action) => action.payload)
 });
 
 export default structureSlice.reducer;

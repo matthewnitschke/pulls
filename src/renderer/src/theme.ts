@@ -56,7 +56,7 @@ export const theme = createTheme({
 
 
     MuiToolbar: {
-      defaultProps: { variant: "dense" }
+      defaultProps: { variant: "dense" },
     },
 
     MuiSvgIcon: {

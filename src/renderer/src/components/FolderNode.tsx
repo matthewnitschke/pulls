@@ -6,9 +6,16 @@ import { Fragment } from "react/jsx-runtime";
 import { useState } from "react";
 import { ungroupPrs } from "@renderer/redux/structure_slice";
 import { selectActiveQuery } from "@renderer/redux/selectors";
+import { NodeModel } from "@minoru/react-dnd-treeview";
 
 
-export const FolderNode = (props) => {
+export const FolderNode = (
+  props: {
+    node: NodeModel,
+    depth: number,
+    onToggle: () => {},
+    isOpen: boolean,
+}) => {
   const { text } = props.node;
   const indent = props.depth * 30;
 
@@ -47,14 +54,14 @@ export const FolderNode = (props) => {
 }
 
 
-const FolderDetailsMenu = (props) => {
+const FolderDetailsMenu = (props: {id: string | number}) => {
   let dispatch = useAppDispatch();
 
   let query = useAppSelector(selectActiveQuery);
 
   let [anchorEl, setAnchorEl] = useState(null);
   let open = Boolean(anchorEl);
-  const handleClick = (e) => setAnchorEl(e.currentTarget);
+  const handleClick = (e: React.MouseEvent<HTMLElement>) => setAnchorEl(e.currentTarget as any);
   const handleClose = () => setAnchorEl(null);
 
   return <Fragment>
