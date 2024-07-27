@@ -1,17 +1,34 @@
-# Pulls [![Tests](https://github.com/matthewnitschke/pulls/actions/workflows/tests.yml/badge.svg)](https://github.com/matthewnitschke/pulls/actions/workflows/tests.yml)
+# pulls_ts
 
-Like https://github.com/pulls, but for your menubar, and with folder support
+An Electron application with React and TypeScript
 
-![pulls-image](https://user-images.githubusercontent.com/6363089/144167085-8406e0e6-4f2f-4bac-aca6-7a4c07d188a4.png)
+## Recommended IDE Setup
 
-## Usage
+- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
 
-Hotkeys:
+## Project Setup
 
-| Combo                               | Action                           |
-| ----------------------------------- | -------------------------------- |
-| `Cmd+G`                             | Group Selected PRs               |
-| `Cmd+O`                             | Open Selected PRs in Browser     |
-| `Cmd+C`                             | Copy Selected PRs text and links |
-| `Cmd+l`                             | Focus search bar                 |
-| `Cmd+Shift+l` (can be run globally) | Shows pulls window               |
+### Install
+
+```bash
+$ npm install
+```
+
+### Development
+
+```bash
+$ npm run dev
+```
+
+### Build
+
+```bash
+# For windows
+$ npm run build:win
+
+# For macOS
+$ npm run build:mac
+
+# For Linux
+$ npm run build:linux
+```
