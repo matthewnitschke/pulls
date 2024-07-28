@@ -1,5 +1,5 @@
 import { ErrorOutline, NavigateNext, Search } from "@mui/icons-material";
-import { AppBar, Box, Breadcrumbs, CircularProgress, Link, ListItemText, Menu, MenuItem, TextField, Toolbar, Typography } from "@mui/material";
+import { AppBar, Breadcrumbs, CircularProgress, Link, ListItemText, Menu, MenuItem, TextField, Toolbar, Typography } from "@mui/material";
 import { setActiveQuery } from "@renderer/redux/active_query_slice";
 import { useAppDispatch, useAppSelector } from "@renderer/redux/store";
 import { Fragment, useState } from "react";
