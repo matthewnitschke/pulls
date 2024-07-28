@@ -43,7 +43,7 @@ export default function Header(props: HeaderProps) {
         <Breadcrumbs separator={<NavigateNext fontSize="small"/>}>
           <Typography
             color="text.primary"
-            fontWeight={500}
+            fontWeight={600}
             fontSize={'1.1rem'}
           >PULLS</Typography>
           <Link
@@ -51,7 +51,7 @@ export default function Header(props: HeaderProps) {
             underline="hover"
             sx={{ cursor: 'pointer' }}
             onClick={handleClick}
-            fontWeight={500}
+            fontWeight={600}
           >
             {queries[activeQueryIndex]?.label}
           </Link>
@@ -98,7 +98,7 @@ export default function Header(props: HeaderProps) {
       variant="outlined"
       sx={{
         mx: '.9rem',
-        zIndex: 99999999999,
+        zIndex: 1100,
 
         '& .MuiOutlinedInput-root': {
           borderRadius: '2rem',

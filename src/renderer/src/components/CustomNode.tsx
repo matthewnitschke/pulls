@@ -59,11 +59,13 @@ export const CustomNode = (props: CustomNodeProps) => {
         <ListItemText>
           <Typography
             component="span"
-            fontWeight={500}
             sx={{mr: 1}}
             color="text.secondary"
           >{pr.repo}</Typography>
-          {pr.name}
+
+          <Typography
+           component="span"
+          >{pr.name}</Typography>
         </ListItemText>
       </ListItemButton>
     </ListItem>
