@@ -1,6 +1,10 @@
 import styles from "./CustomDragPreview.module.css";
 
-export const CustomDragPreview = (props: any) => {
+interface CustomDragPreviewProps {
+  monitorProps: any
+}
+
+export const CustomDragPreview = (props: CustomDragPreviewProps) => {
   const item = props.monitorProps.item;
 
   return (

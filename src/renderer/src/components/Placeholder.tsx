@@ -1,6 +1,10 @@
 import { Box } from "@mui/material";
 
-export const Placeholder = (props) => {
+interface PlaceholderProps {
+  depth: number
+}
+
+export const Placeholder = (props: PlaceholderProps) => {
   return <Box
     sx={{
       left: props.depth * 24,

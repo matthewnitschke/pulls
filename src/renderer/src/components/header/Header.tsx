@@ -3,8 +3,13 @@ import { AppBar, Breadcrumbs, CircularProgress, Link, ListItemText, Menu, MenuIt
 import { setActiveQuery } from "@renderer/redux/active_query_slice";
 import { useAppDispatch, useAppSelector } from "@renderer/redux/store";
 import { Fragment, useState } from "react";
+import SelectedPrsDetailMenu from "./SelectedPrsDetailMenu";
 
-export default function Header() {
+interface HeaderProps {
+  onGroupClick: () => void;
+}
+
+export default function Header(props: HeaderProps) {
   const dispatch = useAppDispatch();
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -15,6 +20,7 @@ export default function Header() {
   let queries = useAppSelector((state) => state.config.data?.queries);
   let activeQueryIndex = useAppSelector((state) => state.activeQueryIndex);
   let prQueryStatus = useAppSelector((state) => state.prs.status);
+  let selectedPrIds = useAppSelector((state) => state.selectedPrs);
 
   if (queries == null) return;
 
@@ -22,7 +28,6 @@ export default function Header() {
     <AppBar
       elevation={0}
       position="fixed"
-      sx={{ marginTop: '10px'}}
     >
       <Toolbar
         sx={{
@@ -73,6 +78,8 @@ export default function Header() {
               </MenuItem>
             ))}
         </Menu>
+
+        { selectedPrIds.length >= 2 && <SelectedPrsDetailMenu onGroupClick={props.onGroupClick} /> }
 
         {prQueryStatus == 'loading' && <CircularProgress size="1rem" sx={{ marginLeft: '.5rem' }} />}
         {prQueryStatus == 'error' && <ErrorOutline sx={{ marginLeft: '.5rem' }} />}

@@ -4,8 +4,14 @@ import { useAppDispatch, useAppSelector } from "@renderer/redux/store";
 import { ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import { togglePrSelected } from "@renderer/redux/selected_prs_slice";
 import { selectActiveQuery } from "@renderer/redux/selectors";
+import openUrls from "@renderer/utils/open_url";
 
-export const CustomNode = (props: any) => {
+interface CustomNodeProps {
+  node: any;
+  depth: number;
+}
+
+export const CustomNode = (props: CustomNodeProps) => {
   const indent = props.depth * 30;
 
   let dispatch = useAppDispatch();
@@ -26,15 +32,15 @@ export const CustomNode = (props: any) => {
     return state.selectedPrs.includes(props.node.id);
   });
 
+  if (pr == null) return null;
+
   const handleClick = (e: any) => {
     if (e.metaKey) {
       dispatch(togglePrSelected(props.node.id));
     } else {
-      // open the pr in the browser
+      openUrls([pr.url]);
     }
   };
-
-  if (pr == null) return null;
 
   return (
     <ListItem
@@ -47,13 +53,12 @@ export const CustomNode = (props: any) => {
         onClick={handleClick}
       >
         <ListItemIcon>
-
-          <StatusIcon state={pr?.status} />
+          <StatusIcon state={pr.status} />
         </ListItemIcon>
 
         <ListItemText>
-          <Typography component="span" sx={{mr: 1}} color="text.secondary">{pr?.repo}</Typography>
-          {pr?.name}
+          <Typography component="span" sx={{mr: 1}} color="text.secondary">{pr.repo}</Typography>
+          {pr.name}
         </ListItemText>
       </ListItemButton>
     </ListItem>

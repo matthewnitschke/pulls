@@ -11,52 +11,9 @@
 
     <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob: filesystem:;">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
-
-    <style>
-      #root {
-        /* we have to make room for the window arrow */
-        /* height: calc(100% - 10px); */
-        /* background-color: #22272d; */
-      }
-
-      /* .window-arrow-wrapper {
-        display: flex;
-        justify-content: center;
-      }
-
-      .window-arrow-wrapper .window-arrow {
-        width: 0;
-        height: 0;
-        border-left: 10px solid transparent;
-        border-right: 10px solid transparent;
-        border-bottom: 10px solid var(--header-color);
-      } */
-
-      .window-arrow {
-        position: relative;
-        padding: 12px 0;
-      }
-
-      .window-arrow:before {
-        content: '';
-        height: 0;
-        width: 0;
-        border-width: 0 8px 12px 8px;
-        border-style: solid;
-        border-color: transparent transparent #eeeeee transparent;
-        position: absolute;
-        top: 0px;
-        left: 50%;
-        transform: translateX(-50%);
-      }
-    </style>
   </head>
 
-  <body class="window-arrow">
-    <!-- <div class="window-arrow-wrapper">
-      <div class="window-arrow"></div>
-    </div> -->
-
+  <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

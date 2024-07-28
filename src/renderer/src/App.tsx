@@ -1,21 +1,22 @@
-import { useSelector } from "react-redux"
-import { RootState, useAppDispatch, useAppSelector } from "./redux/store";
-import Header from "./components/Header";
+import { useAppDispatch, useAppSelector } from "./redux/store";
+import Header from "./components/header/Header";
 import { useHotkeys } from "react-hotkeys-hook";
 import { fetchPrs } from "./redux/prs_slice";
 import PrList from "./components/PrList";
-import { Fragment } from "react/jsx-runtime";
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Modal, Stack, TextField, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 import { groupPrs } from "./redux/structure_slice";
 import { useState } from "react";
-import { GroupPrsDialog } from "./components/GroupPrsDialog";
+import GroupNameDialog from "./components/utils/GroupNameDialog";
 import { setSelectedPrs } from "./redux/selected_prs_slice";
 import { setActiveQuery } from "./redux/active_query_slice";
+import { selectActiveQuery } from "./redux/selectors";
 
 
 function App(): JSX.Element {
   let dispatch = useAppDispatch();
+  let query = useAppSelector(selectActiveQuery);
   let activeQueryIndex = useAppSelector(state => state.activeQueryIndex);
+  let selectedPrIds = useAppSelector(state => state.selectedPrs);
 
   useHotkeys('ctrl+r', () => dispatch(fetchPrs(activeQueryIndex)));
 
@@ -25,14 +26,19 @@ function App(): JSX.Element {
     });
   }
 
+  useHotkeys('Meta+g', () => {
+    if (selectedPrIds.length == 0) return;
+    setOpen(true);
+  });
+
   const [open, setOpen] = useState(false);
 
   return <Stack
     sx={{height: '100%'}}
   >
-    <Header />
+    <Header onGroupClick={() => setOpen(true)}/>
     <PrList />
-    <GroupPrsDialog
+    <GroupNameDialog
       open={open}
       setOpen={(isOpen) => {
         setOpen(isOpen);
@@ -40,6 +46,9 @@ function App(): JSX.Element {
         if (!isOpen) {
           dispatch(setSelectedPrs([]))
         }
+      }}
+      onSubmit={(name) => {
+        dispatch(groupPrs({ query, prs: selectedPrIds, name }))
       }}
     />
   </Stack>

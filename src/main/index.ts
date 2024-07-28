@@ -1,7 +1,6 @@
 import { app, shell, BrowserWindow, ipcMain, Menu } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import icon from '../../resources/icon.png?asset'
 import { menubar } from 'menubar';
 import * as os from 'os';
 
@@ -13,12 +12,10 @@ import Store from 'electron-store';
 
 const store = new Store();
 
-const windowMode = false;
-
 function createWindow(): void {
-
-  if (!windowMode) {
+  if (import.meta.env.MODE !== 'window') {
     const mb = menubar({
+      icon: join(__dirname, '../../public', 'IconTemplate.png'),
       index: process.env['ELECTRON_RENDERER_URL'],
       browserWindow: {
         width: 600,
@@ -60,7 +57,6 @@ function createWindow(): void {
       height: 670,
       show: false,
       autoHideMenuBar: true,
-      ...(process.platform === 'linux' ? { icon } : {}),
       webPreferences: {
         preload: join(__dirname, '../preload/index.js'),
         sandbox: false
@@ -100,7 +96,8 @@ function createWindow(): void {
   });
 
   ipcMain.handle('get-structure', async () =>  store.get('structure'));
-  ipcMain.handle('set-structure', async (e, structure) => store.set('structure', structure));
+  ipcMain.handle('set-structure', async (_, structure) => store.set('structure', structure));
+  ipcMain.handle('open-urls', async (_, urls) => urls.forEach(shell.openExternal));
 }
 
 // This method will be called when Electron has finished

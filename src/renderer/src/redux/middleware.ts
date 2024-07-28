@@ -1,7 +1,3 @@
-import { ipcMain } from 'electron';
-import Store from 'electron-store';
-
-// const settingsStore = new Store();
 
 export const structurePersistanceMiddleware = store => next => action => {
   let initialState = store.getState();

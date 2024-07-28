@@ -64,6 +64,13 @@ const structureSlice = createSlice({
         }
       }
       state[query] = state[query].filter((pr) => pr.id != groupId);
+    },
+    renameGroup: (state, action) => {
+      let query = action.payload.query;
+      let groupId = action.payload.groupId;
+
+      let groupIndex = state[query].findIndex((node) => node.id == groupId);
+      state[query][groupIndex].text = action.payload.name;
     }
   },
   extraReducers: (builder) => builder
@@ -88,4 +95,4 @@ const structureSlice = createSlice({
 });
 
 export default structureSlice.reducer;
-export const { updateStructure, groupPrs, ungroupPrs } = structureSlice.actions;
+export const { updateStructure, groupPrs, ungroupPrs, renameGroup } = structureSlice.actions;

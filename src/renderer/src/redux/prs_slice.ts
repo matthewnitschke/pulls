@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import queryGithub from "@renderer/clients/github_client";
+import queryGithub from "@renderer/utils/github_client";
 import { RootState } from "./store";
 
 export interface PullData {
@@ -17,7 +17,7 @@ export interface PullData {
 
 export const fetchPrs = createAsyncThunk<
 { [query: string]: {[id: string]: PullData} },
-  number,
+  number | undefined,
   { rejectValue: string }
 >(
   'fetchPrs',
@@ -25,7 +25,9 @@ export const fetchPrs = createAsyncThunk<
     try {
       let state = getState() as RootState;
 
-      let query = state.config.data.queries[queryIndex].query;
+      let index = queryIndex ?? state.activeQueryIndex;
+
+      let query = state.config.data.queries[index].query;
       let res = await queryGithub([query], state.config.data?.githubToken ?? '');
 
       return res;

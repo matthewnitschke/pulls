@@ -11,7 +11,7 @@ import { fetchPrs } from "@renderer/redux/prs_slice";
 import { FolderNode } from "./FolderNode";
 import { selectActiveQuery } from "@renderer/redux/selectors";
 
-export default function PrList(props) {
+export default function PrList() {
   let dispatch = useAppDispatch();
   let queryIndex = useAppSelector((state) => state.activeQueryIndex);
 
@@ -52,9 +52,7 @@ export default function PrList(props) {
       return (
         <CustomNode
           node={node}
-          depth={depth}
-          isOpen={isOpen}
-          onToggle={onToggle} />
+          depth={depth} />
       );
     }}
     dragPreviewRender={(monitorProps) => (
@@ -67,14 +65,12 @@ export default function PrList(props) {
     }}
     sort={false}
     insertDroppableFirst={false}
-    canDrop={(tree, { dragSource, dropTargetId, dropTarget }) => {
-      if (dragSource?.parent === dropTargetId) {
-        return true;
-      }
+    canDrop={(_, { dragSource, dropTargetId }) => {
+      return dragSource?.parent === dropTargetId;
     }}
     dropTargetOffset={5}
-    placeholderRender={(node, { depth }) => (
-      <Placeholder node={node} depth={depth} />
+    placeholderRender={(_, { depth }) => (
+      <Placeholder depth={depth} />
     )}
     onDrop={handleDrop}
   />;

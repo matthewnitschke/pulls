@@ -4,18 +4,19 @@ import { useAppDispatch, useAppSelector } from "@renderer/redux/store";
 import { IconButton, ListItem, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
 import { Fragment } from "react/jsx-runtime";
 import { useState } from "react";
-import { ungroupPrs } from "@renderer/redux/structure_slice";
+import { renameGroup, ungroupPrs } from "@renderer/redux/structure_slice";
 import { selectActiveQuery } from "@renderer/redux/selectors";
 import { NodeModel } from "@minoru/react-dnd-treeview";
+import GroupNameDialog from "./utils/GroupNameDialog";
 
+interface FolderNodeProps {
+  node: NodeModel;
+  depth: number;
+  onToggle(): void;
+  isOpen: boolean;
+}
 
-export const FolderNode = (
-  props: {
-    node: NodeModel,
-    depth: number,
-    onToggle: () => {},
-    isOpen: boolean,
-}) => {
+export const FolderNode = (props: FolderNodeProps) => {
   const { text } = props.node;
   const indent = props.depth * 30;
 
@@ -29,7 +30,7 @@ export const FolderNode = (
         '& .MuiListItemSecondaryAction-root .MuiIconButton-root:not(.open)': { visibility: 'hidden' },
         '&:hover .MuiListItemSecondaryAction-root .MuiIconButton-root': { visibility: 'inherit' }
       }}
-      secondaryAction={<FolderDetailsMenu id={props.node.id}/>}
+      secondaryAction={<FolderDetailsMenu id={props.node.id as string} text={text}/>}
     >
       <ListItemButton
         onClick={props.onToggle}
@@ -54,7 +55,11 @@ export const FolderNode = (
 }
 
 
-const FolderDetailsMenu = (props: {id: string | number}) => {
+interface FolderDetailsMenuProps {
+  id: string,
+  text: string,
+}
+const FolderDetailsMenu = (props: FolderDetailsMenuProps) => {
   let dispatch = useAppDispatch();
 
   let query = useAppSelector(selectActiveQuery);
@@ -63,6 +68,8 @@ const FolderDetailsMenu = (props: {id: string | number}) => {
   let open = Boolean(anchorEl);
   const handleClick = (e: React.MouseEvent<HTMLElement>) => setAnchorEl(e.currentTarget as any);
   const handleClose = () => setAnchorEl(null);
+
+  const [nameDialogOpen, setNameDialogOpen] = useState(false);
 
   return <Fragment>
     <IconButton
@@ -90,12 +97,22 @@ const FolderDetailsMenu = (props: {id: string | number}) => {
       </MenuItem>
 
       <MenuItem onClick={() => {
-        // dispatch(ungroupPrs(props.id))
+        setNameDialogOpen(true);
         handleClose()
       }}>
         <ListItemIcon><ModeEdit/></ListItemIcon>
         <ListItemText>Rename</ListItemText>
       </MenuItem>
     </Menu>
+
+    <GroupNameDialog
+      open={nameDialogOpen}
+      setOpen={setNameDialogOpen}
+      onSubmit={(name) => {
+        dispatch(renameGroup({ query, groupId: props.id, name }))
+      }}
+      defaultName={props.text}
+      submitButtonText="Rename"
+    />
   </Fragment>
 }
