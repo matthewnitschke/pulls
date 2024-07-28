@@ -1,5 +1,5 @@
-import { ErrorOutline, NavigateNext } from "@mui/icons-material";
-import { AppBar, Breadcrumbs, CircularProgress, Link, ListItemText, Menu, MenuItem, Toolbar, Typography } from "@mui/material";
+import { ErrorOutline, NavigateNext, Search } from "@mui/icons-material";
+import { AppBar, Box, Breadcrumbs, CircularProgress, Link, ListItemText, Menu, MenuItem, TextField, Toolbar, Typography } from "@mui/material";
 import { setActiveQuery } from "@renderer/redux/active_query_slice";
 import { useAppDispatch, useAppSelector } from "@renderer/redux/store";
 import { Fragment, useState } from "react";
@@ -28,6 +28,9 @@ export default function Header(props: HeaderProps) {
     <AppBar
       elevation={0}
       position="fixed"
+      sx={{
+        paddingBottom: '16px'
+      }}
     >
       <Toolbar
         sx={{
@@ -38,7 +41,11 @@ export default function Header(props: HeaderProps) {
         }}
       >
         <Breadcrumbs separator={<NavigateNext fontSize="small"/>}>
-          <Typography color="text.primary" fontWeight={500}>PULLS</Typography>
+          <Typography
+            color="text.primary"
+            fontWeight={500}
+            fontSize={'1.1rem'}
+          >PULLS</Typography>
           <Link
             color="inherit"
             underline="hover"
@@ -87,6 +94,25 @@ export default function Header(props: HeaderProps) {
     </AppBar>
     <Toolbar />
 
+    <TextField
+      variant="outlined"
+      sx={{
+        mx: '.9rem',
+        zIndex: 99999999999,
+
+        '& .MuiOutlinedInput-root': {
+          borderRadius: '2rem',
+          backgroundColor: 'background.default',
+        },
+
+        '& .MuiOutlinedInput-input': {
+          padding: '.2rem 1rem',
+        }
+      }}
+      InputProps={{
+        endAdornment: <Search fontSize="small" />
+      }}
+    />
   </Fragment>
 
 }

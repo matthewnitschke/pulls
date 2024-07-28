@@ -20,7 +20,7 @@ export const theme = createTheme({
   },
 
   typography: {
-    fontSize: 13,
+    // fontSize: 13,
     fontFamily: 'Roboto',
   },
 

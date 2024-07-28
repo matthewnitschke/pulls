@@ -57,7 +57,12 @@ export const CustomNode = (props: CustomNodeProps) => {
         </ListItemIcon>
 
         <ListItemText>
-          <Typography component="span" sx={{mr: 1}} color="text.secondary">{pr.repo}</Typography>
+          <Typography
+            component="span"
+            fontWeight={500}
+            sx={{mr: 1}}
+            color="text.secondary"
+          >{pr.repo}</Typography>
           {pr.name}
         </ListItemText>
       </ListItemButton>

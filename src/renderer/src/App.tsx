@@ -3,7 +3,7 @@ import Header from "./components/header/Header";
 import { useHotkeys } from "react-hotkeys-hook";
 import { fetchPrs } from "./redux/prs_slice";
 import PrList from "./components/PrList";
-import { Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { groupPrs } from "./redux/structure_slice";
 import { useState } from "react";
 import GroupNameDialog from "./components/utils/GroupNameDialog";
@@ -37,7 +37,9 @@ function App(): JSX.Element {
     sx={{height: '100%'}}
   >
     <Header onGroupClick={() => setOpen(true)}/>
-    <PrList />
+    <Box sx={{mt: 1}}>
+      <PrList />
+    </Box>
     <GroupNameDialog
       open={open}
       setOpen={(isOpen) => {
