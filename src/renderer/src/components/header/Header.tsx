@@ -4,6 +4,7 @@ import { setActiveQuery } from "@renderer/redux/active_query_slice";
 import { useAppDispatch, useAppSelector } from "@renderer/redux/store";
 import { Fragment, useState } from "react";
 import SelectedPrsDetailMenu from "./SelectedPrsDetailMenu";
+import { setFilter } from "@renderer/redux/filter_slice";
 
 interface HeaderProps {
   onGroupClick: () => void;
@@ -21,6 +22,7 @@ export default function Header(props: HeaderProps) {
   let activeQueryIndex = useAppSelector((state) => state.activeQueryIndex);
   let prQueryStatus = useAppSelector((state) => state.prs.status);
   let selectedPrIds = useAppSelector((state) => state.selectedPrs);
+  let filterText = useAppSelector((state) => state.filter);
 
   if (queries == null) return;
 
@@ -28,9 +30,6 @@ export default function Header(props: HeaderProps) {
     <AppBar
       elevation={0}
       position="fixed"
-      sx={{
-        paddingBottom: '16px'
-      }}
     >
       <Toolbar
         sx={{
@@ -43,7 +42,6 @@ export default function Header(props: HeaderProps) {
         <Breadcrumbs separator={<NavigateNext fontSize="small"/>}>
           <Typography
             color="text.primary"
-            fontWeight={600}
             fontSize={'1.1rem'}
           >PULLS</Typography>
           <Link
@@ -51,7 +49,6 @@ export default function Header(props: HeaderProps) {
             underline="hover"
             sx={{ cursor: 'pointer' }}
             onClick={handleClick}
-            fontWeight={600}
           >
             {queries[activeQueryIndex]?.label}
           </Link>
@@ -91,28 +88,30 @@ export default function Header(props: HeaderProps) {
         {prQueryStatus == 'loading' && <CircularProgress size="1rem" sx={{ marginLeft: '.5rem' }} />}
         {prQueryStatus == 'error' && <ErrorOutline sx={{ marginLeft: '.5rem' }} />}
       </Toolbar>
+      <TextField
+        variant="outlined"
+        sx={{
+          mx: '.7rem',
+          zIndex: 1100,
+          mb: '-12px',
+
+          '& .MuiOutlinedInput-root': {
+            borderRadius: '2rem',
+            backgroundColor: 'background.default',
+          },
+
+          '& .MuiOutlinedInput-input': {
+            padding: '.2rem 1rem',
+          }
+        }}
+        InputProps={{
+          endAdornment: <Search fontSize="small" />
+        }}
+        value={filterText}
+        onChange={(e) => dispatch(setFilter(e.target.value))}
+      />
     </AppBar>
     <Toolbar />
-
-    <TextField
-      variant="outlined"
-      sx={{
-        mx: '.9rem',
-        zIndex: 1100,
-
-        '& .MuiOutlinedInput-root': {
-          borderRadius: '2rem',
-          backgroundColor: 'background.default',
-        },
-
-        '& .MuiOutlinedInput-input': {
-          padding: '.2rem 1rem',
-        }
-      }}
-      InputProps={{
-        endAdornment: <Search fontSize="small" />
-      }}
-    />
   </Fragment>
 
 }

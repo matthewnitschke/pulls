@@ -5,6 +5,7 @@ import selectedPrsReducer from "./selected_prs_slice";
 import prsReducer from "./prs_slice";
 import structureReducer from "./structure_slice";
 import configReducer from "./config_slice";
+import filterReducer from "./filter_slice";
 import { structurePersistanceMiddleware } from "./middleware";
 
 const store = configureStore({
@@ -14,6 +15,7 @@ const store = configureStore({
     selectedPrs: selectedPrsReducer,
     prs: prsReducer,
     structure: structureReducer,
+    filter: filterReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(structurePersistanceMiddleware),
 });

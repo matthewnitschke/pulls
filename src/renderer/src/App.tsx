@@ -31,15 +31,17 @@ function App(): JSX.Element {
     setOpen(true);
   });
 
+  useHotkeys('esc', () => {
+    dispatch(setSelectedPrs([]));
+  });
+
   const [open, setOpen] = useState(false);
 
   return <Stack
     sx={{height: '100%'}}
   >
     <Header onGroupClick={() => setOpen(true)}/>
-    <Box sx={{mt: 1}}>
-      <PrList />
-    </Box>
+    <PrList />
     <GroupNameDialog
       open={open}
       setOpen={(isOpen) => {

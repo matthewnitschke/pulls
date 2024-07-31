@@ -21,8 +21,9 @@ export const theme = createTheme({
 
   typography: {
     fontSize: 13,
-    fontWeightRegular: 600,
-    fontFamily: 'Noto Sans',
+    fontWeightRegular: 500,
+    // fontFamily: 'Noto Sans',
+    fontFamily: 'Roboto',
   },
 
   components: {
