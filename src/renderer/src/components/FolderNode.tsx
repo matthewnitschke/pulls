@@ -46,6 +46,7 @@ export const FolderNode = (props: FolderNodeProps) => {
           <Typography
             component='span'
             color='secondary'
+            sx={{ fontSize: '1.07rem'}}
           >{text}</Typography>
         </ListItemText>
       </ListItemButton>
