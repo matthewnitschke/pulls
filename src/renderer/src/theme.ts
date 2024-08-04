@@ -20,9 +20,8 @@ export const theme = createTheme({
   },
 
   typography: {
-    fontSize: 13,
+    fontSize: 14,
     fontWeightRegular: 500,
-    // fontFamily: 'Noto Sans',
     fontFamily: 'Roboto',
   },
 
