@@ -13,8 +13,8 @@ export default function EmptyCircle() {
     >
       <Box
         sx={{
-          width: '14px',
-          height: '14px',
+          width: '12px',
+          height: '12px',
           borderRadius: '50%',
           border: 'solid 2px #768390',
           margin: 'auto'

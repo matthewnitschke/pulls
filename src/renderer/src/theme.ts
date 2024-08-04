@@ -76,6 +76,9 @@ export const theme = createTheme({
     },
 
     MuiListItemButton: {
+      defaultProps: {
+        disableRipple: true,
+      },
       styleOverrides: {
         root: {
           paddingLeft: '8px'

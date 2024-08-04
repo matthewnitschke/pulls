@@ -101,7 +101,7 @@ export default function Header(props: HeaderProps) {
           },
 
           '& .MuiOutlinedInput-input': {
-            padding: '.2rem 1rem',
+            padding: '.15rem 1rem',
           }
         }}
         InputProps={{
