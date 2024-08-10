@@ -1,5 +1,5 @@
 appId: com.electron.app
-productName: pulls_ts
+productName: pulls
 directories:
   buildResources: build
 files:
@@ -12,7 +12,7 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: pulls_ts
+  executableName: pulls
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
@@ -33,7 +33,7 @@ linux:
     - AppImage
     - snap
     - deb
-  maintainer: electronjs.org
+  maintainer: matthew.nitschke
   category: Utility
 appImage:
   artifactName: ${name}-${version}.${ext}
