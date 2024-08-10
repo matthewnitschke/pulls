@@ -13,11 +13,17 @@ import { theme } from './theme';
 import { loadConfig } from './redux/config_slice';
 import { loadStructure } from './redux/structure_slice';
 import { fetchPrs } from './redux/prs_slice';
+import { setSelectedPrs } from './redux/selected_prs_slice';
+import { setFilter } from './redux/filter_slice';
 
 store.dispatch(loadConfig());
 store.dispatch(loadStructure());
 
 window.electron.ipcRenderer.on('menubar-show', () => store.dispatch(fetchPrs()));
+window.electron.ipcRenderer.on('menubar-hide', () => {
+  store.dispatch(setSelectedPrs([]));
+  store.dispatch(setFilter(''));
+});
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>

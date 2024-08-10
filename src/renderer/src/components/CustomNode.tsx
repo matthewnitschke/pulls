@@ -1,7 +1,7 @@
 import Typography from "@mui/material/Typography";
 import StatusIcon from "./utils/PrStatusIcon";
 import { useAppDispatch, useAppSelector } from "@renderer/redux/store";
-import { ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
+import { Box, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import { togglePrSelected } from "@renderer/redux/selected_prs_slice";
 import { selectActiveQuery } from "@renderer/redux/selectors";
 import openUrls from "@renderer/utils/open_url";
@@ -12,9 +12,11 @@ interface CustomNodeProps {
 }
 
 export const CustomNode = (props: CustomNodeProps) => {
-  const indent = props.depth * 30;
+  const indent = props.depth * 35;
 
   let dispatch = useAppDispatch();
+
+  let filterText = useAppSelector((state) => state.filter);
 
   let pr = useAppSelector((state) => {
     if (props.node.id == null) return null;
@@ -43,13 +45,17 @@ export const CustomNode = (props: CustomNodeProps) => {
   };
 
   return (
-    <ListItem
-      style={{ paddingLeft: indent }}
-      disablePadding
-      sx={{ borderBottom: 'solid 1px #373e47' }}
-    >
-      <ListItemButton
-        selected={isSelected}
+    <Box sx={{ marginLeft: `${indent}px`}}>
+      <ListItem
+        sx={{
+          borderBottom: 'solid 1px #373e47',
+
+          backgroundColor: isSelected ? '#2d323a' : 'inherit',
+          '&:hover': {
+            cursor: 'pointer',
+            backgroundColor: '#2d323a',
+          }
+        }}
         onClick={handleClick}
       >
         <ListItemIcon>
@@ -63,11 +69,37 @@ export const CustomNode = (props: CustomNodeProps) => {
             color="text.secondary"
           >{pr.repo}</Typography>
 
-          <Typography
-           component="span"
-          >{pr.name}</Typography>
+          <Title name={pr.name} filterText={filterText} />
+
         </ListItemText>
-      </ListItemButton>
-    </ListItem>
+      </ListItem>
+    </Box>
   );
 };
+
+function Title(props: { name: string, filterText: string }) {
+  let name = props.name;
+
+  if (props.filterText != '') {
+    let matchStart = name.toLowerCase().indexOf(props.filterText.toLowerCase());
+
+    // sanity check to make sure the filter text is in the name
+    if (matchStart <= -1) return name;
+
+    let prefix = name.substring(0, matchStart);
+    let match = name.substring(matchStart, matchStart + props.filterText.length);
+    let suffix = name.substring(matchStart + props.filterText.length);
+
+    return (
+      <Typography
+        component="span"
+      >
+        {prefix}
+        <mark>{match}</mark>
+        {suffix}
+      </Typography>
+    );
+  }
+
+  return name;
+}

@@ -98,11 +98,18 @@ export default function Header(props: HeaderProps) {
           '& .MuiOutlinedInput-root': {
             borderRadius: '2rem',
             backgroundColor: 'background.default',
+
+            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+              borderWidth: '1px', // dont increase the width on selection
+            },
           },
 
           '& .MuiOutlinedInput-input': {
             padding: '.15rem 1rem',
-          }
+            fontWeight: 400,
+          },
+
+
         }}
         InputProps={{
           endAdornment: <Search fontSize="small" />

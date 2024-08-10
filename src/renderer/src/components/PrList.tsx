@@ -49,7 +49,7 @@ export default function PrList() {
     if (prs[node.id] == null) return false;
 
     return prs[node.id].name.toLowerCase().includes(filterText.toLowerCase());
-  })
+  });
 
   const handleDrop = (newTree: NodeModel[]) => {
     dispatch(updateStructure({
@@ -62,6 +62,7 @@ export default function PrList() {
     tree={filteredStructure}
     rootId={0}
     listItemComponent={Box}
+
     render={(node, { depth, isOpen, onToggle }) => {
       if (node.droppable) {
         return <FolderNode
