@@ -13,10 +13,6 @@ permissions:
 jobs:
   package:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [win, mac, linux]
-
     steps:
       - uses: actions/checkout@v4
 
@@ -26,9 +22,9 @@ jobs:
 
       - run: npm install
 
-      - run: npm run build:${{ matrix.os }}
+      - run: npm run build:mac
 
       - name: Upload package
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
-          name: package
+          path: dist/pulls-*.dmg
