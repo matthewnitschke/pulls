@@ -20,8 +20,9 @@ export default function Header(props: HeaderProps) {
       alignItems='center'
       sx={{
         px: 2,
-        pt: 2,
-        pb: 1.3,
+        // pt: 2,
+        // pb: 1.3,
+        height: '53px',
         backgroundColor: 'background.paper',
         borderTopLeftRadius: '11px',
         borderTopRightRadius: '11px',

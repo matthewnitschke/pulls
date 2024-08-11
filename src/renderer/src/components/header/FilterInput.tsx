@@ -20,7 +20,7 @@ export default function FilterInput() {
         '& .MuiOutlinedInput-root': {
           borderRadius: '2rem',
           backgroundColor: 'background.default',
-          zIndex: 9001,
+          zIndex: 1100,
 
           '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
             borderWidth: '1px', // dont increase the width on selection
