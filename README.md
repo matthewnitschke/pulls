@@ -1,34 +1,14 @@
-# pulls_ts
+# pulls
 
-An Electron application with React and TypeScript
+Like https://github.com/pulls, but for your menubar, and with folder support
 
-## Recommended IDE Setup
+<img width="500" alt="Pulls-Demo" src="https://github.com/user-attachments/assets/ba43f9c0-c5ca-4310-93c7-bc216c67f8ed">
 
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+## Usage
 
-## Project Setup
+Hotkeys:
 
-### Install
-
-```bash
-$ npm install
-```
-
-### Development
-
-```bash
-$ npm run dev
-```
-
-### Build
-
-```bash
-# For windows
-$ npm run build:win
-
-# For macOS
-$ npm run build:mac
-
-# For Linux
-$ npm run build:linux
-```
+| Combo                               | Action                           |
+| ----------------------------------- | -------------------------------- |
+| `Cmd+G`                             | Group Selected PRs               |
+| `Cmd+O`                             | Open Selected PRs in Browser     |
