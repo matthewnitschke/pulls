@@ -1,13 +1,11 @@
-.app {
-  height: 100%;
-}
-
 .treeRoot {
   height: 100%;
   overflow-y: auto;
 
-  margin-top: 16px;
   padding-top: 20px;
+  margin-top: -14px;
+
+  background-color: #22272d;
 
   &::-webkit-scrollbar {
     width: 6px;

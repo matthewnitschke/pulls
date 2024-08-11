@@ -53,7 +53,7 @@ function App(): JSX.Element {
   const [open, setOpen] = useState(false);
 
   return <Stack
-    sx={{height: '100%'}}
+    sx={{ height: '100%' }}
   >
     <Header onGroupClick={() => setOpen(true)}/>
     <PrList />

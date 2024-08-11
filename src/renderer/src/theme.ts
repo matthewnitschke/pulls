@@ -32,9 +32,9 @@ export const theme = createTheme({
           margin: 0,
           padding: 0
         },
-        "html, body, #root": {
-          height: "100%",
-        },
+        // "html, body, #root": {
+        //   height: "100%",
+        // },
         ul: {
           listStyle: "none"
         }
