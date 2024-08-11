@@ -58,8 +58,5 @@
     "react-dom": "^18.2.0",
     "typescript": "^5.1.6",
     "vite": "^4.4.9"
-  },
-  "optionalDependencies": {
-    "dmg-license": "^1.0.11"
   }
 }
