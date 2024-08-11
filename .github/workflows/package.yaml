@@ -22,7 +22,9 @@ jobs:
 
       - run: npm install
 
-      - run: npm run build:mac
+      - run: |
+          export CSC_IDENTITY_AUTO_DISCOVERY=false
+          npm run build:mac
 
       - name: Upload package
         uses: actions/upload-artifact@v4
