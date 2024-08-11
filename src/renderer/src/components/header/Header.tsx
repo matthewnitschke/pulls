@@ -20,8 +20,6 @@ export default function Header(props: HeaderProps) {
       alignItems='center'
       sx={{
         px: 2,
-        // pt: 2,
-        // pb: 1.3,
         height: '53px',
         backgroundColor: 'background.paper',
         borderTopLeftRadius: '11px',
@@ -33,9 +31,11 @@ export default function Header(props: HeaderProps) {
         <SelectQueryMenu />
       </Breadcrumbs>
 
-      { selectedPrIds.length >= 2 && <SelectedPrsDetailMenu onGroupClick={props.onGroupClick} /> }
-      {prQueryStatus == 'loading' && <CircularProgress size="1rem" sx={{ marginLeft: '.5rem' }} />}
-      {prQueryStatus == 'error' && <ErrorOutline sx={{ marginLeft: '.5rem' }} />}
+      <Stack direction='row' alignItems='center'>
+        {prQueryStatus == 'loading' && <CircularProgress size="1rem" sx={{ marginLeft: '.5rem' }} />}
+        {prQueryStatus == 'error' && <ErrorOutline sx={{ marginLeft: '.5rem' }} />}
+        { selectedPrIds.length >= 2 && <SelectedPrsDetailMenu onGroupClick={props.onGroupClick} /> }
+      </Stack>
     </Stack>
 
     <FilterInput />
