@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Pulls</title>
+
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+        default-src 'self';
+        script-src 'self';
+        style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+        font-src 'self' https://fonts.gstatic.com;
+        img-src 'self' data:;
+        connect-src https://api.github.com/graphql http://localhost:5173 ws://localhost:5173;
+      "
+    />
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+    <style>
+      html, body {
+        height: 100%;
+      }
+
+      body {
+        background-color: transparent !important;
+      }
+
+      .window-arrow-wrapper {
+        display: flex;
+        justify-content: center;
+        height:10px;
+
+        .window-arrow {
+          width: 0;
+          height: 0;
+          border-left: 10px solid transparent;
+          border-right: 10px solid transparent;
+          border-bottom: 10px solid #2d333b;
+        }
+      }
+
+      #root {
+        height: calc(100% - 10px);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="window-arrow-wrapper">
+      <div class="window-arrow"></div>
+    </div>
+
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

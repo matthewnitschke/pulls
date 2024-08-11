@@ -1,0 +1,35 @@
+.treeRoot {
+  height: 100%;
+  overflow-y: auto;
+
+  padding-top: 20px;
+  margin-top: -14px;
+
+  background-color: #22272d;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: none; /* color of the tracking area */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #444c56;
+    border-radius: 20px;
+    scrollbar-width: thin;
+  }
+}
+
+.draggingSource {
+  opacity: 0.3;
+}
+
+.placeholderContainer {
+  position: relative;
+}
+
+.dropTarget {
+  background-color: #e8f0fe;
+}
