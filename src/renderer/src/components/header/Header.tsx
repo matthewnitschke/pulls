@@ -1,5 +1,5 @@
 import { ErrorOutline, NavigateNext } from "@mui/icons-material";
-import { Breadcrumbs, CircularProgress, Stack, Typography } from "@mui/material";
+import { Breadcrumbs, CircularProgress, Stack, Tooltip, Typography } from "@mui/material";
 import { useAppSelector } from "@renderer/redux/store";
 import SelectedPrsDetailMenu from "./SelectedPrsDetailMenu";
 import SelectQueryMenu from "./SelectQueryLink";
@@ -11,6 +11,7 @@ interface HeaderProps {
 
 export default function Header(props: HeaderProps) {
   let prQueryStatus = useAppSelector((state) => state.prs.status);
+  let prQueryError = useAppSelector((state) => state.prs.errorMessage);
   let selectedPrIds = useAppSelector((state) => state.selectedPrs);
 
   return <Stack>
@@ -32,8 +33,8 @@ export default function Header(props: HeaderProps) {
       </Breadcrumbs>
 
       <Stack direction='row' alignItems='center'>
-        {prQueryStatus == 'loading' && <CircularProgress size="1rem" sx={{ marginLeft: '.5rem' }} />}
-        {prQueryStatus == 'error' && <ErrorOutline sx={{ marginLeft: '.5rem' }} />}
+        { prQueryStatus == 'loading' && <CircularProgress size="1rem" sx={{ marginLeft: '.5rem' }} /> }
+        { prQueryStatus == 'error' && <Tooltip title={prQueryError}><ErrorOutline sx={{ marginLeft: '.5rem' }} /></Tooltip> }
         { selectedPrIds.length >= 2 && <SelectedPrsDetailMenu onGroupClick={props.onGroupClick} /> }
       </Stack>
     </Stack>

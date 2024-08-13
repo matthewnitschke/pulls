@@ -9,31 +9,25 @@ import { updateStructure } from "@renderer/redux/structure_slice";
 import useHotkeys from "@reecelucas/react-use-hotkeys";
 import { fetchPrs } from "@renderer/redux/prs_slice";
 import { FolderNode } from "./FolderNode";
-import { selectActiveQuery } from "@renderer/redux/selectors";
+import { selectActiveRootQuery } from "@renderer/redux/selectors";
 
 export default function PrList() {
   let dispatch = useAppDispatch();
-  let queryIndex = useAppSelector((state) => state.activeQueryIndex);
-
-  let query = useAppSelector(selectActiveQuery);
-  let structure = useAppSelector((state) => {
-    if (state.config.data.queries.length == 0) return null;
-    let query = state.config.data.queries[state.activeQueryIndex].query;
-    return state.structure[query];
-  });
+  let activeRootQuery = useAppSelector((state) => state.activeRootQuery);
+  let structure = useAppSelector((state) => state.structure[activeRootQuery]);
 
   let filterText = useAppSelector((state) => state.filter);
   let prs = useAppSelector((state) => {
-    let query = selectActiveQuery(state);
+    let query = selectActiveRootQuery(state);
     if (query == null) return null;
     return state.prs.data[query];
   });
 
   useHotkeys("Ctrl+r", () => {
-    dispatch(fetchPrs(queryIndex))
+    dispatch(fetchPrs(activeRootQuery))
   });
 
-  if (structure == null || query == null) return null;
+  if (structure == null || activeRootQuery == null) return null;
 
   let filteredStructure = structure.filter((node) => {
     if (filterText == '' || prs == null) return true;
@@ -53,7 +47,7 @@ export default function PrList() {
 
   const handleDrop = (newTree: NodeModel[]) => {
     dispatch(updateStructure({
-      query,
+      query: activeRootQuery,
       nodes: newTree
     }));
   };

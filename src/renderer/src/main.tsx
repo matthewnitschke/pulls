@@ -19,7 +19,7 @@ import { setFilter } from './redux/filter_slice';
 store.dispatch(loadConfig());
 store.dispatch(loadStructure());
 
-window.electron.ipcRenderer.on('menubar-show', () => store.dispatch(fetchPrs()));
+window.electron.ipcRenderer.on('menubar-show', () => store.dispatch(fetchPrs(null)));
 window.electron.ipcRenderer.on('menubar-hide', () => {
   store.dispatch(setSelectedPrs([]));
   store.dispatch(setFilter(''));

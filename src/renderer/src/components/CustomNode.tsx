@@ -3,7 +3,7 @@ import StatusIcon from "./utils/PrStatusIcon";
 import { useAppDispatch, useAppSelector } from "@renderer/redux/store";
 import { Box, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import { togglePrSelected } from "@renderer/redux/selected_prs_slice";
-import { selectActiveQuery } from "@renderer/redux/selectors";
+import { selectActiveRootQuery } from "@renderer/redux/selectors";
 import openUrls from "@renderer/utils/open_url";
 
 interface CustomNodeProps {
@@ -21,7 +21,7 @@ export const CustomNode = (props: CustomNodeProps) => {
   let pr = useAppSelector((state) => {
     if (props.node.id == null) return null;
 
-    let query = selectActiveQuery(state);
+    let query = selectActiveRootQuery(state);
     if (query == null) return null;
 
     if (state.prs.data[query] == null) return null;

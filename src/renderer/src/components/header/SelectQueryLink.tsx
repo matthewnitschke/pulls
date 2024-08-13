@@ -1,5 +1,6 @@
 import { Link, ListItemText, Menu, MenuItem, Typography } from "@mui/material";
-import { setActiveQuery } from "@renderer/redux/active_query_slice";
+import { setActiveRootQuery } from "@renderer/redux/active_root_query_slice";
+
 import { useAppDispatch, useAppSelector } from "@renderer/redux/store";
 import { useState } from "react";
 
@@ -12,7 +13,9 @@ export default function SelectQueryLink() {
   const handleClose = () => setAnchorEl(null);
 
   let queries = useAppSelector((state) => state.config.data?.queries);
-  let activeQueryIndex = useAppSelector((state) => state.activeQueryIndex);
+  let activeQuery = useAppSelector((state) => {
+    return state.config.data?.queries.find((q) => q.query === state.activeRootQuery);
+  });
 
   if (queries == null) return;
 
@@ -24,7 +27,7 @@ export default function SelectQueryLink() {
       sx={{ cursor: 'pointer' }}
       onClick={handleClick}
     >
-      {queries[activeQueryIndex]?.label}
+      {activeQuery?.label}
     </Link>
 
     <Menu
@@ -42,7 +45,7 @@ export default function SelectQueryLink() {
             key={query.label}
             sx={{ width: 180 }}
             onClick={() => {
-              dispatch(setActiveQuery(i));
+              dispatch(setActiveRootQuery(query.query));
               handleClose();
             }}
           >

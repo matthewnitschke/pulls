@@ -1,21 +1,21 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
-import activeQueryReducer from "./active_query_slice";
-import selectedPrsReducer from "./selected_prs_slice";
-import prsReducer from "./prs_slice";
-import structureReducer from "./structure_slice";
-import configReducer from "./config_slice";
-import filterReducer from "./filter_slice";
+import {activeRootQuery} from "./active_root_query_slice";
+import {selectedPrs} from "./selected_prs_slice";
+import {prs} from "./prs_slice";
+import {structure} from "./structure_slice";
+import { config } from "./config_slice";
+import { filter } from "./filter_slice";
 import { structurePersistanceMiddleware } from "./middleware";
 
 const store = configureStore({
   reducer: {
-    config: configReducer,
-    activeQueryIndex: activeQueryReducer,
-    selectedPrs: selectedPrsReducer,
-    prs: prsReducer,
-    structure: structureReducer,
-    filter: filterReducer,
+    config: config.reducer,
+    activeRootQuery: activeRootQuery.reducer,
+    selectedPrs: selectedPrs.reducer,
+    prs: prs.reducer,
+    structure: structure.reducer,
+    filter: filter.reducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(structurePersistanceMiddleware),
 });
