@@ -16,7 +16,7 @@ type StructureSliceState = {
 
 const initialState: StructureSliceState = {}
 
-const structureSlice = createSlice({
+export const structure = createSlice({
   name: 'structure',
   initialState,
   reducers: {
@@ -94,5 +94,4 @@ const structureSlice = createSlice({
     .addCase(loadStructure.fulfilled, (_, action) => action.payload)
 });
 
-export default structureSlice.reducer;
-export const { updateStructure, groupPrs, ungroupPrs, renameGroup } = structureSlice.actions;
+export const { updateStructure, groupPrs, ungroupPrs, renameGroup } = structure.actions;

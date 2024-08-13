@@ -1,7 +1,7 @@
 import { Launch, Layers, MoreVert } from "@mui/icons-material";
 import { IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Typography } from "@mui/material";
 import { setSelectedPrs } from "@renderer/redux/selected_prs_slice";
-import { selectActiveQuery } from "@renderer/redux/selectors";
+import { selectActiveRootQuery } from "@renderer/redux/selectors";
 import { useAppDispatch, useAppSelector } from "@renderer/redux/store";
 import openUrls from "@renderer/utils/open_url";
 import { useState } from "react";
@@ -13,7 +13,7 @@ interface SelectedPrsDetailMenuProps {
 export default function SelectedPrsDetailMenu(props: SelectedPrsDetailMenuProps) {
   let dispatch = useAppDispatch();
   let selectedPrData = useAppSelector(state => {
-    let activeQuery = selectActiveQuery(state);
+    let activeQuery = selectActiveRootQuery(state);
     if (activeQuery == null) return [];
     return state.selectedPrs.map((pr) => state.prs.data[activeQuery][pr]);
   });

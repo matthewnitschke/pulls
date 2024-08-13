@@ -1,16 +1,28 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 import { ConfigSchema } from "../../../main/config";
+import { setActiveRootQuery } from "./active_root_query_slice";
+import { AppDispatch, RootState } from "./store";
 
 export const loadConfig = createAsyncThunk<
   ConfigSchema,
   void,
-  { rejectValue: string[] }
+  {
+    rejectValue: string[],
+    dispatch: AppDispatch
+  }
 >(
   'loadConfig',
-  async (_, { rejectWithValue }) => {
+  async (_, { getState, dispatch, rejectWithValue }) => {
     try {
-     return await window.electron.ipcRenderer.invoke('get-config');
+      let config: ConfigSchema = await window.electron.ipcRenderer.invoke('get-config');
+
+      let state = getState() as RootState;
+      if (!state.activeRootQuery) {
+        dispatch(setActiveRootQuery(config.queries[0].query));
+      }
+
+      return config;
     } catch(e) {
       if (e instanceof Error) return rejectWithValue([e.message]);
       return rejectWithValue([String(e)])
@@ -33,7 +45,7 @@ const initialState: ConfigSliceState = {
   isValid: true,
 }
 
-const configSlice = createSlice({
+export const config = createSlice({
   name: 'config',
   initialState,
   reducers: {},
@@ -44,6 +56,3 @@ const configSlice = createSlice({
       state.isValid = true;
     })
 })
-
-
-export default configSlice.reducer;

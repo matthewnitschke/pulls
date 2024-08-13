@@ -3,7 +3,7 @@ import { groupPrs } from "./structure_slice";
 
 const initialState: string[] = [];
 
-const selectedPrsSlice = createSlice({
+export const selectedPrs = createSlice({
   name: 'selectedPrs',
   initialState,
   reducers: {
@@ -20,5 +20,4 @@ const selectedPrsSlice = createSlice({
     .addCase(groupPrs, (_, __) => [])
 });
 
-export default selectedPrsSlice.reducer;
-export const {setSelectedPrs, togglePrSelected} = selectedPrsSlice.actions;
+export const {setSelectedPrs, togglePrSelected} = selectedPrs.actions;

@@ -17,21 +17,18 @@ export interface PullData {
 
 export const fetchPrs = createAsyncThunk<
 { [query: string]: {[id: string]: PullData} },
-  number | undefined,
+  string | null,
   { rejectValue: string }
 >(
   'fetchPrs',
-  async (queryIndex, { getState, rejectWithValue }) => {
+  async (query, { getState, rejectWithValue }) => {
+    let state = getState() as RootState;
     try {
-      let state = getState() as RootState;
-
-      let index = queryIndex ?? state.activeQueryIndex;
-
-      let query = state.config.data.queries[index].query;
-      let res = await queryGithub([query], state.config.data?.githubToken ?? '');
-
+      let q = query ?? state.activeRootQuery ?? state.config.data.queries[0].query;
+      let res = await queryGithub([q], state.config.data?.githubToken ?? '');
       return res;
     } catch (err) {
+      if (err instanceof Error) return rejectWithValue(err.message);
       return rejectWithValue('error');
     }
   },
@@ -48,7 +45,7 @@ const initialState: PrsSliceState = {
   status: 'idle',
 }
 
-const prsSlice = createSlice({
+export const prs = createSlice({
   name: 'prs',
   initialState,
   reducers: {},
@@ -68,5 +65,3 @@ const prsSlice = createSlice({
       }
     })
 });
-
-export default prsSlice.reducer;

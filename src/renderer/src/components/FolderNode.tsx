@@ -5,7 +5,7 @@ import { Box, IconButton, ListItem, ListItemIcon, ListItemText, Menu, MenuItem }
 import { Fragment } from "react/jsx-runtime";
 import { useState } from "react";
 import { renameGroup, ungroupPrs } from "@renderer/redux/structure_slice";
-import { selectActiveQuery } from "@renderer/redux/selectors";
+import { selectActiveRootQuery } from "@renderer/redux/selectors";
 import { NodeModel } from "@minoru/react-dnd-treeview";
 import GroupNameDialog from "./utils/GroupNameDialog";
 
@@ -21,7 +21,7 @@ export const FolderNode = (props: FolderNodeProps) => {
   const indent = props.depth * 35;
 
   const isAtStart = useAppSelector((state) => {
-    const query = selectActiveQuery(state);
+    const query = selectActiveRootQuery(state);
     if (query == null) return false;
 
     return state.structure[query][0].id === props.node.id;
@@ -76,7 +76,7 @@ interface FolderDetailsMenuProps {
 const FolderDetailsMenu = (props: FolderDetailsMenuProps) => {
   let dispatch = useAppDispatch();
 
-  let query = useAppSelector(selectActiveQuery);
+  let query = useAppSelector(selectActiveRootQuery);
 
   let [anchorEl, setAnchorEl] = useState(null);
   let open = Boolean(anchorEl);
